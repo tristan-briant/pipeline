@@ -1,6 +1,5 @@
 Library/
 Build/
-*.asset
 *.meta
 *.prefab
 *.csproj
