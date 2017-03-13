@@ -20,6 +20,8 @@ public class MenuManager : MonoBehaviour{
     private void Awake()
     {
         generateMenu();
+        float scale = Screen.width / 660f; // 660 = 100 + 120 + 50 + 120 + 50+ 120 +100
+        levelList.transform.localScale = new Vector3( scale,scale, 1f);
 
     }
 

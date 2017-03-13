@@ -1,7 +1,2 @@
 Library/
 Build/
-*.meta
-*.prefab
-*.csproj
-*.sln
-.vs
