@@ -1,0 +1,8 @@
+Library/
+Build/
+*.asset
+*.meta
+*.prefab
+*.csproj
+*.sln
+.vs
