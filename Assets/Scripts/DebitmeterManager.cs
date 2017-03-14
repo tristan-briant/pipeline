@@ -11,7 +11,7 @@ public class DebitmeterManager : BaseComponent {
     public float setPointHigh, setPointLow, iMax;
 
     float t_shine = 0;
-
+    public new float f;
 
     public override void calcule_i_p(float[] p, float[] i)
     {

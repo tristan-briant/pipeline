@@ -23,6 +23,21 @@ public class MenuManager : MonoBehaviour{
         float scale = Screen.width / 660f; // 660 = 100 + 120 + 50 + 120 + 50+ 120 +100
         levelList.transform.localScale = new Vector3( scale,scale, 1f);
 
+        StartCoroutine("removeIntroScreen");
+
+    }
+
+    public GameObject introScreen;
+    public void removeIntro()
+    {
+        Destroy(introScreen);
+
+    }
+
+    IEnumerator removeIntroScreen() {
+        yield return new WaitForSeconds(5f);
+        if(introScreen!=null)
+            removeIntro();
     }
 
     void generateMenu()
@@ -51,6 +66,8 @@ public class MenuManager : MonoBehaviour{
         }
     }
 
+
+  
 
     void LateUpdate()
     {

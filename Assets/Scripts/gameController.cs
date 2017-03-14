@@ -152,22 +152,33 @@ public class gameController : MonoBehaviour {
             //GameObject go = GameObject.Find("WinText");
             //GameObject go = GameObject.FindGameObjectWithTag("WinText").gameObject;//.GetComponent(typeof(GameObject))
 
-            StartCoroutine("LoadLevel","level1");
-            int levelCompleted = PlayerPrefs.GetInt("Level Completed");
+            //StartCoroutine("LoadLevel","level1");
+            StartCoroutine("WinAnimation");
 
-            if(currantLevel> levelCompleted)
-            {
-                PlayerPrefs.SetInt("Level Completed",currantLevel);
-                PlayerPrefs.Save();
-            }
         }
     }
 
-    IEnumerator LoadLevel(string level)
+    IEnumerator WinAnimation()
     {
+        int levelCompleted = PlayerPrefs.GetInt("Level Completed");
+
+        if (currantLevel > levelCompleted)
+        {
+            PlayerPrefs.SetInt("Level Completed", currantLevel);
+            PlayerPrefs.Save();
+        }
         winText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(level);
+        levelText.text = "Next level";
+        levelText.GetComponent<Button>().enabled = true;
+        levelText.GetComponent<Animator>().enabled = true;
+
+
+    }
+
+    public void LoadNextLevel()
+    {
+        SceneManager.LoadScene("level" + (currantLevel+1));
     }
 
 
@@ -190,7 +201,7 @@ public class gameController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.Escape))
         {
-            Application.Quit();
+            //Application.Quit();
             SceneManager.LoadScene(0);
         }
         if (Input.GetKey(KeyCode.Menu))
