@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour{
     public GameObject introScreen;
     public void removeIntro()
     {
-        Destroy(introScreen);
+        introScreen.GetComponent<Canvas>().enabled=false;
 
     }
 
