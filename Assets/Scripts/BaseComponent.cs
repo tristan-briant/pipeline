@@ -10,7 +10,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected float q = 0, f = 0;
     public int dir=0;
-    protected float R = 2, L = 5, C = 4, Rground = 50;
+    protected float R = 3f, L = 5, C = 8, Rground = 50;
     protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
@@ -23,7 +23,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected Color pressureColor(float p)
     { // donne la convention de pression
-        float PMAX = 1.5f;
+        float PMAX = 1.0f;
 
         Color max = new Color(0, 1.0f, 1.0f);  // p=2
         //Color zero = new Color(0, 0.0f / 255, 00.0f / 255); //

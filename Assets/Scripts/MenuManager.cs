@@ -9,11 +9,13 @@ public class MenuManager : MonoBehaviour{
     public int levelCompleted;
     public int levelMax;
     public GameObject levelList;
-    public Sprite Locked; 
+    public Sprite Locked;
+    public LevelManager LVM;
 
     public void LoadLevel(int levelNumber)
     {
-        SceneManager.LoadScene("level" + levelNumber);
+        LVM.currantLevel = levelNumber;
+        SceneManager.LoadScene("level");
 
     }
 
@@ -23,7 +25,16 @@ public class MenuManager : MonoBehaviour{
         float scale = Screen.width / 660f; // 660 = 100 + 120 + 50 + 120 + 50+ 120 +100
         levelList.transform.localScale = new Vector3( scale,scale, 1f);
 
-        StartCoroutine("removeIntroScreen");
+        LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+
+        if (LVM.FirstLaunch)
+        {
+            StartCoroutine("IntroScreen");
+            LVM.FirstLaunch = false;
+        }
+        else {
+            removeIntro();
+        }
 
     }
 
@@ -34,7 +45,8 @@ public class MenuManager : MonoBehaviour{
 
     }
 
-    IEnumerator removeIntroScreen() {
+    IEnumerator IntroScreen() {
+        introScreen.GetComponent<Canvas>().enabled = true;
         yield return new WaitForSeconds(5f);
         if(introScreen!=null)
             removeIntro();

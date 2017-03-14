@@ -75,16 +75,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\ResistorManager.cs" />
     <Compile Include="Assets\Scripts\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\BaseFrontier.cs" />
     <Compile Include="Assets\Scripts\DebitmeterManager.cs" />
     <Compile Include="Assets\Scripts\ElbowManager.cs" />
     <Compile Include="Assets\Scripts\Engine.cs" />
     <Compile Include="Assets\Scripts\InletManager.cs" />
+    <Compile Include="Assets\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts\MenuManager.cs" />
     <Compile Include="Assets\Scripts\OnDrop.cs" />
     <Compile Include="Assets\Scripts\Pipeline.cs" />
+    <Compile Include="Assets\Scripts\ResistorManager.cs" />
     <Compile Include="Assets\Scripts\TeManager.cs" />
     <Compile Include="Assets\Scripts\WallManager.cs" />
     <Compile Include="Assets\Scripts\calculate.cs" />

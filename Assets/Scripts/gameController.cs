@@ -19,17 +19,38 @@ public class gameController : MonoBehaviour {
 
     public bool composantChanged;
 
-    
-    public GameObject Pg; //The canvas "playground" from which are determined N and M 
+    public LevelManager LVM;
+    public GameObject PgHolder; //The "playground Holder" 
+    GameObject Pg; //The "playground" from which are determined N and M 
+
     public float alpha=0.001f;
 
     private void Awake()
     {
         ///////////// Array Initialization /////////////
+        LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
-        Scene scene = SceneManager.GetActiveScene();
+        currantLevel = LVM.currantLevel;
+
+        /*Scene scene = SceneManager.GetActiveScene();
         print("Loaded Level number = " + (scene.name.ToString().Substring(5))); // name of scene
-        currantLevel = int.Parse(scene.name.ToString().Substring(5));
+        currantLevel = int.Parse(scene.name.ToString().Substring(5));*/
+
+        if (currantLevel > 0) // 0 mean level design
+        {
+            if (PgHolder.transform.childCount > 0)
+            {
+                print("destroy old Pg !");
+                DestroyImmediate(PgHolder.transform.GetChild(0).gameObject);
+            }
+
+            Pg = Instantiate(Resources.Load("Playgrounds/Playground" + currantLevel, typeof(GameObject))) as GameObject;
+            Pg.transform.SetParent(PgHolder.transform);
+        }
+        else
+        {
+            Pg = PgHolder.transform.GetChild(0).gameObject;
+        }
 
         levelText.text = "Level " + currantLevel;
 
@@ -178,7 +199,8 @@ public class gameController : MonoBehaviour {
 
     public void LoadNextLevel()
     {
-        SceneManager.LoadScene("level" + (currantLevel+1));
+        LVM.currantLevel = currantLevel + 1;
+        SceneManager.LoadScene("level");
     }
 
 
