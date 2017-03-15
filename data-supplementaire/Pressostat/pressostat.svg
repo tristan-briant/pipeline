@@ -15,9 +15,9 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="pressostat.svg"
-   inkscape:export-filename="C:\Users\Tristan\Google Drive\Programmation\Processing\tuyau_V6_P2D\data\pressostat-shine.png"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300">
+   inkscape:export-filename="pressostat-water2.png"
+   inkscape:export-xdpi="144"
+   inkscape:export-ydpi="144">
   <defs
      id="defs4">
     <filter
@@ -41,17 +41,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.919596"
-     inkscape:cx="21.75249"
-     inkscape:cy="60.08879"
+     inkscape:zoom="5.6"
+     inkscape:cx="45.629369"
+     inkscape:cy="35.953296"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1005"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1592"
+     inkscape:window-height="756"
+     inkscape:window-x="47"
+     inkscape:window-y="135"
+     inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -66,7 +66,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -81,9 +81,12 @@
      style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
      id="rect4161"
      width="22.475893"
-     height="64.397224"
+     height="61.361511"
      x="64.144684"
-     y="9.0862722" />
+     y="12.121986"
+     inkscape:export-filename="pressostat-cadran.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144" />
   <rect
      y="25.878519"
      x="64.144684"
@@ -91,6 +94,16 @@
      width="22.475893"
      id="rect4165"
      style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#31ff31;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+  <path
+     sodipodi:nodetypes="ssccccsscscs"
+     inkscape:connector-curvature="0"
+     id="path4179"
+     d="M 55.398438,2.8671875 C 54.919001,2.8570541 54.424025,2.866812 53.916016,2.8984375 45.787859,3.4044462 41.921875,7.1914062 41.921875,7.1914062 l 0,70.0800778 c 8.207031,3.637673 16.414063,3.76963 24.621094,0 l 0,-2.082031 17.888672,0 c 4.81133,0 7.177734,-3.520101 7.177734,-7.070312 l 0,-55.298829 c -0.008,-3.406388 -2.492238,-6.3222651 -6.267578,-6.3222651 l -19.970703,0 C 63.723722,5.1438224 60.351272,2.971871 55.398438,2.8671875 Z"
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.91500005;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;filter:url(#filter4229);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     transform="matrix(1.2317111,0,0,1.219498,-14.398913,-6.4492119)"
+     inkscape:export-filename="pressostat-shine.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144" />
   <g
      id="g4244"
      transform="translate(-0.24275434,0)">
@@ -118,13 +131,6 @@
        id="rect4242"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
   </g>
-  <path
-     sodipodi:nodetypes="ssccccsscscs"
-     inkscape:connector-curvature="0"
-     id="path4179"
-     d="M 55.398438,2.8671875 C 54.919001,2.8570541 54.424025,2.866812 53.916016,2.8984375 45.787859,3.4044462 41.921875,7.1914062 41.921875,7.1914062 l 0,70.0800778 c 8.207031,3.637673 16.414063,3.76963 24.621094,0 l 0,-2.082031 17.888672,0 c 4.81133,0 7.177734,-3.520101 7.177734,-7.070312 l 0,-55.298829 c -0.008,-3.406388 -2.492238,-6.3222651 -6.267578,-6.3222651 l -19.970703,0 C 63.723722,5.1438224 60.351272,2.971871 55.398438,2.8671875 Z"
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.91500005;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;filter:url(#filter4229);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-     transform="matrix(1.138173,0,0,1.0592612,-9.22521,2.0686287)" />
   <g
      id="g4233">
     <g
@@ -144,12 +150,16 @@
        d="M 55.398438,2.8671875 C 54.919001,2.8570541 54.424025,2.866812 53.916016,2.8984375 45.787859,3.4044462 41.921875,7.1914062 41.921875,7.1914062 l 0,72.2229348 c 8.207031,3.637673 18.914063,1.805344 23.017578,-0.227629 l 0.233672,-3.029788 19.258516,-0.06564 c 4.811302,-0.0164 7.177734,-3.520101 7.177734,-7.070312 l 0,-52.286319 c -0.008,-3.406388 -2.492315,-6.298199 -6.267578,-6.322265 l -19.808151,0 -0.162552,-3.9143411 C 63.723722,5.1438224 60.351272,2.971871 55.398438,2.8671875 Z m 3.316406,6.4066369 0,63.8962956 c -2.988281,1.441958 -5.976563,1.58706 -8.964844,0 l 0,-63.8962956 c 3.020529,-1.7116143 6.335992,-1.6713752 8.964844,0 z m 11.80643,6.8132826 12.267788,0 c 1.60197,-0.0095 3.244141,0.915575 3.244141,3.283203 l 0,46.329791 c 0.0907,2.270048 0.152716,4.544922 -3.496094,4.544922 l -12.078969,0 c -2.154699,0 -3.915171,-1.122592 -3.915171,-3.600361 l 0,-46.960763 c 0,-2.59106 1.087981,-3.596792 3.978305,-3.596792 z"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffcc00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
   </g>
-  <path
-     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 163.32951,7.5530954 19.76111,-0.2525382 0,64.1446868 -19.3823,0.126269"
-     id="path4169"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccc" />
+  <rect
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     id="rect4149"
+     width="15.714286"
+     height="69.464287"
+     x="45.714287"
+     y="7.142858"
+     inkscape:export-filename="pressostat-water.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144" />
   <path
      style="fill:#ff0000;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 46.269413,45.002208 25.27193,0.0933 5.85329,5.09879 -5.59548,4.80434 -25.77856,-0.0947 0.111817,-4.449739 z"
@@ -159,7 +169,8 @@
      inkscape:transform-center-y="0.451178"
      aiguille=""
      aig=""
-     inkscape:export-xdpi="300"
-     inkscape:export-ydpi="300"
-     sodipodi:nodetypes="ccccccc" />
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144"
+     sodipodi:nodetypes="ccccccc"
+     inkscape:export-filename="pressostat-arrow.png" />
 </svg>
