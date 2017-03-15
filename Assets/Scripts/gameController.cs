@@ -44,7 +44,9 @@ public class gameController : MonoBehaviour {
                 DestroyImmediate(PgHolder.transform.GetChild(0).gameObject);
             }
 
-            Pg = Instantiate(Resources.Load("Playgrounds/Playground" + currantLevel, typeof(GameObject))) as GameObject;
+            //Pg = Instantiate(Resources.Load("Playgrounds/Playground" + currantLevel, typeof(GameObject))) as GameObject;
+            Pg = Instantiate(Resources.Load(LVM.getPlaygroundName(currantLevel), typeof(GameObject))) as GameObject;
+
             Pg.transform.SetParent(PgHolder.transform);
         }
         else
