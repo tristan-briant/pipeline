@@ -91,8 +91,8 @@ public class DebitmeterManager : BaseComponent {
 
 
         arrow.transform.localEulerAngles= new Vector3(0, 0, angle);
-        cadranMax.GetComponent<Image>().fillAmount = 0.5f-angleH*0.35f  ;
-        cadranMin.GetComponent<Image>().fillAmount = 0.5f-angleL * 0.35f;
+        cadranMax.GetComponent<Image>().fillAmount = 0.5f-angleH*0.33f  ;
+        cadranMin.GetComponent<Image>().fillAmount = 0.5f-angleL * 0.33f;
 
         float alpha;
        

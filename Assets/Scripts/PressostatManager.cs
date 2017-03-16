@@ -60,26 +60,18 @@ public class PressostatManager : BaseComponent {
 
     private void Update()
     {
-
-        //water.GetComponent<Image>().color = pressureColor(pin[0]);
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 
-       
-
-        /*const float ANGLEMAX = 180 / 4.8f;*/
         float rate = Mathf.Clamp( (q-PMin) / (PMax - PMin) , 0, 1);
 
         float rateH = Mathf.Clamp((setPointHigh - PMin) / (PMax-PMin) , 0, 1);
         float rateL = Mathf.Clamp((setPointLow - PMin) / (PMax - PMin) , 0, 1);
 
-
-
-        //arrow.transform.localEulerAngles = new Vector3(0, 0, angle);
         Vector3 pos= new Vector3(0, rate* 55.3f, 0);
         arrow.transform.localPosition = arrowStartPosition+pos; 
         cadranMax.GetComponent<Image>().fillAmount = rateH;
         cadranMin.GetComponent<Image>().fillAmount = rateL;
-        water.GetComponent<Image>().fillAmount = 1-rate;
+        water.GetComponent<Image>().fillAmount = (1-0.9f*rate);
 
         float alpha;
 

@@ -17,9 +17,14 @@ public class LevelManager : MonoBehaviour {
     {
         "playground1",
         "playground2",
+        "Pg 3 DBM",
         "Pg double DBM",
         "playground3",
-        "Pg 4 pressostats"
+        "Pg 4 pressostats",
+        "Pg 1P2R",
+        "Pg double DBM2",
+        "Pg Rampe tension",
+        "PG DBM+PST"
     };
 
     private void Awake()

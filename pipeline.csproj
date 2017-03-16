@@ -75,7 +75,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PressostatManager.cs" />
     <Compile Include="Assets\Scripts\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\BaseFrontier.cs" />
     <Compile Include="Assets\Scripts\DebitmeterManager.cs" />
@@ -86,6 +85,7 @@
     <Compile Include="Assets\Scripts\MenuManager.cs" />
     <Compile Include="Assets\Scripts\OnDrop.cs" />
     <Compile Include="Assets\Scripts\Pipeline.cs" />
+    <Compile Include="Assets\Scripts\PressostatManager.cs" />
     <Compile Include="Assets\Scripts\ResistorManager.cs" />
     <Compile Include="Assets\Scripts\TeManager.cs" />
     <Compile Include="Assets\Scripts\WallManager.cs" />

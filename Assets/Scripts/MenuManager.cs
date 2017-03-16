@@ -35,6 +35,7 @@ public class MenuManager : MonoBehaviour{
         else {
             removeIntro();
         }
+        levelMax = LVM.levelMax;
 
     }
 
