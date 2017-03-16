@@ -33,7 +33,7 @@ public class calculate : MonoBehaviour {
         i[3] = p[3] / Rground;
     }
 
-    private void Start()
+   /* private void Start()
     {
         name = "pipeline";
         water = this.transform.FindChild("Water").gameObject;
@@ -45,7 +45,7 @@ public class calculate : MonoBehaviour {
         c += 0.01f;
         if (c > 1) c = 0.0f;
         water.GetComponent<Image>().color = new Color(1,c,1);
-    }
+    }*/
 
 
 }

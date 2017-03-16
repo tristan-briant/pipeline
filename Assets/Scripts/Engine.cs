@@ -155,7 +155,7 @@ public class Engine  {
             {
                 Engine.currant_in(k - 1, l - 1, pression, intensite, pp, ii);
                 Engine.rotate_currant(composants[k][l].dir, pp, ii);
-                composants[k][l].set_i_p(pp, ii);
+                //composants[k][l].set_i_p(pp, ii);
                 composants[k][l].calcule_i_p(pp, ii);
                 Engine.rotate_currant((4 - composants[k][l].dir) % 4, pp, ii);
                 Engine.currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
