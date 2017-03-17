@@ -16,6 +16,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     protected float[] iin = new float[4];
     public float success = 1;
     public int x, y;
+    public bool locked=false;
 
 
     gameController gc; // le moteur du jeu à invoquer parfois
@@ -85,7 +86,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!dragged)
+        if (!dragged && !locked)
         {
             dir++;
             if (dir == 4) dir = 0;
@@ -104,6 +105,8 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (locked) { eventData.pointerDrag = null; return; } // If locked cancel the drag
+
         startPos = transform.position;
         itemBeingDragged = gameObject;
         startParent = transform.parent;
@@ -118,6 +121,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public void OnDrag(PointerEventData eventData)
     {
+        
         Vector3 vec = Input.mousePosition;
         vec.z = 1.0f;
         transform.position = Camera.main.ScreenToWorldPoint(vec);
@@ -125,6 +129,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        
         itemBeingDragged = null;
         transform.localScale = transform.localScale / 1.2f;
         DestroyImmediate (startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 

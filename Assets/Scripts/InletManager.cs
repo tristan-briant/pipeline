@@ -8,26 +8,42 @@ public class InletManager : BaseFrontier {
     public float pset;
     public float imax=1;
     float pp = 0;
-    
+    float ii=0;
     GameObject water,water0, arrow;
+    public bool isSuccess=false;
 
 
     public override void calcule_i_p(float[] p, float[] i)
     {
+        float a = p[0];
 
 
-        if (i[0] < imax && i[0] > -imax)
+        if (ii < imax && ii > -imax)
         {
-            p[0] = pp;
-            pp = 0.9f * pp + 0.1f * pset; // tending to pin
+           pp=pset;
+            //pp = 0.5f * pp + 0.5f * pset; // tending to pin
+            
         }
         else
         {
             pp = 0.9f * pp;
-            p[0] = pp;
-        }
-        //i[0]=constrain(i[0],-imax,imax);
+            //p[0] = pp;*/
+            //i[0] = Mathf.Clamp(i[0], -imax, imax);
 
+        }
+
+ 
+        q += (i[0] + ii) / C;
+        f += (p[0] - pp) / L;
+
+        p[0] = (q + (i[0] - f) * R);
+        //p[2] = (q + (i[2] + f) * R);
+
+        i[0] = (f + (a - q) / R);
+        ii = (-f + (pp - q) / R);
+
+        if (isSuccess && Mathf.Abs(f) < 0.1) success = 0;
+        else success = 1;
     }
 
     protected override void Start()

@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour {
         "Pg 3 DBM",
         "Pg double DBM",
         "playground3",
+        "PG bonus1",
         "Pg 4 pressostats",
         "Pg 1P2R",
         "Pg double DBM2",
@@ -39,9 +40,13 @@ public class LevelManager : MonoBehaviour {
         }
 
 
-        levelMax = playgroundName.Count;
+        //levelMax = playgroundName.Count;
     }
 
+
+    public int getLevelMax() {
+        return playgroundName.Count;
+    }
 
     public string getPlaygroundName(int level) { 
         // Return the complete name (with path in Ressources) of the prefab playground

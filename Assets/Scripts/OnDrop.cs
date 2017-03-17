@@ -8,15 +8,18 @@ public class OnDrop : MonoBehaviour , IDropHandler {
 
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
-        
-        if (transform.childCount == 0) {  // No child => empty
+
+        if (transform.childCount == 0)
+        {  // No child => empty // normally never happen
             BaseComponent.itemBeingDragged.transform.SetParent(transform);
         }
         else
         {
             GameObject item = transform.GetChild(0).gameObject;
-            item.transform.SetParent(BaseComponent.startParent);  
-            BaseComponent.itemBeingDragged.transform.SetParent(transform);
+            if (item.GetComponent<BaseComponent>().locked == false) { 
+                item.transform.SetParent(BaseComponent.startParent);
+                BaseComponent.itemBeingDragged.transform.SetParent(transform);
+            }
         }
 
     }

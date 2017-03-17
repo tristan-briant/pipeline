@@ -32,10 +32,6 @@ public class gameController : MonoBehaviour {
 
         currantLevel = LVM.currantLevel;
 
-        /*Scene scene = SceneManager.GetActiveScene();
-        print("Loaded Level number = " + (scene.name.ToString().Substring(5))); // name of scene
-        currantLevel = int.Parse(scene.name.ToString().Substring(5));*/
-
         if (currantLevel > 0) // 0 mean level design
         {
             if (PgHolder.transform.childCount > 0)
@@ -44,7 +40,6 @@ public class gameController : MonoBehaviour {
                 DestroyImmediate(PgHolder.transform.GetChild(0).gameObject);
             }
 
-            //Pg = Instantiate(Resources.Load("Playgrounds/Playground" + currantLevel, typeof(GameObject))) as GameObject;
             Pg = Instantiate(Resources.Load(LVM.getPlaygroundName(currantLevel), typeof(GameObject))) as GameObject;
 
             Pg.transform.SetParent(PgHolder.transform);
@@ -105,6 +100,16 @@ public class gameController : MonoBehaviour {
                     BaseComponent bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
                     bc.x = i;bc.y = j;
                     composants[i ][j] = bc;
+
+                    if (firstPopulate)
+                    {
+                        if (bc.GetComponent<BaseComponent>().locked)
+                        {
+                            go.GetComponent<Image>().sprite = Resources.Load<Sprite>("concrete");
+                            go.GetComponent<Image>().color = new Color(1, 1, 1);
+                        }
+                        //bc.transform.GetComponent<Image>().enabled=true;
+                    }
                 }
                 else
                 {

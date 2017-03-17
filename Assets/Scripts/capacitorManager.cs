@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class capacitorManager : BaseComponent {
 
     GameObject waterIn0, waterIn2, water0, water2, bubble;
+    GameObject spring1, spring2, spring3, spring4, piston;
     public float x_bulle = 0;
     float r_bulle = 0.1f;
     public float Cin;
     float q0, q2;
+    public float xp;
 
     public override void calcule_i_p(float[] p, float[] i)
     {
@@ -44,8 +46,11 @@ public class capacitorManager : BaseComponent {
         waterIn2 = this.transform.FindChild("Water-in2").gameObject;
         water0 = this.transform.FindChild("Water0").gameObject;
         water2 = this.transform.FindChild("Water2").gameObject;
-
-
+        spring1 = transform.FindChild("Spring1").gameObject;
+        spring2 = transform.FindChild("Spring2").gameObject;
+        spring3 = transform.FindChild("Spring3").gameObject;
+        spring4 = transform.FindChild("Spring4").gameObject;
+        piston = transform.FindChild("Piston").gameObject;
     }
 
     private void Update()
@@ -55,6 +60,15 @@ public class capacitorManager : BaseComponent {
         water0.GetComponent<Image>().color = pressureColor(pin[0]);
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 
+        float xMax = 32f;
+        xp = Mathf.Clamp((q2-q0)/Cin*xMax, -xMax,xMax);
+        piston.transform.localPosition= new Vector3(xp,0,0);
+
+        waterIn2.GetComponent<Image>().fillAmount = 0.6f + 0.4f*xp/xMax;
+        spring1.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax*0.4f, 1);
+        spring2.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
+        spring3.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
+        spring4.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
 
     }
 }
