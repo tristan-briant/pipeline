@@ -42,8 +42,15 @@ public class InletManager : BaseFrontier {
         i[0] = (f + (a - q) / R);
         ii = (-f + (pp - q) / R);
 
-        if (isSuccess && Mathf.Abs(f) < 0.1) success = 0;
-        else success = 1;
+
+        if(isSuccess)
+        {
+            if ( Mathf.Abs(f) > 0.1)
+                success = Mathf.Clamp(success + 0.005f, 0, 1);
+            else
+                success = Mathf.Clamp(success - 0.05f, 0, 1);
+        }
+        
     }
 
     protected override void Start()

@@ -73,7 +73,7 @@ public class MenuManager : MonoBehaviour{
             go.transform.SetParent(levelList.transform);//levelList.transform.GetChild(i).gameObject;
             go.transform.localScale = new Vector3(1, 1, 1);
 
-            if (i > levelCompleted)
+            if (i > levelCompleted && !LVM.hacked)
             {
                 go.GetComponentInChildren<Image>().sprite = Locked;
                 go.GetComponentInChildren<Text>().text = "";
