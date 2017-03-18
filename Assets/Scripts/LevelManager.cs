@@ -28,7 +28,8 @@ public class LevelManager : MonoBehaviour {
         "Pg double DBM2",
         "Pg Rampe tension",
         "PG DBM+PST",
-        "PG Capa1"
+        "PG Capa1",
+        "PG Capa2"
     };
 
     private void Awake()

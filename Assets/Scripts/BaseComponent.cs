@@ -18,6 +18,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     public int x, y;
     public bool locked=false;
 
+    public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
     gameController gc; // le moteur du jeu à invoquer parfois
 
@@ -84,7 +85,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     bool dragged;
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (!dragged && !locked)
         {
