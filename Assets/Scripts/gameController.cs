@@ -36,11 +36,10 @@ public class gameController : MonoBehaviour {
         {
             if (PgHolder.transform.childCount > 0)
             {
-                print("destroy old Pg !");
                 DestroyImmediate(PgHolder.transform.GetChild(0).gameObject);
             }
 
-            Pg = Instantiate(Resources.Load(LVM.getPlaygroundName(currantLevel), typeof(GameObject))) as GameObject;
+            Pg = Instantiate(Resources.Load("Playgrounds/" + LVM.getPlaygroundName(currantLevel), typeof(GameObject))) as GameObject;
 
             Pg.transform.SetParent(PgHolder.transform);
         }
@@ -113,7 +112,6 @@ public class gameController : MonoBehaviour {
                 }
                 else
                 {
-                    Debug.Log(" 1 created");
                     BaseComponent bc = Instantiate(vide);
                     bc.transform.SetParent(go.transform);
                     bc.x = i; bc.y = j;

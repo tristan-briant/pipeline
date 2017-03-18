@@ -57,7 +57,7 @@ public class LevelManager : MonoBehaviour {
         // level start at 1  
 
         if( 0 < level && level <= playgroundName.Count )
-            return "Playgrounds/" + playgroundName[level - 1];
+            return playgroundName[level - 1];
         else
             return "";
 

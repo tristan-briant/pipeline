@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\IntroManager.cs" />
     <Compile Include="Assets\PressostatTriggerManager.cs" />
     <Compile Include="Assets\Scripts\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\BaseFrontier.cs" />
