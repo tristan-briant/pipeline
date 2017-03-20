@@ -108,6 +108,7 @@ public class Engine  {
         int M = composants[0].Length;
 
         float success = 1;
+        float fail = 0;
 
 
         for (int k = 1; k < N - 1; k++) //Border UP condition
@@ -119,6 +120,7 @@ public class Engine  {
             pression[k - 1][0] = (1 - alpha) * pression[k - 1][0] + alpha * pp[0];
             intensite[k - 1][0] = (1 - alpha) * intensite[k - 1][0] + alpha * (-ii[0]);
             success = success * composants[k][0].success;
+            fail += composants[k][0].fail;
         }
 
         for (int k = 1; k < N - 1; k++) //Border DOWN condition
@@ -129,7 +131,8 @@ public class Engine  {
 
             pression[k - 1][2 * M - 4] = (1 - alpha) * pression[k - 1][2 * M - 4] + alpha * pp[0];
             intensite[k - 1][2 * M - 4] = (1 - alpha) * intensite[k - 1][2 * M - 4] + alpha * ii[0];
-            success = success * composants[k][M-1].success;
+            success = success * composants[k][M - 1].success;
+            fail += composants[k][M - 1].fail;
         }
 
         for (int k = 1; k < M - 1; k++) //Border RIGHT condition
@@ -141,6 +144,7 @@ public class Engine  {
             pression[N - 2][2 * (k - 1) + 1] = (1 - alpha) * pression[N - 2][2 * (k - 1) + 1] + alpha * pp[0];
             intensite[N - 2][2 * (k - 1) + 1] = (1 - alpha) * intensite[N - 2][2 * (k - 1) + 1] + alpha * (ii[0]);
             success = success * composants[N - 1][k].success;
+            fail += composants[N - 1][k].fail;
         }
 
         for (int k = 1; k < M - 1; k++) //Border LEFT condition
@@ -151,6 +155,7 @@ public class Engine  {
             pression[0][2 * (k - 1) + 1] = (1 - alpha) * pression[0][2 * (k - 1) + 1] + alpha * pp[0];
             intensite[0][2 * (k - 1) + 1] = (1 - alpha) * intensite[0][2 * (k - 1) + 1] + alpha * (-ii[0]);
             success = success * composants[0][k].success;
+            fail += composants[0][k].fail;
         }
 
 
@@ -166,9 +171,11 @@ public class Engine  {
                 Engine.currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
 
                 success = success * composants[k][l].success;
+                fail += composants[k][l].fail;
             }
         }
 
+        if (fail > 0) return -1;
 
         return success;
         

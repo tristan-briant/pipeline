@@ -15,6 +15,8 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
     public float success = 1;
+    public float fail = 0;
+
     public int x, y;
     public bool locked=false;
 

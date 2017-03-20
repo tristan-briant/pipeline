@@ -11,10 +11,18 @@ public class InletManager : BaseFrontier {
     float ii=0;
     GameObject water,water0, arrow;
     public bool isSuccess=false;
+    public bool jelly = false;
+    Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
+    Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
 
 
     public override void calcule_i_p(float[] p, float[] i)
     {
+        if (jelly) {
+            if(pset>0) i[0] = -1;
+            p[0] = pset;
+            return;
+        }
         float a = p[0];
 
 
@@ -60,13 +68,30 @@ public class InletManager : BaseFrontier {
         water0 = this.transform.FindChild("Water0").gameObject;
 
         arrow = this.transform.FindChild("Arrow").gameObject;
+
+        if (jelly)
+        {
+            if (pset > 0)
+            {
+                water.GetComponent<Image>().color = jellyColor;
+                water0.GetComponent<Image>().color = jellyColor;
+            }
+            else {
+                water.GetComponent<Image>().color = jellyColorBg;
+                water0.GetComponent<Image>().color = jellyColorBg;
+            }
+        }
     }
         
 
     private void Update()
     {
-        water.GetComponent<Image>().color = pressureColor(pset);
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
+       
+        if (!jelly)
+        {
+            water.GetComponent<Image>().color = pressureColor(pset);
+            water0.GetComponent<Image>().color = pressureColor(pin[0]);
+        }
 
         if (pset <= 0)
         {

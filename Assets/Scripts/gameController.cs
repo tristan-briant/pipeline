@@ -156,11 +156,13 @@ public class gameController : MonoBehaviour {
         firstPopulate = false;
     }
 
- 
-     
 
-    public float success;
+
+
+    bool gameOver=false;
+    bool fail=false;
     public GameObject winText;
+    public GameObject loseText;
 
 
     // Use this for initialization
@@ -173,15 +175,19 @@ public class gameController : MonoBehaviour {
 
         float success= Engine.oneStep(composants);
 
-        if (success >= 1 && BaseComponent.itemBeingDragged == null)
+        if (success >= 1 && BaseComponent.itemBeingDragged == null && !gameOver)
         {
-            //GameObject go = GameObject.Find("WinText");
-            //GameObject go = GameObject.FindGameObjectWithTag("WinText").gameObject;//.GetComponent(typeof(GameObject))
-
-            //StartCoroutine("LoadLevel","level1");
+            gameOver = true;
             StartCoroutine("WinAnimation");
-
         }
+
+        if (success < 0 && !gameOver) {
+            gameOver = true;
+            fail = true;
+            CancelInvoke(); // Stop calculate the evolution
+            StartCoroutine("LoseAnimation");
+        }
+
     }
 
     IEnumerator WinAnimation()
@@ -202,9 +208,22 @@ public class gameController : MonoBehaviour {
 
     }
 
+
+    IEnumerator LoseAnimation()
+    {
+        loseText.SetActive(true);                            //lance l'animation de victoire
+        yield return new WaitForSeconds(2f);
+        levelText.text = "Retry";
+        levelText.GetComponent<Button>().enabled = true;
+        levelText.GetComponent<Animator>().enabled = true;
+
+
+    }
+
     public void LoadNextLevel()
     {
-        LVM.currantLevel = currantLevel + 1;
+        if(!fail)
+            LVM.currantLevel = currantLevel + 1;
         SceneManager.LoadScene("level");
     }
 

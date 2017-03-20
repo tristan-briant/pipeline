@@ -57,19 +57,24 @@ public class MenuManager : MonoBehaviour{
     void generateMenu()
     {
         levelCompleted = PlayerPrefs.GetInt("Level Completed");
-        //print(levelCompleted);
 
         int heigh = (120 + 50) * (Mathf.CeilToInt(levelMax / 3) + 1 ) + 50;
 
         levelList.GetComponent<RectTransform>().sizeDelta  = new Vector2(660,heigh);
 
-        //levelCompleted = 5;
-        Debug.Log(" menu !");
+        //Debug.Log(" menu !");
 
         for (int i =0; i< LVM.getLevelMax(); i++)
         {
-            Debug.Log(" menu " + i);
-            GameObject go = Instantiate(Resources.Load<GameObject>("ButtonUnlock"));
+            //Debug.Log(" menu " + i);
+            GameObject go;
+
+            if (LVM.getPlaygroundName(i+1).Contains("jelly"))
+                go = Instantiate(Resources.Load<GameObject>("ButtonJelly"));
+            else
+                go = Instantiate(Resources.Load<GameObject>("ButtonUnlock"));
+
+
             go.transform.SetParent(levelList.transform);//levelList.transform.GetChild(i).gameObject;
             go.transform.localScale = new Vector3(1, 1, 1);
 

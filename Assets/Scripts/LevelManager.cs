@@ -17,19 +17,25 @@ public class LevelManager : MonoBehaviour {
     List<string> playgroundName = new List<string>()
     {
         "Pg 0",
+        "Pg 0b",
         "playground1",
         "playground2",
         "Pg 3 DBM",
+        "Pg jelly0",
         "Pg double DBM",
         "playground3",
         "PG bonus1",
         "Pg 4 pressostats",
         "Pg 1P2R",
+        "Pg jelly1",
         "Pg double DBM2",
         "Pg Rampe tension",
         "PG DBM+PST",
         "PG Capa1",
-        "PG Capa2"
+        "PG Capa2",
+        "Pg jelly2",
+        "PG Capa3",
+        "PG Capa4"
     };
 
     private void Awake()
