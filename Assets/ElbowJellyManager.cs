@@ -7,7 +7,7 @@ public class ElbowJellyManager : BaseComponent {
 
     GameObject jelly3, jelly2, bubble;
     public float x_bulle = 0;
-    float r_bulle = 0.1f;
+    float r_bulle = 0.2f;
     public float Capa = 1.0f;
     bool full = false;
     bool entered = false;
@@ -74,17 +74,16 @@ public class ElbowJellyManager : BaseComponent {
             jelly2.GetComponent<Image>().color = new Color(255, 255, 255);
         }
 
-        if (full && Mathf.Abs(f) > 0.01f)
-            {
-                if (x_bulle > 1 - r_bulle) x_bulle = 0 + r_bulle;
-                if (x_bulle < 0 + r_bulle) x_bulle = 1 - r_bulle;
+        if (full && Mathf.Abs(f) > 0.01f){
 
-                // cos(x_bulle - PI / 2) * w * 0.5 - w * d_bulle / 2 ,sin(x_bulle - PI / 2) * w * 0.5 - w * d_bulle / 2 + w
+            float x_max = 0.5f - r_bulle / 2f;
+
+            if (x_bulle > x_max) x_bulle = -x_max; /// 3 for PI
+            if (x_bulle < -x_max) x_bulle = x_max;
 
 
-
-                bubble.transform.localPosition = new Vector3((Mathf.Cos( ( x_bulle - 1 )* Mathf.PI / 2) * 0.5f - 0.5f) * 100, (-Mathf.Sin( ( x_bulle - 1 ) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, 0);
-                bubble.SetActive(true);
+            bubble.transform.localPosition = new Vector3((Mathf.Cos((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, (-Mathf.Sin((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, 0);
+            bubble.SetActive(true);
             }
             else
             {

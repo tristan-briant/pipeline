@@ -101,6 +101,7 @@
     <Compile Include="Assets\Scripts\controller.cs" />
     <Compile Include="Assets\Scripts\gameController.cs" />
     <Compile Include="Assets\Scripts\triggerAction.cs" />
+    <Compile Include="Assets\diodeManager.cs" />
     <Compile Include="Assets\keepalive.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

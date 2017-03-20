@@ -52,14 +52,13 @@ public class ElbowManager : BaseComponent {
 
         if (Mathf.Abs(f) > 0.01f)
         {
-            if (x_bulle > Mathf.PI / 2 - r_bulle) x_bulle = 0 + r_bulle;
-            if (x_bulle < 0 + r_bulle) x_bulle = Mathf.PI / 2 - r_bulle;
+            float x_max = 0.5f - r_bulle/2f;
 
-           // cos(x_bulle - PI / 2) * w * 0.5 - w * d_bulle / 2 ,sin(x_bulle - PI / 2) * w * 0.5 - w * d_bulle / 2 + w
+            if (x_bulle >x_max) x_bulle = -x_max; /// 3 for PI
+            if (x_bulle < -x_max) x_bulle = x_max;
 
-
-
-            bubble.transform.localPosition = new Vector3((Mathf.Cos(x_bulle - Mathf.PI / 2)  * 0.5f -0.5f)* 100, (-Mathf.Sin(x_bulle - Mathf.PI / 2) * 0.5f -0.5f)* 100, 0);
+ 
+            bubble.transform.localPosition = new Vector3((Mathf.Cos((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, (-Mathf.Sin((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, 0);
             bubble.SetActive(true);
         }
         else
