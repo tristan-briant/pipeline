@@ -75,33 +75,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\ElbowJellyManager.cs" />
-    <Compile Include="Assets\InletJellyManager.cs" />
-    <Compile Include="Assets\PipelineJellyManager.cs" />
+    <Compile Include="Assets\GeneratorManager.cs" />
     <Compile Include="Assets\Scripts\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\BaseFrontier.cs" />
-    <Compile Include="Assets\Scripts\DebitmeterManager.cs" />
-    <Compile Include="Assets\Scripts\ElbowManager.cs" />
+    <Compile Include="Assets\Scripts\Components\ResistorManager.cs" />
+    <Compile Include="Assets\Scripts\Components\capacitorManager.cs" />
+    <Compile Include="Assets\Scripts\Components\diodeManager.cs" />
     <Compile Include="Assets\Scripts\Engine.cs" />
     <Compile Include="Assets\Scripts\InletManager.cs" />
     <Compile Include="Assets\Scripts\IntroManager.cs" />
+    <Compile Include="Assets\Scripts\Jelly\ElbowJellyManager.cs" />
+    <Compile Include="Assets\Scripts\Jelly\InletJellyManager.cs" />
+    <Compile Include="Assets\Scripts\Jelly\PipelineJellyManager.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts\MenuManager.cs" />
     <Compile Include="Assets\Scripts\OnDrop.cs" />
-    <Compile Include="Assets\Scripts\Pipeline.cs" />
-    <Compile Include="Assets\Scripts\PressostatManager.cs" />
-    <Compile Include="Assets\Scripts\PressostatTriggerManager.cs" />
-    <Compile Include="Assets\Scripts\ResistorManager.cs" />
-    <Compile Include="Assets\Scripts\TeManager.cs" />
-    <Compile Include="Assets\Scripts\ValveManager.cs" />
+    <Compile Include="Assets\Scripts\Pipes\ElbowManager.cs" />
+    <Compile Include="Assets\Scripts\Pipes\Pipeline.cs" />
+    <Compile Include="Assets\Scripts\Pipes\TeManager.cs" />
+    <Compile Include="Assets\Scripts\Pipes\ValveManager.cs" />
+    <Compile Include="Assets\Scripts\Pipes\WatchManager.cs" />
+    <Compile Include="Assets\Scripts\Pipes\triggerAction.cs" />
+    <Compile Include="Assets\Scripts\Sensors\DebitmeterManager.cs" />
+    <Compile Include="Assets\Scripts\Sensors\PressostatManager.cs" />
+    <Compile Include="Assets\Scripts\Sensors\PressostatTriggerManager.cs" />
     <Compile Include="Assets\Scripts\WallManager.cs" />
-    <Compile Include="Assets\Scripts\WatchManager.cs" />
     <Compile Include="Assets\Scripts\calculate.cs" />
-    <Compile Include="Assets\Scripts\capacitorManager.cs" />
     <Compile Include="Assets\Scripts\controller.cs" />
     <Compile Include="Assets\Scripts\gameController.cs" />
-    <Compile Include="Assets\Scripts\triggerAction.cs" />
-    <Compile Include="Assets\diodeManager.cs" />
     <Compile Include="Assets\keepalive.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

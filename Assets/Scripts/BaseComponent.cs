@@ -10,8 +10,8 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected float q = 0, f = 0;
     public int dir=0;
-    protected float R = 3f, L = 10, C = 1, Rground = 50;
-    protected string Name;
+    protected float R = 3f, L = 3, C = 1, Rground = 50;
+    //protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
     public float success = 1;
@@ -69,9 +69,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected virtual void Start()
     {
-        Name = "empty";
         success = 1;
-        //empty = true;
         gc = (gameController)GameObject.Find("gameController").GetComponent(typeof(gameController)); //find the game engine
         transform.rotation = Quaternion.identity;
         transform.Rotate(new Vector3(0, 0, dir * 90));

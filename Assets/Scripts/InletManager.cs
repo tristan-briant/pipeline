@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InletManager : BaseFrontier {
 
     public float pset;
+    float ppset;
     public float imax=1;
     float pp = 0;
     float ii=0;
@@ -14,39 +15,68 @@ public class InletManager : BaseFrontier {
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
     Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
+    public int mode = 0;
+    public float periode=2;
 
 
+
+    IEnumerator generateRandom()
+    {
+        int s = 1;
+
+        while (true)
+        {
+            ppset = pset * s;
+            float time = Random.Range(0, periode);
+            yield return new WaitForSeconds(time);
+
+            const float N = 10;
+            for (int i = 0; i < N; i++)
+            {
+                ppset = pset * (1 - 2 * i / N) * s;
+                yield return new WaitForSeconds(0.02f);  // retournement en douceur
+            }
+            s = -s;
+        }
+    }
+
+
+    float Rin = 0; //resistance interne
     public override void calcule_i_p(float[] p, float[] i)
     {
-        if (jelly) {
-            if(pset>0) i[0] = -1;
-            p[0] = pset;
-            return;
-        }
+       
         float a = p[0];
+
+         switch (mode) {
+            case 0:  // Mode normal
+                ppset = pset;
+                break;
+            case 1: //mode périodique
+                ppset = pset*Mathf.Sin(Mathf.PI*Time.time/periode);
+                break;
+ 
+        }
 
 
         if (ii < imax && ii > -imax)
         {
-           pp=pset;
-            //pp = 0.5f * pp + 0.5f * pset; // tending to pin
-            
+            //pp=ppset;      
+            Rin = Mathf.Clamp(Rin - 0.01f, 0, 20);
         }
         else
         {
-            pp = 0.9f * pp;
-            //p[0] = pp;*/
-            //i[0] = Mathf.Clamp(i[0], -imax, imax);
+            Rin = Mathf.Clamp(Rin + 0.01f, 0, 20);
 
+            // pp = 0.9f * pp;
         }
 
+        pp = ppset -ii * Rin;
  
         q += (i[0] + ii) / C;
         f += (p[0] - pp) / L;
-
+        
         p[0] = (q + (i[0] - f) * R);
-        //p[2] = (q + (i[2] + f) * R);
-
+ 
         i[0] = (f + (a - q) / R);
         ii = (-f + (pp - q) / R);
 
@@ -81,6 +111,8 @@ public class InletManager : BaseFrontier {
                 water0.GetComponent<Image>().color = jellyColorBg;
             }
         }
+
+        if (mode == 2) StartCoroutine(generateRandom()); 
     }
         
 
@@ -89,13 +121,27 @@ public class InletManager : BaseFrontier {
        
         if (!jelly)
         {
-            water.GetComponent<Image>().color = pressureColor(pset);
+            water.GetComponent<Image>().color = pressureColor(ppset);
             water0.GetComponent<Image>().color = pressureColor(pin[0]);
         }
+        
 
-        if (pset <= 0)
+        switch (mode)
         {
-            arrow.transform.localScale = new Vector3(-1,1,1);
+            case 0:  // Mode normal
+                if (ppset <= 0)
+                    arrow.transform.localScale = new Vector3(-1, 1, 1);
+                else
+                    arrow.transform.localScale = new Vector3(1, 1, 1);
+                break;
+            case 1: //mode périodique
+            case 2:
+                arrow.transform.localScale = new Vector3(Mathf.Clamp(ppset,-1,1), 1, 1);
+                break;
+        }
+
+        if (ppset <= 0)
+        {
             arrow.transform.localPosition = new Vector3(25 - (0.025f - 0.05f * Mathf.Sqrt(Mathf.Abs(Mathf.Sin(Time.time / 0.5f)))) * 100, 0, 0);
 
         }
