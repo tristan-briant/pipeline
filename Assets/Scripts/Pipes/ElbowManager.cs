@@ -13,14 +13,14 @@ public class ElbowManager : BaseComponent {
     {
         float a = p[2], b = p[3];
 
-        q += (i[2] + i[3]) / C; //q*=0.99;
-        f += (p[2] - p[3]) / L;
+        q += (i[2] + i[3]) * alpha; //q*=0.99;
+        f += (p[2] - p[3]) / L * alpha;
 
-        p[2] = (q + (i[2] - f) * R);
-        p[3] = (q + (i[3] + f) * R);
+        p[2] = (q/C + (i[2] - f) * R);
+        p[3] = (q/C + (i[3] + f) * R);
 
-        i[2] = (f + (a - q) / R);
-        i[3] = (-f + (b - q) / R);
+        i[2] = (f + (a - q/C) / R);
+        i[3] = (-f + (b - q/C) / R);
 
         //i[1]=i[0]=0;
         i[0] = p[0] / Rground;

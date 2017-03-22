@@ -23,7 +23,7 @@ public class gameController : MonoBehaviour {
     public GameObject PgHolder; //The "playground Holder" 
     GameObject Pg; //The "playground" from which are determined N and M 
 
-    public float alpha=0.001f;
+    //public float alpha=0.001f;
 
     private void Awake()
     {

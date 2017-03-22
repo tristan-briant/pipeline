@@ -72,8 +72,8 @@ public class InletManager : BaseFrontier {
 
         pp = ppset -ii * Rin;
  
-        q += (i[0] + ii) / C;
-        f += (p[0] - pp) / L;
+        q += (i[0] + ii) / C * alpha;
+        f += (p[0] - pp) / L * alpha;
         
         p[0] = (q + (i[0] - f) * R);
  

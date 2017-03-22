@@ -17,9 +17,9 @@ public class diodeManager : BaseComponent {
         float a = p[0], b = p[2];
 
 
-        q0 +=  (i[0]) / C;
-        q2 += (i[2]) / C;
-        f += (p[0] - p[2]) / L;
+        q0 +=  (i[0]) / C * alpha;
+        q2 += (i[2]) / C * alpha;
+        f += (p[0] - p[2]) / L * alpha;
   
 
         if (q0 < q2)
