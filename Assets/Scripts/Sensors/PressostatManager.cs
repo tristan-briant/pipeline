@@ -18,14 +18,14 @@ public class PressostatManager : BaseComponent {
     {
         float b = p[2];
 
-        q += (i[2]) / C * 2; //q*=0.99;
+        q += (i[2])  * alpha; //q*=0.99;
         f += (p[0] - p[2]) / L * 0;
 
         //p[0] = (1-alpha)*p[0] + alpha*( q + (i[0]-f)*R);
-        p[2] = (q + (i[2] + f) * R);
+        p[2] = (q / C + (i[2] + f) * R);
 
         //i[0] = (1-alpha)*i[0] + alpha*( f + (a-q)/R);
-        i[2] = (-f + (b - q) / R);
+        i[2] = (-f + (b - q / C) / R);
 
         //i[0]=i[1]=i[3]=0;
         i[0] = p[0] / Rground;

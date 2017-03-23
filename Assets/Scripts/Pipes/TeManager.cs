@@ -26,18 +26,18 @@ public class TeManager : BaseComponent
         i2 = i[2]; x_bulle2 += 0.05f * i2;
         i3 = i[3]; x_bulle3 -= 0.05f * i3;
 
-        q += (i[0] + i[2] + i[3]) / C; //q*=0.99;
-        f1 += (p[0] - p[2]) / L;
-        f2 += (p[2] - p[3]) / L;
-        f3 += (p[3] - p[0]) / L;
+        q += (i[0] + i[2] + i[3]) * alpha; //q*=0.99;
+        f1 += (p[0] - p[2]) / L * alpha;
+        f2 += (p[2] - p[3]) / L * alpha;
+        f3 += (p[3] - p[0]) / L * alpha;
 
-        p[0] = (q + (i[0] - f1 + f3) * R);
-        p[2] = (q + (i[2] - f2 + f1) * R);
-        p[3] = (q + (i[3] - f3 + f2) * R);
+        p[0] = (q / C + (i[0] - f1 + f3) * R);
+        p[2] = (q / C + (i[2] - f2 + f1) * R);
+        p[3] = (q / C + (i[3] - f3 + f2) * R);
 
-        i[0] = (f1 - f3 + (a - q) / R);
-        i[2] = (f2 - f1 + (b - q) / R);
-        i[3] = (f3 - f2 + (c - q) / R);
+        i[0] = (f1 - f3 + (a - q / C) / R);
+        i[2] = (f2 - f1 + (b - q / C) / R);
+        i[3] = (f3 - f2 + (c - q / C) / R);
 
         //i[1]=0;
 
@@ -66,7 +66,7 @@ public class TeManager : BaseComponent
 
 
         //////////BUBBLE 0
-        if (Mathf.Abs(i1) > 0.01)
+        if (Mathf.Abs(i1) > fMinBubble)
         {
             float xmax = 0.5f - r_bulle;
             if (x_bulle1 > xmax) x_bulle1 = -xmax;
@@ -86,7 +86,7 @@ public class TeManager : BaseComponent
         }
 
         //////////BUBBLE 2
-        if (Mathf.Abs(i2) > 0.01)
+        if (Mathf.Abs(i2) > fMinBubble)
         {
             float xmax = 0.5f - r_bulle;
             if (x_bulle2 > xmax) x_bulle2 = -xmax;
@@ -106,7 +106,7 @@ public class TeManager : BaseComponent
         }
 
         //////////BUBBLE 3
-        if (Mathf.Abs(i3) > 0.01)
+        if (Mathf.Abs(i3) > fMinBubble)
         {
             float xmax = 0.5f - r_bulle;
             if (x_bulle3 > xmax) x_bulle3 = -xmax;

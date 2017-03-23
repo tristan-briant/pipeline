@@ -48,7 +48,7 @@ public class ElbowJellyManager : BaseComponent {
 
         x_bulle -= 0.01f * f * 100 / Capa;
 
-        if (q > 1 + 2 / Capa)
+        if (q > 1 + 2 / Capa / alpha)
             fail = 1;
     }
 
@@ -68,7 +68,7 @@ public class ElbowJellyManager : BaseComponent {
         if (f > 0) jelly3.GetComponent<Image>().fillAmount = q;
         if (f < 0) jelly2.GetComponent<Image>().fillAmount = q;
 
-        if (q > 1 + 2 / Capa)
+        if (q > 1 + 2 / Capa / alpha)
         {
             jelly3.GetComponent<Image>().color = new Color(255, 255, 255);
             jelly2.GetComponent<Image>().color = new Color(255, 255, 255);

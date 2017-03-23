@@ -64,7 +64,7 @@ public class InletJellyManager : BaseFrontier {
                 success = 0;
         }
 
-        if (q > 1 + 2 / Capa)
+        if (q > 1 + 10 / Capa / alpha)
             fail = 1;
 
     }

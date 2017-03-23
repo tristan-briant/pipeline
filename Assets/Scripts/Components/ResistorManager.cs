@@ -16,15 +16,15 @@ public class ResistorManager : BaseComponent {
 
         float a = p[0], b = p[2];
 
-        q += (i[0] + i[2]) / C;
+        q += (i[0] + i[2]) * alpha;
         //f+=alpha*(p[0]-p[2])/L;
         f = (i[0] - i[2]) / 2;
 
-        p[0] = (q + (i[0]) * Res*0.5f);
-        p[2] = (q + (i[2]) * Res * 0.5f);
+        p[0] = (q / C + (i[0]) * Res * 0.5f);
+        p[2] = (q / C + (i[2]) * Res * 0.5f);
 
-        i[0] = (+(a - q) / Res * 2);
-        i[2] = (+(b - q) / Res * 2);
+        i[0] = (+(a - q / C) / Res * 2);
+        i[2] = (+(b - q / C) / Res * 2);
 
         //i[1]=i[3]=0;
         i[1] = p[1] / Rground;

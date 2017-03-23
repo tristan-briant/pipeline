@@ -17,14 +17,14 @@ public class Pipeline : BaseComponent {
 
         float a = p[0], b = p[2];
 
-        q += (i[0] + i[2]) / C; 
-        f += (p[0] - p[2]) / L;
+        q += (i[0] + i[2]) * alpha; 
+        f += (p[0] - p[2]) / L * alpha;
 
-        p[0] = (q + (i[0] - f) * R);
-        p[2] = (q + (i[2] + f) * R);
+        p[0] = (q / C + (i[0] - f) * R);
+        p[2] = (q / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q) / R);
-        i[2] = (-f + (b - q) / R);
+        i[0] = (f + (a - q / C) / R);
+        i[2] = (-f + (b - q / C) / R);
 
         //i[1]=i[3]=0;
         i[1] = p[1] / Rground;
@@ -49,7 +49,7 @@ public class Pipeline : BaseComponent {
         water0.GetComponent<Image>().color = pressureColor(pin[0]);
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 
-        if (Mathf.Abs(f) > 0.01f)
+        if (Mathf.Abs(f) > fMinBubble)
         {
             //if (x_bulle < -0.5f + d_bulle * 0.5f) { x_bulle = 0.5f - d_bulle * 0.5f; }
             //if (x_bulle > 0.5f - d_bulle * 0.5f) { x_bulle = -0.5f + d_bulle * 0.5f; }

@@ -10,14 +10,14 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected float q = 0, f = 0;
     public int dir=0;
-    protected float R = 1f, L = 0.5f, C = 1, Rground = 50;
+    protected float R = 2f, L = 1f, C = 1, Rground = 50;
     //protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
     public float success = 1;
     public float fail = 0;
-    public const  float alpha = 0.4f;
-
+    public const  float alpha = 0.2f;
+    public const float fMinBubble = 0.1f;
 
     public int x, y;
     public bool locked=false;

@@ -36,7 +36,10 @@ public class LevelManager : MonoBehaviour {
         "Pg jelly2",
         "PG Capa3",
         "PG Capa4",
-        "PG Diode1"
+        "PG Diode Capa",
+        "PG Diode1",
+        "PG Diode2",
+        "PG D demi pont"
     };
 
     private void Awake()

@@ -27,15 +27,15 @@ public class PressostatTriggerManager : BaseComponent {
 
     public override void calcule_i_p(float[] p, float[] i)
     {
-        C = 5;
+        C = 1;
         float b = p[2];
 
-        q += (i[2]) / C * 2; //q*=0.99;
+        q += (i[2])  * alpha; //q*=0.99;
         f += (p[0] - p[2]) / L * 0;
 
-        p[2] = (q + (i[2] + f) * R);
+        p[2] = (q / C + (i[2] + f) * R);
 
-        i[2] = (-f + (b - q) / R);
+        i[2] = (-f + (b - q / C) / R);
 
         i[0] = p[0] / Rground;
         i[1] = p[1] / Rground;

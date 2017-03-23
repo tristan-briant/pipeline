@@ -50,7 +50,7 @@ public class ElbowManager : BaseComponent {
         //transform.Rotate(new Vector3(0, 0, dir * 90));
 
 
-        if (Mathf.Abs(f) > 0.01f)
+        if (Mathf.Abs(f) > fMinBubble)
         {
             float x_max = 0.5f - r_bulle/2f;
 

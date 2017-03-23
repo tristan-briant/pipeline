@@ -15,7 +15,8 @@ public class DebitmeterManager : BaseComponent {
 
     public override void calcule_i_p(float[] p, float[] i)
     {
-        //C = 5.0f; L = 10f;
+        //C = 5.0f;
+        L = 5f;
         float a = p[0], b = p[2];
 
         q += (i[0] + i[2]) / C; //q*=0.99;

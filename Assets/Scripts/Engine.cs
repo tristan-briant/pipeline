@@ -6,7 +6,7 @@ public class Engine  {
 
     static float[][] intensite; //ordonnée paire = courants verticaux
     static float[][] pression;
-    const float alpha = 0.5f;
+    const float alpha = 0.2f;
 
 
     public static void initialize_p_i(int N,int M)
