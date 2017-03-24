@@ -103,6 +103,7 @@
     <Compile Include="Assets\Scripts\calculate.cs" />
     <Compile Include="Assets\Scripts\controller.cs" />
     <Compile Include="Assets\Scripts\gameController.cs" />
+    <Compile Include="Assets\TransistorManager.cs" />
     <Compile Include="Assets\keepalive.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

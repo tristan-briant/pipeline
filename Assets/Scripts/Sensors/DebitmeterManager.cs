@@ -9,7 +9,8 @@ public class DebitmeterManager : BaseComponent {
     public float x_bulle = 0;
     float r_bulle = 0.1f;
     public float setPointHigh, setPointLow, iMax;
-
+    public int mode = 0;
+    public float periode = 2;
     float t_shine = 0;
     //public new float f;
 
@@ -34,11 +35,37 @@ public class DebitmeterManager : BaseComponent {
 
         x_bulle -= 0.05f * f;
 
-        if (-f < setPointHigh && -f > setPointLow && itemBeingDragged ==null)
-            success = Mathf.Clamp(success + 0.005f, 0, 1);
-        else
-            success = Mathf.Clamp(success - 0.05f, 0, 1);
+        if (mode == 0)
+        {
+            if (-f < setPointHigh && -f > setPointLow && itemBeingDragged == null)
+                success = Mathf.Clamp(success + 0.005f, 0, 1);
+            else
+                success = Mathf.Clamp(success - 0.05f, 0, 1);
+        }
+        if (mode == 1)
+        {
+            float mean = 0.5f * (setPointHigh + setPointLow);
+            float tol = (setPointHigh - setPointLow) * 0.5f;
+            float t = 2 * Mathf.PI * Time.time;
 
+            if (mean * Mathf.Sin(t / periode) - tol < -f && -f < mean * Mathf.Sin(t / periode) + tol && itemBeingDragged == null)
+                success = Mathf.Clamp(success + 0.01f / periode /(2*3.14f) , 0, 1); // 2 periode to win
+            else
+                success = Mathf.Clamp(success - 0.05f, 0, 1);
+
+        }
+        if (mode == 2)
+        {
+            float mean = 0.5f * (setPointHigh + setPointLow);
+            float tol = (setPointHigh - setPointLow) * 0.5f;
+            float t = 2 * Mathf.PI * Time.time;
+
+            if (mean * (1+Mathf.Sin(t / periode))*0.5f - tol < -f && -f < mean * (1+Mathf.Sin(t / periode))*0.5f + tol && itemBeingDragged == null)
+                success = Mathf.Clamp(success + 0.01f / periode, 0, 1); // 2 periode to win
+            else
+                success = Mathf.Clamp(success - 0.05f, 0, 1);
+
+        }
 
     }
 
@@ -86,9 +113,31 @@ public class DebitmeterManager : BaseComponent {
         const float ANGLEMAX = 180 / 4.8f;
         float angle = Mathf.Clamp(f / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
 
-        float angleH = Mathf.Clamp( (setPointHigh) / iMax, -1, 1);
-        float angleL = Mathf.Clamp( (setPointLow) / iMax, -1, 1);
+        float angleH, angleL;
+        if (mode == 0)
+        {
+            angleH = Mathf.Clamp((setPointHigh) / iMax, -1, 1);
+            angleL = Mathf.Clamp((setPointLow) / iMax, -1, 1);
+        }
+        else if(mode==1)
+        {
+            float mean = 0.5f * (setPointHigh + setPointLow);
+            float tol = (setPointHigh - setPointLow) * 0.5f;
+            float t = 2 * Mathf.PI * Time.time;
 
+            angleH = Mathf.Clamp((mean * Mathf.Sin(t / periode) + tol) / iMax, -1, 1);
+            angleL = Mathf.Clamp((mean * Mathf.Sin(t / periode) - tol) / iMax, -1, 1);
+
+        }
+        else
+        {
+            float mean = 0.5f * (setPointHigh + setPointLow);
+            float tol = (setPointHigh - setPointLow) * 0.5f;
+            float t = 2 * Mathf.PI * Time.time;
+
+            angleH = Mathf.Clamp((mean * (1+Mathf.Sin(t / periode))*0.5f + tol) / iMax, -1, 1);
+            angleL = Mathf.Clamp((mean * (1+Mathf.Sin(t / periode))*0.5f - tol) / iMax, -1, 1);
+        }
 
 
         arrow.transform.localEulerAngles= new Vector3(0, 0, angle);

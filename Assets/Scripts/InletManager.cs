@@ -52,7 +52,7 @@ public class InletManager : BaseFrontier {
                 ppset = pset;
                 break;
             case 1: //mode périodique
-                ppset = pset*Mathf.Sin(Mathf.PI*Time.time/periode);
+                ppset = pset*Mathf.Sin(2*Mathf.PI*Time.time/periode);
                 break;
  
         }
