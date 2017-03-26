@@ -17,7 +17,7 @@ public class InductorManager : BaseComponent
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
-        R = 80;//C = 2;
+        R = 16f;//C = 2;
         float a = p[0], b = p[2];
 
         q += (i[0] + i[2]) * alpha;

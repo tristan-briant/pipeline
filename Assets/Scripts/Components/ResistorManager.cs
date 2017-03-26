@@ -47,7 +47,7 @@ public class ResistorManager : BaseComponent {
 
     private void Update()
     {
-        water.GetComponent<Image>().color = pressureColor(q);
+        water.GetComponent<Image>().color = pressureColor(q / C);
         water0.GetComponent<Image>().color = pressureColor(pin[0]);
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 

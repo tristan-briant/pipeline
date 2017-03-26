@@ -10,7 +10,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected float q = 0, f = 0;
     public int dir=0;
-    protected float R = 2f, L = 1f, C = 1f, Rground = 50;
+    protected float R = 1f, L = 1f, C =0.5f, Rground = 50;
     //protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];

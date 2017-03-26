@@ -61,12 +61,12 @@ public class InletManager : BaseFrontier {
         if (-imax < ii && ii < imax)
         {
             //pp=ppset;      
-            Rin = Mathf.Clamp(Rin - 0.05f, 0, 20);
+            Rin = Mathf.Clamp(Rin - 0.01f, 0, 20);
             //Rin = 0;
         }
         else
         {
-            Rin = Mathf.Clamp(Rin + 0.01f, 0, 20);
+            Rin = Mathf.Clamp(Rin + 0.005f, 0, 20);
 
             // pp = 0.9f * pp;
         }

@@ -33,7 +33,7 @@ public class PressostatManager : BaseComponent {
         i[3] = p[3] / Rground;
 
 
-        if ( setPointLow <q &&  q < setPointHigh  && itemBeingDragged == null)
+        if ( setPointLow <q / C &&  q / C < setPointHigh  && itemBeingDragged == null)
             success = Mathf.Clamp(success + 0.005f, 0, 1);
         else
             success = Mathf.Clamp(success - 0.05f, 0, 1);
@@ -62,7 +62,7 @@ public class PressostatManager : BaseComponent {
     {
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 
-        float rate = Mathf.Clamp( (q-PMin) / (PMax - PMin) , 0, 1);
+        float rate = Mathf.Clamp((q / C - PMin) / (PMax - PMin), 0, 1);
 
         float rateH = Mathf.Clamp((setPointHigh - PMin) / (PMax-PMin) , 0, 1);
         float rateL = Mathf.Clamp((setPointLow - PMin) / (PMax - PMin) , 0, 1);

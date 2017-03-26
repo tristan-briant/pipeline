@@ -6,20 +6,26 @@ public class Engine  {
 
     static float[][] intensite; //ordonnée paire = courants verticaux
     static float[][] pression;
-    const float dt = 0.2f;
-    const float alpha = 0.2f;
+    static float[][] Dintensite; //ordonnée paire = courants verticaux
+    static float[][] Dpression;
+    const float dt = 0.1f;
+    const float alpha = 0.1f;
 
 
     public static void initialize_p_i(int N,int M)
     {
         intensite = new float[N - 1][];
         pression = new float[N - 1][];
- 
+        Dintensite = new float[N - 1][];
+        Dpression = new float[N - 1][];
+
 
         for (int k = 0; k < N - 1; k++)
         {
             intensite[k] = new float[2 * (M - 2) + 1];
             pression[k] = new float[2 * (M - 2) + 1];
+            Dintensite[k] = new float[2 * (M - 2) + 1];
+            Dpression[k] = new float[2 * (M - 2) + 1];
 
             for (int l = 0; l < 2 * (M - 2) + 1; l++)
                 intensite[k][l] = pression[k][l] = 0;
@@ -76,6 +82,22 @@ public class Engine  {
 
         p[x][2 * y + 2] = (1 - alpha) * p[x][2 * y + 2] + alpha * pc[3];  //en bas
         i[x][2 * y + 2] = (1 - alpha) * i[x][2 * y + 2] + alpha * -ic[3];
+
+    }
+
+    public static void currant_update2(int x, int y, float[][] p, float[][] i, float[] pc, float[] ic, float alpha)
+    {
+        p[x + 1][2 * y + 1] +=  pc[0];  //à droite
+        i[x + 1][2 * y + 1] += -ic[0];
+
+        p[x][2 * y] += -pc[1];  //en haut
+        i[x][2 * y] += - ic[1];
+
+        p[x][2 * y + 1] += -pc[2];  //à gauche
+        i[x][2 * y + 1] += - ic[2];
+
+        p[x][2 * y + 2] +=  pc[3];  //en bas
+        i[x][2 * y + 2] += -ic[3];
 
     }
 
@@ -193,6 +215,9 @@ public class Engine  {
         float success = 1;
         float fail = 0;
 
+        for (int k = 0; k < N - 1; k++)
+            for (int l = 0; l < 2 * (M - 2) + 1; l++)
+                Dintensite[k][l] = Dpression[k][l] = 0;
 
         for (int k = 1; k < N - 1; k++) //Border UP condition
         {
@@ -200,8 +225,8 @@ public class Engine  {
             pp[0] = pression[k - 1][0];
             ii[0] = (-intensite[k - 1][0]);
             composants[k][0].calcule_i_p(pp, ii, dt);
-            pression[k - 1][0] = (1 - alpha) * pression[k - 1][0] + alpha * pp[0];
-            intensite[k - 1][0] = (1 - alpha) * intensite[k - 1][0] + alpha * (-ii[0]);
+            Dpression[k - 1][0] +=  pp[0];
+            Dintensite[k - 1][0] +=  -ii[0];
             success = success * composants[k][0].success;
             fail += composants[k][0].fail;
         }
@@ -212,8 +237,8 @@ public class Engine  {
             ii[0] = intensite[k - 1][2 * M - 4];
             composants[k][M - 1].calcule_i_p(pp, ii, dt);
 
-            pression[k - 1][2 * M - 4] = (1 - alpha) * pression[k - 1][2 * M - 4] + alpha * pp[0];
-            intensite[k - 1][2 * M - 4] = (1 - alpha) * intensite[k - 1][2 * M - 4] + alpha * ii[0];
+            Dpression[k - 1][2 * M - 4] += -pp[0];
+            Dintensite[k - 1][2 * M - 4] += - ii[0];
             success = success * composants[k][M - 1].success;
             fail += composants[k][M - 1].fail;
         }
@@ -224,8 +249,8 @@ public class Engine  {
             pp[0] = pression[N - 2][2 * (k - 1) + 1];
             ii[0] = (intensite[N - 2][2 * (k - 1) + 1]);
             composants[N - 1][k].calcule_i_p(pp, ii, dt);
-            pression[N - 2][2 * (k - 1) + 1] = (1 - alpha) * pression[N - 2][2 * (k - 1) + 1] + alpha * pp[0];
-            intensite[N - 2][2 * (k - 1) + 1] = (1 - alpha) * intensite[N - 2][2 * (k - 1) + 1] + alpha * (ii[0]);
+            Dpression[N - 2][2 * (k - 1) + 1] += - pp[0];
+            Dintensite[N - 2][2 * (k - 1) + 1] += - ii[0];
             success = success * composants[N - 1][k].success;
             fail += composants[N - 1][k].fail;
         }
@@ -235,8 +260,8 @@ public class Engine  {
             pp[0] = pression[0][2 * (k - 1) + 1];
             ii[0] = (-intensite[0][2 * (k - 1) + 1]);
             composants[0][k].calcule_i_p(pp, ii, dt);
-            pression[0][2 * (k - 1) + 1] = (1 - alpha) * pression[0][2 * (k - 1) + 1] + alpha * pp[0];
-            intensite[0][2 * (k - 1) + 1] = (1 - alpha) * intensite[0][2 * (k - 1) + 1] + alpha * (-ii[0]);
+            Dpression[0][2 * (k - 1) + 1] +=  pp[0];
+            Dintensite[0][2 * (k - 1) + 1] += -ii[0];
             success = success * composants[0][k].success;
             fail += composants[0][k].fail;
         }
@@ -251,14 +276,22 @@ public class Engine  {
                 //composants[k][l].set_i_p(pp, ii);
                 composants[k][l].calcule_i_p(pp, ii, dt);
                 Engine.rotate_currant((4 - composants[k][l].dir) % 4, pp, ii);
-                Engine.currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
+                Engine.currant_update2(k - 1, l - 1, Dpression, Dintensite, pp, ii, alpha);
 
                 success = success * composants[k][l].success;
                 fail += composants[k][l].fail;
             }
         }
 
-        if (fail > 0) return -1;
+        for (int k = 0; k < N - 1; k++)
+            for (int l = 0; l < 2 * (M - 2) + 1; l++)
+            {
+                pression[k][l] += Dintensite[k][l] * alpha;
+                intensite[k][l] += Dpression[k][l] * alpha;
+           }
+        
+
+                if (fail > 0) return -1;
 
         return success;
 
