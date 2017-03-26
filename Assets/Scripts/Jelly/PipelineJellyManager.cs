@@ -13,11 +13,11 @@ public class PipelineJellyManager : BaseComponent {
     bool full = false;
     bool entered = false;
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
 
        
-        q += (i[0] + i[2]) / Capa;
+        q += (i[0] + i[2]) / Capa * alpha;
 
         if (q > 0 && !entered)
         {
@@ -69,7 +69,7 @@ public class PipelineJellyManager : BaseComponent {
         if(f>0) jelly0.GetComponent<Image>().fillAmount = q;
         if (f < 0) jelly2.GetComponent<Image>().fillAmount = q;
 
-        if (q > 1 + 2 / Capa / alpha)
+        if (q > 1 + 2 / Capa )
         {
             jelly0.GetComponent<Image>().color = new Color(255, 255, 255);
             jelly2.GetComponent<Image>().color = new Color(255, 255, 255);

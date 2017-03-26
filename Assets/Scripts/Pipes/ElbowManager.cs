@@ -9,7 +9,7 @@ public class ElbowManager : BaseComponent {
     float x_bulle = 0;
 
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[2], b = p[3];
 

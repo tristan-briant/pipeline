@@ -10,13 +10,12 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected float q = 0, f = 0;
     public int dir=0;
-    protected float R = 2f, L = 1f, C = 1, Rground = 50;
+    protected float R = 2f, L = 1f, C = 1f, Rground = 50;
     //protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
     public float success = 1;
     public float fail = 0;
-    public const  float alpha = 0.2f;
     public const float fMinBubble = 0.1f;
 
     public int x, y;
@@ -52,7 +51,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
         }
     }
 
-    public virtual void calcule_i_p(float[] p, float[] i)
+    public virtual void calcule_i_p(float[] p, float[] i,float dt)
     {
         /*i[0] = p[0] / Rground;
         i[1] = p[1] / Rground;

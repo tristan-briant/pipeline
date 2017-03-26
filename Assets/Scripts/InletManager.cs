@@ -42,7 +42,7 @@ public class InletManager : BaseFrontier {
 
 
     float Rin = 0; //resistance interne
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
        
         float a = p[0];
@@ -58,10 +58,11 @@ public class InletManager : BaseFrontier {
         }
 
 
-        if (ii < imax && ii > -imax)
+        if (-imax < ii && ii < imax)
         {
             //pp=ppset;      
-            Rin = Mathf.Clamp(Rin - 0.01f, 0, 20);
+            Rin = Mathf.Clamp(Rin - 0.05f, 0, 20);
+            //Rin = 0;
         }
         else
         {
@@ -69,16 +70,16 @@ public class InletManager : BaseFrontier {
 
             // pp = 0.9f * pp;
         }
-
+        //Rin = 0;
         pp = ppset -ii * Rin;
  
-        q += (i[0] + ii) / C * alpha;
+        q += (i[0] + ii) * alpha;
         f += (p[0] - pp) / L * alpha;
-        
-        p[0] = (q + (i[0] - f) * R);
- 
-        i[0] = (f + (a - q) / R);
-        ii = (-f + (pp - q) / R);
+
+        p[0] = (q / C + (i[0] - f) * R);
+        //p[0] = ppset;
+        i[0] = (f + (a - q / C) / R);
+        ii = (-f + (pp - q / C) / R);
 
 
         if(isSuccess)

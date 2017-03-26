@@ -6,6 +6,7 @@ public class Engine  {
 
     static float[][] intensite; //ordonnée paire = courants verticaux
     static float[][] pression;
+    const float dt = 0.2f;
     const float alpha = 0.2f;
 
 
@@ -116,7 +117,7 @@ public class Engine  {
 
             pp[0] = pression[k - 1][0];
             ii[0] = (-intensite[k - 1][0]);
-            composants[k][0].calcule_i_p(pp, ii);
+            composants[k][0].calcule_i_p(pp, ii,dt);
             pression[k - 1][0] = (1 - alpha) * pression[k - 1][0] + alpha * pp[0];
             intensite[k - 1][0] = (1 - alpha) * intensite[k - 1][0] + alpha * (-ii[0]);
             success = success * composants[k][0].success;
@@ -127,7 +128,7 @@ public class Engine  {
         {
             pp[0] = pression[k - 1][2 * M - 4];
             ii[0] = intensite[k - 1][2 * M - 4];
-            composants[k][M - 1].calcule_i_p(pp, ii);
+            composants[k][M - 1].calcule_i_p(pp, ii, dt);
 
             pression[k - 1][2 * M - 4] = (1 - alpha) * pression[k - 1][2 * M - 4] + alpha * pp[0];
             intensite[k - 1][2 * M - 4] = (1 - alpha) * intensite[k - 1][2 * M - 4] + alpha * ii[0];
@@ -140,7 +141,7 @@ public class Engine  {
 
             pp[0] = pression[N - 2][2 * (k - 1) + 1];
             ii[0] = (intensite[N - 2][2 * (k - 1) + 1]);
-            composants[N - 1][k].calcule_i_p(pp, ii);
+            composants[N - 1][k].calcule_i_p(pp, ii, dt);
             pression[N - 2][2 * (k - 1) + 1] = (1 - alpha) * pression[N - 2][2 * (k - 1) + 1] + alpha * pp[0];
             intensite[N - 2][2 * (k - 1) + 1] = (1 - alpha) * intensite[N - 2][2 * (k - 1) + 1] + alpha * (ii[0]);
             success = success * composants[N - 1][k].success;
@@ -151,7 +152,7 @@ public class Engine  {
         {
             pp[0] = pression[0][2 * (k - 1) + 1];
             ii[0] = (-intensite[0][2 * (k - 1) + 1]);
-            composants[0][k].calcule_i_p(pp, ii);
+            composants[0][k].calcule_i_p(pp, ii, dt);
             pression[0][2 * (k - 1) + 1] = (1 - alpha) * pression[0][2 * (k - 1) + 1] + alpha * pp[0];
             intensite[0][2 * (k - 1) + 1] = (1 - alpha) * intensite[0][2 * (k - 1) + 1] + alpha * (-ii[0]);
             success = success * composants[0][k].success;
@@ -166,7 +167,7 @@ public class Engine  {
                 Engine.currant_in(k - 1, l - 1, pression, intensite, pp, ii);
                 Engine.rotate_currant(composants[k][l].dir, pp, ii);
                 //composants[k][l].set_i_p(pp, ii);
-                composants[k][l].calcule_i_p(pp, ii);
+                composants[k][l].calcule_i_p(pp, ii, dt);
                 Engine.rotate_currant((4 - composants[k][l].dir) % 4, pp, ii);
                 Engine.currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
 
@@ -181,6 +182,89 @@ public class Engine  {
         
 
     }
+
+    public static float oneStep2(BaseComponent[][] composants)
+    {
+        time++;
+
+        int N = composants.Length;
+        int M = composants[0].Length;
+
+        float success = 1;
+        float fail = 0;
+
+
+        for (int k = 1; k < N - 1; k++) //Border UP condition
+        {
+
+            pp[0] = pression[k - 1][0];
+            ii[0] = (-intensite[k - 1][0]);
+            composants[k][0].calcule_i_p(pp, ii, dt);
+            pression[k - 1][0] = (1 - alpha) * pression[k - 1][0] + alpha * pp[0];
+            intensite[k - 1][0] = (1 - alpha) * intensite[k - 1][0] + alpha * (-ii[0]);
+            success = success * composants[k][0].success;
+            fail += composants[k][0].fail;
+        }
+
+        for (int k = 1; k < N - 1; k++) //Border DOWN condition
+        {
+            pp[0] = pression[k - 1][2 * M - 4];
+            ii[0] = intensite[k - 1][2 * M - 4];
+            composants[k][M - 1].calcule_i_p(pp, ii, dt);
+
+            pression[k - 1][2 * M - 4] = (1 - alpha) * pression[k - 1][2 * M - 4] + alpha * pp[0];
+            intensite[k - 1][2 * M - 4] = (1 - alpha) * intensite[k - 1][2 * M - 4] + alpha * ii[0];
+            success = success * composants[k][M - 1].success;
+            fail += composants[k][M - 1].fail;
+        }
+
+        for (int k = 1; k < M - 1; k++) //Border RIGHT condition
+        {
+
+            pp[0] = pression[N - 2][2 * (k - 1) + 1];
+            ii[0] = (intensite[N - 2][2 * (k - 1) + 1]);
+            composants[N - 1][k].calcule_i_p(pp, ii, dt);
+            pression[N - 2][2 * (k - 1) + 1] = (1 - alpha) * pression[N - 2][2 * (k - 1) + 1] + alpha * pp[0];
+            intensite[N - 2][2 * (k - 1) + 1] = (1 - alpha) * intensite[N - 2][2 * (k - 1) + 1] + alpha * (ii[0]);
+            success = success * composants[N - 1][k].success;
+            fail += composants[N - 1][k].fail;
+        }
+
+        for (int k = 1; k < M - 1; k++) //Border LEFT condition
+        {
+            pp[0] = pression[0][2 * (k - 1) + 1];
+            ii[0] = (-intensite[0][2 * (k - 1) + 1]);
+            composants[0][k].calcule_i_p(pp, ii, dt);
+            pression[0][2 * (k - 1) + 1] = (1 - alpha) * pression[0][2 * (k - 1) + 1] + alpha * pp[0];
+            intensite[0][2 * (k - 1) + 1] = (1 - alpha) * intensite[0][2 * (k - 1) + 1] + alpha * (-ii[0]);
+            success = success * composants[0][k].success;
+            fail += composants[0][k].fail;
+        }
+
+
+        for (int k = 1; k < N - 1; k++)
+        {
+            for (int l = 1; l < M - 1; l++)
+            {
+                Engine.currant_in(k - 1, l - 1, pression, intensite, pp, ii);
+                Engine.rotate_currant(composants[k][l].dir, pp, ii);
+                //composants[k][l].set_i_p(pp, ii);
+                composants[k][l].calcule_i_p(pp, ii, dt);
+                Engine.rotate_currant((4 - composants[k][l].dir) % 4, pp, ii);
+                Engine.currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
+
+                success = success * composants[k][l].success;
+                fail += composants[k][l].fail;
+            }
+        }
+
+        if (fail > 0) return -1;
+
+        return success;
+
+
+    }
+
 
     public static void update_composant_p_i(BaseComponent[][] composants)
     {

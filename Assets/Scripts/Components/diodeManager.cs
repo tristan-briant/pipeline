@@ -12,7 +12,7 @@ public class diodeManager : BaseComponent {
     float q0, q2;
     public float xp;
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[0], b = p[2];
 

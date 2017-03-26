@@ -12,49 +12,45 @@ public class TransistorManager : BaseComponent
     float r_bulle = 0.1f;
     float q1, q2, q3;
     public float xp;
-    float g;
+    float g,f1,f2,f3;
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[1], b = p[2], c=p[3];
 
 
-        q1 += (i[1]) / C * alpha;
-        q3 += (i[3]) / C * alpha;
-        q2 += (i[2]) / C * alpha;
-        f += (p[3] - p[2]) / L * alpha;
-        g += (p[3] - p[1]) / L * alpha;
+        q1 += (i[1]) * alpha;
+        q3 += (i[3]) * alpha;
+        q2 += (i[2]) * alpha;
 
+        f2 += (p[2] - p[3]) / L * alpha;
+        f3 += (p[3] - p[1]) / L * alpha;
 
-        if (q3 < q2 - 0.1f)  // threshold necessary
+        if (f2 > 0)
         {
             q = (q3 + q2 + q1) / 3;
 
-            q1 = q;
-            q3 = q;
-            q2 = q;
+            q1 = q2 = q3 = q;
         }
         else
         {
-            f = 0;
-            g = 0;
+            f2 = f3 = 0;
         }
-        p[3] = (q3 + (i[3] - f - g) * R);
-        p[2] = (q2 + (i[2] + f) * R);
-        p[1] = (q1 + (i[1] + g) * R);
 
+        p[1] = (q1 / C + (i[1] - f1 + f3) * R);
+        p[2] = (q2 / C + (i[2] - f2 + f1) * R);
+        p[3] = (q3 / C + (i[3] - f3 + f2) * R);
 
-        i[1] = (-g + (a - q1) / R);
-        i[2] = (-f + (b - q2) / R);
-        i[3] = (f + g + (c - q3) / R);
+        i[1] = (f1 - f3 + (a - q1 / C) / R);
+        i[2] = (f2 - f1 + (b - q2 / C) / R);
+        i[3] = (f3 - f2 + (c - q3 / C) / R);
 
+ 
 
         i[0] = p[0] / Rground;
-        // i[3] = i[3] = 0;
-        //i[0]=0;
-
-        x_bulle2 -= 0.05f * f;
-        x_bulle1 -= 0.05f * g;
+   
+        x_bulle2 += 0.05f * f2;
+        x_bulle1 -= 0.05f * f3;
 
     }
 
@@ -75,13 +71,14 @@ public class TransistorManager : BaseComponent
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
         water3.GetComponent<Image>().color = pressureColor(pin[3]);
 
-        xp = 0.9f * xp + 0.1f * Mathf.Clamp(-f, 0, 0.1f);
+        xp = 0.9f * xp + 0.1f * Mathf.Clamp(+f2, 0, 0.1f);
 
 
-        piston.transform.rotation = Quaternion.identity;
-        piston.transform.Rotate(new Vector3(0, 0, xp * 180));
+       /* piston.transform.rotation = Quaternion.identity;
+        piston.transform.Rotate(new Vector3(0, 0, xp * 180));*/
+        piston.transform.localEulerAngles = new Vector3(0, 0, xp*180);
 
-        if (Mathf.Abs(f) > 0.01f)
+        if (Mathf.Abs(f2) > fMinBubble)
         {
 
             float x_max = 0.5f - r_bulle;
@@ -104,7 +101,7 @@ public class TransistorManager : BaseComponent
         {
             bubble2.SetActive(false);
         }
-        if (Mathf.Abs(g) > 0.01f)
+        if (Mathf.Abs(f3) > fMinBubble)
         {
 
             float x_max = 0.5f - r_bulle;

@@ -5,20 +5,23 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class Pipeline : BaseComponent { 
+public class InductorManager : BaseComponent
+{
 
-    GameObject water0,water2,bubble;
-    public float x_bulle = 0;
-    float r_bulle=0.1f;
- 
+    GameObject water, water0, water2, bubble, propeller;
+    //public float x_bulle = 0;
+    public float Lin = 10;
+    float r_bulle = 0.1f;
+    float angle;
+
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
-
+        R = 80;//C = 2;
         float a = p[0], b = p[2];
 
-        q += (i[0] + i[2]) * alpha; 
-        f += (p[0] - p[2]) / L * alpha;
+        q += (i[0] + i[2]) * alpha;
+        f += (p[0] - p[2]) / Lin * alpha;
 
         p[0] = (q / C + (i[0] - f) * R);
         p[2] = (q / C + (i[2] + f) * R);
@@ -30,7 +33,7 @@ public class Pipeline : BaseComponent {
         i[1] = p[1] / Rground;
         i[3] = p[3] / Rground;
 
-        x_bulle -= 0.05f * f;
+        angle -= 0.05f * f;
 
     }
 
@@ -39,34 +42,22 @@ public class Pipeline : BaseComponent {
         base.Start();
         water0 = this.transform.FindChild("Water0").gameObject;
         water2 = this.transform.FindChild("Water2").gameObject;
+        water = this.transform.FindChild("Water").gameObject;
 
-        bubble = this.transform.FindChild("Bubble").gameObject;
+        propeller = this.transform.FindChild("Propeller").gameObject;
+        //bubble = this.transform.FindChild("Bubble").gameObject;
 
     }
 
     private void Update()
     {
+        water.GetComponent<Image>().color = pressureColor(q/C);
         water0.GetComponent<Image>().color = pressureColor(pin[0]);
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 
-        if (Mathf.Abs(f) > fMinBubble)
-        {
-            //if (x_bulle < -0.5f + d_bulle * 0.5f) { x_bulle = 0.5f - d_bulle * 0.5f; }
-            //if (x_bulle > 0.5f - d_bulle * 0.5f) { x_bulle = -0.5f + d_bulle * 0.5f; }
+        
+        propeller.transform.localEulerAngles = new Vector3(0, 0, angle*300);
 
-            float x_max = 0.5f - r_bulle;
-
-            if (x_bulle > x_max) x_bulle = -x_max;
-            if (x_bulle < -x_max) x_bulle = x_max;
-
-
-            bubble.transform.localPosition =new Vector3(x_bulle*100,0,0);
-            bubble.SetActive(true);
-        }
-        else
-        {
-            bubble.SetActive(false);
-        }
 
     }
 

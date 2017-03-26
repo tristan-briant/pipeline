@@ -9,25 +9,66 @@ public class DebitmeterManager : BaseComponent {
     public float x_bulle = 0;
     float r_bulle = 0.1f;
     public float setPointHigh, setPointLow, iMax;
+    float SPH, SPL, successSpeed;
     public int mode = 0;
-    public float periode = 2;
+    public float periode = 2,phase = 0;
     float t_shine = 0;
     //public new float f;
+    float ff=0;
+    const float beta=0.1f;
 
-    public override void calcule_i_p(float[] p, float[] i)
+    void calculateSetPoint()
+    {
+        float mean, tolerance, t;
+        switch (mode)
+        {
+            case 0 :
+                SPH = setPointHigh;
+                SPL = setPointLow;
+                successSpeed = 0.005f;
+                break;
+            case 1 :
+                 mean = 0.5f * (setPointHigh + setPointLow);
+                 tolerance = (setPointHigh - setPointLow) * 0.5f;
+                 t = 2 * Mathf.PI * Time.time;
+
+                SPL = mean * Mathf.Sin(t / periode + Mathf.PI * phase / 180.0f) - tolerance;
+                SPH = SPL + 2 * tolerance;
+                successSpeed = 0.01f / periode / 2;
+                break;
+            case 2:
+                mean = 0.5f * (setPointHigh + setPointLow);
+                tolerance = (setPointHigh - setPointLow) * 0.5f;
+                t = 2 * Mathf.PI * Time.time;
+
+                SPL = mean * theta(Mathf.Sin(t / periode + Mathf.PI * phase / 180.0f)) - tolerance;
+                SPH = SPL + 2 * tolerance;
+                successSpeed = 0.01f / periode / 2;
+                break;
+
+        }
+    }
+
+
+    float theta(float x) {
+        if( x < 0) return 0;
+        return x;
+    }
+
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         //C = 5.0f;
-        L = 5f;
+        //L = 3f;
         float a = p[0], b = p[2];
 
-        q += (i[0] + i[2]) / C; //q*=0.99;
-        f += (p[0] - p[2]) / L;
+        q += (i[0] + i[2]) * alpha; 
+        f += (p[0] - p[2]) / L * alpha;
 
-        p[0] = (q + (i[0] - f) * R);
-        p[2] = (q + (i[2] + f) * R);
+        p[0] = (q / C + (i[0] - f) * R);
+        p[2] = (q / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q) / R);
-        i[2] = (-f + (b - q) / R);
+        i[0] = (f + (a - q / C) / R);
+        i[2] = (-f + (b - q / C) / R);
 
         //i[1]=i[3]=0;
         i[1] = p[1] / Rground;
@@ -35,43 +76,20 @@ public class DebitmeterManager : BaseComponent {
 
         x_bulle -= 0.05f * f;
 
-        if (mode == 0)
-        {
-            if (-f < setPointHigh && -f > setPointLow && itemBeingDragged == null)
-                success = Mathf.Clamp(success + 0.005f, 0, 1);
-            else
-                success = Mathf.Clamp(success - 0.05f, 0, 1);
-        }
-        if (mode == 1)
-        {
-            float mean = 0.5f * (setPointHigh + setPointLow);
-            float tol = (setPointHigh - setPointLow) * 0.5f;
-            float t = 2 * Mathf.PI * Time.time;
+        ff = (1 - beta) * ff + beta * f;
 
-            if (mean * Mathf.Sin(t / periode) - tol < -f && -f < mean * Mathf.Sin(t / periode) + tol && itemBeingDragged == null)
-                success = Mathf.Clamp(success + 0.01f / periode /(2*3.14f) , 0, 1); // 2 periode to win
-            else
-                success = Mathf.Clamp(success - 0.05f, 0, 1);
-
-        }
-        if (mode == 2)
-        {
-            float mean = 0.5f * (setPointHigh + setPointLow);
-            float tol = (setPointHigh - setPointLow) * 0.5f;
-            float t = 2 * Mathf.PI * Time.time;
-
-            if (mean * (1+Mathf.Sin(t / periode))*0.5f - tol < -f && -f < mean * (1+Mathf.Sin(t / periode))*0.5f + tol && itemBeingDragged == null)
-                success = Mathf.Clamp(success + 0.01f / periode, 0, 1); // 2 periode to win
-            else
-                success = Mathf.Clamp(success - 0.05f, 0, 1);
-
-        }
+        calculateSetPoint();
+        if ( SPL < -ff  && -ff <SPH && itemBeingDragged == null)
+            success = Mathf.Clamp(success + successSpeed, 0, 1);
+        else
+            success = Mathf.Clamp(success - 0.05f, 0, 1);
 
     }
 
     protected override void Start()
     {
         base.Start();
+        success = 0;
         water0 = this.transform.FindChild("Water0").gameObject;
         water2 = this.transform.FindChild("Water2").gameObject;
 
@@ -91,11 +109,8 @@ public class DebitmeterManager : BaseComponent {
         water0.GetComponent<Image>().color = pressureColor(pin[0]);
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 
-        if (Mathf.Abs(f) > 0.01f)
+        if (Mathf.Abs(f) > fMinBubble)
         {
-            //if (x_bulle < -0.5f + d_bulle * 0.5f) { x_bulle = 0.5f - d_bulle * 0.5f; }
-            //if (x_bulle > 0.5f - d_bulle * 0.5f) { x_bulle = -0.5f + d_bulle * 0.5f; }
-
             float x_max = 0.5f - r_bulle;
 
             if (x_bulle > x_max) x_bulle = -x_max;
@@ -111,10 +126,14 @@ public class DebitmeterManager : BaseComponent {
         }
 
         const float ANGLEMAX = 180 / 4.8f;
-        float angle = Mathf.Clamp(f / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
+        float angle = Mathf.Clamp(ff / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
 
-        float angleH, angleL;
-        if (mode == 0)
+        //float angleH, angleL;
+        float angleH = Mathf.Clamp((SPH) / iMax, -1, 1);
+        float angleL = Mathf.Clamp((SPL) / iMax, -1, 1);
+
+
+        /*if (mode == 0)
         {
             angleH = Mathf.Clamp((setPointHigh) / iMax, -1, 1);
             angleL = Mathf.Clamp((setPointLow) / iMax, -1, 1);
@@ -135,9 +154,9 @@ public class DebitmeterManager : BaseComponent {
             float tol = (setPointHigh - setPointLow) * 0.5f;
             float t = 2 * Mathf.PI * Time.time;
 
-            angleH = Mathf.Clamp((mean * (1+Mathf.Sin(t / periode))*0.5f + tol) / iMax, -1, 1);
-            angleL = Mathf.Clamp((mean * (1+Mathf.Sin(t / periode))*0.5f - tol) / iMax, -1, 1);
-        }
+            angleH = Mathf.Clamp((mean * theta(Mathf.Sin(t / periode)) + tol) / iMax, -1, 1);
+            angleL = Mathf.Clamp((mean * theta(Mathf.Sin(t / periode)) - tol) / iMax, -1, 1);
+        }*/
 
 
         arrow.transform.localEulerAngles= new Vector3(0, 0, angle);

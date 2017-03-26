@@ -29,7 +29,7 @@ public class InletJellyManager : BaseFrontier {
 
     }
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         if (pset > 0)
             ii = 1;

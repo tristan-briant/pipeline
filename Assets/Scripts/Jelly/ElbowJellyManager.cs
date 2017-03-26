@@ -12,10 +12,10 @@ public class ElbowJellyManager : BaseComponent {
     bool full = false;
     bool entered = false;
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
 
-        q += (i[3] + i[2]) / Capa;
+        q += (i[3] + i[2]) / Capa * alpha;
 
         if (q > 0 && !entered)
         {
@@ -68,7 +68,7 @@ public class ElbowJellyManager : BaseComponent {
         if (f > 0) jelly3.GetComponent<Image>().fillAmount = q;
         if (f < 0) jelly2.GetComponent<Image>().fillAmount = q;
 
-        if (q > 1 + 2 / Capa / alpha)
+        if (q > 1 + 2 / Capa)
         {
             jelly3.GetComponent<Image>().color = new Color(255, 255, 255);
             jelly2.GetComponent<Image>().color = new Color(255, 255, 255);

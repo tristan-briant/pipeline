@@ -17,7 +17,7 @@ public class TeManager : BaseComponent
     //float f=0;
     //float[] pin = new float[4];
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i,float alpha)
     {
 
         float a = p[0], b = p[2], c = p[3];
@@ -27,6 +27,7 @@ public class TeManager : BaseComponent
         i3 = i[3]; x_bulle3 -= 0.05f * i3;
 
         q += (i[0] + i[2] + i[3]) * alpha; //q*=0.99;
+
         f1 += (p[0] - p[2]) / L * alpha;
         f2 += (p[2] - p[3]) / L * alpha;
         f3 += (p[3] - p[0]) / L * alpha;
@@ -124,26 +125,6 @@ public class TeManager : BaseComponent
         {
             bubble3.SetActive(false);
         }
-
-
-        /*if (Mathf.Abs(f) > 0.01f)
-    {
-        //if (x_bulle < -0.5f + d_bulle * 0.5f) { x_bulle = 0.5f - d_bulle * 0.5f; }
-        //if (x_bulle > 0.5f - d_bulle * 0.5f) { x_bulle = -0.5f + d_bulle * 0.5f; }
-
-        float x_max = 0.5f - r_bulle;
-
-        if (x_bulle > x_max) x_bulle = -x_max;
-        if (x_bulle < -x_max) x_bulle = x_max;
-
-
-        bubble.transform.localPosition = new Vector3(x_bulle * 100, 0, 0);
-        bubble.SetActive(true);
-    }
-    else
-    {
-        bubble.SetActive(false);
-    }*/
 
     }
 

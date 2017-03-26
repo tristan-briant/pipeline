@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GeneratorManager.cs" />
+    <Compile Include="Assets\InductorManager.cs" />
     <Compile Include="Assets\Scripts\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\BaseFrontier.cs" />
     <Compile Include="Assets\Scripts\Components\ResistorManager.cs" />

@@ -25,7 +25,7 @@ public class PressostatTriggerManager : BaseComponent {
         //Do not rotate
     }
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         C = 1;
         float b = p[2];

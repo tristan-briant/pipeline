@@ -15,7 +15,7 @@ public class ValveManager : BaseComponent {
  
 
 
-    public override void calcule_i_p(float[] p, float[] i)
+    public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
 
         float a = p[0], b = p[2];
@@ -24,9 +24,9 @@ public class ValveManager : BaseComponent {
         else
             open = false;*/
 
-        q1 += (i[0]) / C;
-        q2 += (i[2]) / C;
-        f += (p[0] - p[2]) / L;
+        q1 += (i[0])* alpha;
+        q2 += (i[2]) * alpha;
+        f += (p[0] - p[2]) / L * alpha;
 
 
         if (open)
@@ -40,11 +40,11 @@ public class ValveManager : BaseComponent {
         {
             f = 0;
         }
-        p[0] = (q1 + (i[0] - f) * R);
-        p[2] = (q2 + (i[2] + f) * R);
+        p[0] = (q1 / C + (i[0] - f) * R);
+        p[2] = (q2 / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q1) / R);
-        i[2] = (-f + (b - q2) / R);
+        i[0] = (f + (a - q1 / C) / R);
+        i[2] = (-f + (b - q2 / C) / R);
 
         i[1] = p[1] / Rground;
         i[3] = p[3] / Rground;
