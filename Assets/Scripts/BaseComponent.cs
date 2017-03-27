@@ -10,7 +10,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     protected float q = 0, f = 0;
     public int dir=0;
-    protected float R = 2f, L = 1f, C =0.5f, Rground = 50;
+    protected float R = 2f, L = 1f, C =1f, Rground = 50;
     //protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
@@ -24,7 +24,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
     gameController gc; // le moteur du jeu à invoquer parfois
-
+    PlaygroundParameters parameters;
 
     protected Color pressureColor(float p)
     { // donne la convention de pression
@@ -72,6 +72,16 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     {
         success = 1;
         gc = (gameController)GameObject.Find("gameController").GetComponent(typeof(gameController)); //find the game engine
+        parameters = (PlaygroundParameters)transform.parent.transform.parent.GetComponent(typeof(PlaygroundParameters)); //find the game engine
+
+        if (parameters != null)
+        {
+            R = parameters.R;
+            C = parameters.C;
+            L = parameters.L;
+            Rground = parameters.Rground;
+        }
+
         transform.rotation = Quaternion.identity;
         transform.Rotate(new Vector3(0, 0, dir * 90));
     }

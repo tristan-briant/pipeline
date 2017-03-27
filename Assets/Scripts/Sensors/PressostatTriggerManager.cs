@@ -15,7 +15,7 @@ public class PressostatTriggerManager : BaseComponent {
     Vector3 arrowStartPosition, cadranStartPosition;
     float t_shine = 0;
     public float openTime = 4.0f;
-
+    public float Tau = 1;
     bool activated = false;
     //public new float f;
 
@@ -42,7 +42,7 @@ public class PressostatTriggerManager : BaseComponent {
         i[3] = p[3] / Rground;
 
 
-        if ( risingCurve(time)-tolerance/2 < q && q < risingCurve(time) + tolerance / 2 && itemBeingDragged == null && activated)
+        if ( risingCurve(time)-tolerance/2 < q / C && q / C < risingCurve(time) + tolerance / 2 && itemBeingDragged == null && activated)
             success = Mathf.Clamp(success + 0.01f/openTime/0.9f, 0, 1); //0.01=10ms with 90% tolerance
         else
             success = Mathf.Clamp(success - 0.05f, 0, 1);
@@ -133,7 +133,7 @@ public class PressostatTriggerManager : BaseComponent {
     }
 
     float risingCurve(float t) {
-        return setPoint*(1 - Mathf.Exp ( -t ) );
+        return setPoint*(1 - Mathf.Exp ( -t / Tau) );
     }
 
 }

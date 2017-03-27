@@ -13,6 +13,7 @@ public class TransistorManager : BaseComponent
     float q1, q2, q3;
     public float xp;
     float g,f1,f2,f3;
+    float threshold = 0.2f;
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
@@ -23,13 +24,14 @@ public class TransistorManager : BaseComponent
         q3 += (i[3]) * alpha;
         q2 += (i[2]) * alpha;
 
-        f2 += (p[2] - p[3]) / L * alpha;
+        f2 += (p[2] - p[3]-threshold) / L * alpha;
         f3 += (p[3] - p[1]) / L * alpha;
+        f1 = 0;
 
+        //if (p[2] - p[3] > threshold)//
         if (f2 > 0)
         {
             q = (q3 + q2 + q1) / 3;
-
             q1 = q2 = q3 = q;
         }
         else
@@ -71,7 +73,8 @@ public class TransistorManager : BaseComponent
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
         water3.GetComponent<Image>().color = pressureColor(pin[3]);
 
-        xp = 0.9f * xp + 0.1f * Mathf.Clamp(+f2, 0, 0.1f);
+        const float r = 0.1f;
+        xp = (1 - r) * xp + r * Mathf.Clamp(+f2, 0, 0.1f);
 
 
        /* piston.transform.rotation = Quaternion.identity;

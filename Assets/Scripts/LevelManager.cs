@@ -39,7 +39,8 @@ public class LevelManager : MonoBehaviour {
         "PG Diode Capa",
         "PG Diode1",
         "PG Diode2",
-        "PG D demi pont"
+        "PG D demi pont",
+        "PG Transistor1"
     };
 
     private void Awake()

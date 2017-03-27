@@ -60,18 +60,19 @@ public class InletManager : BaseFrontier {
 
         if (-imax < ii && ii < imax)
         {
-            //pp=ppset;      
-            Rin = Mathf.Clamp(Rin - 0.01f, 0, 20);
+            pp=ppset;      
+            //Rin = Mathf.Clamp(Rin - 0.05f, 0, 20);
             //Rin = 0;
         }
         else
         {
-            Rin = Mathf.Clamp(Rin + 0.005f, 0, 20);
+            //Rin = Mathf.Clamp(Rin + 0.01f, 0, 20);
 
             // pp = 0.9f * pp;
+            ii = imax;pp = 0;
         }
         //Rin = 0;
-        pp = ppset -ii * Rin;
+        //pp = ppset -ii * Rin;
  
         q += (i[0] + ii) * alpha;
         f += (p[0] - pp) / L * alpha;
