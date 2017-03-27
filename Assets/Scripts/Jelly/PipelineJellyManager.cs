@@ -17,7 +17,7 @@ public class PipelineJellyManager : BaseComponent {
     {
 
        
-        q += (i[0] + i[2]) / Capa * alpha;
+        q += (i[0] + i[2]) / Capa;
 
         if (q > 0 && !entered)
         {
@@ -69,7 +69,7 @@ public class PipelineJellyManager : BaseComponent {
         if(f>0) jelly0.GetComponent<Image>().fillAmount = q;
         if (f < 0) jelly2.GetComponent<Image>().fillAmount = q;
 
-        if (q > 1 + 2 / Capa )
+        if (fail >= 1)  //(q > 1 + 2 / Capa / alpha)
         {
             jelly0.GetComponent<Image>().color = new Color(255, 255, 255);
             jelly2.GetComponent<Image>().color = new Color(255, 255, 255);

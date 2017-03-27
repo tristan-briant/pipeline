@@ -64,7 +64,7 @@ public class InletJellyManager : BaseFrontier {
                 success = 0;
         }
 
-        if (q > 1 + 10 / Capa / alpha)
+        if (q > 1 + 10 / Capa )
             fail = 1;
 
     }
@@ -75,11 +75,11 @@ public class InletJellyManager : BaseFrontier {
         if (f > 0) jelly0.GetComponent<Image>().fillAmount = q;
         if (f < 0) jelly2.GetComponent<Image>().fillAmount = q;
 
-        /*if (q > 1+2/Capa)
+        if (fail >= 1 && success<1) //(q > 1+2/Capa)
         {
             jelly0.GetComponent<Image>().color = new Color(255, 255, 255);
             jelly2.GetComponent<Image>().color = new Color(255, 255, 255);
-        }*/
+        }
 
         if (pset <= 0)
         {

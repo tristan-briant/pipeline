@@ -8,8 +8,8 @@ public class Engine  {
     static float[][] pression;
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
-    const float dt = 0.1f;
-    const float alpha = 0.1f;
+    const float dt = 0.2f;
+    const float alpha = dt; //0.1f;
 
 
     public static void initialize_p_i(int N,int M)
