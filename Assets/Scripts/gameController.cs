@@ -97,6 +97,13 @@ public class gameController : MonoBehaviour {
                 {
                     if (go.transform.childCount > 1) Debug.Log("Populate error" + go.transform.childCount);
                     BaseComponent bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                    Vector3 v = bc.transform.localPosition;
+                    v.z = 0;
+                    bc.transform.localPosition=v;
+                    if(bc.mirror)
+                        bc.transform.localScale = new Vector3(-1, 1, 1);
+                    else
+                        bc.transform.localScale = new Vector3(1, 1, 1);
                     bc.x = i;bc.y = j;
                     composants[i ][j] = bc;
 
@@ -114,6 +121,7 @@ public class gameController : MonoBehaviour {
                 {
                     BaseComponent bc = Instantiate(vide);
                     bc.transform.SetParent(go.transform);
+                    bc.transform.localScale = new Vector3(1, 1, 1);
                     bc.x = i; bc.y = j;
                     composants[i][j] = bc;
                 }

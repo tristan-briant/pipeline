@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour {
         "Pg double DBM",
         "playground3",
         "PG bonus1",
+        "PG bonus2",
         "Pg 4 pressostats",
         "Pg 1P2R",
         "Pg jelly1",
@@ -40,6 +41,8 @@ public class LevelManager : MonoBehaviour {
         "PG Diode1",
         "PG Diode2",
         "PG D demi pont",
+        "PG Transistor0a",
+        "PG Transistor0b",
         "PG Transistor1"
     };
 

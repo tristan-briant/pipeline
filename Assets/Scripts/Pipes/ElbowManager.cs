@@ -22,9 +22,9 @@ public class ElbowManager : BaseComponent {
         i[2] = (f + (a - q/C) / R);
         i[3] = (-f + (b - q/C) / R);
 
-        //i[1]=i[0]=0;
-        i[0] = p[0] / Rground;
-        i[1] = p[1] / Rground;
+        calcule_i_p_blocked(p, i, alpha, 1);
+        calcule_i_p_blocked(p, i, alpha, 0);
+
 
         x_bulle += 0.05f * f;
 

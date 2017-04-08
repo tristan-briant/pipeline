@@ -26,9 +26,9 @@ public class Pipeline : BaseComponent {
         i[0] = (f + (a - q / C) / R);
         i[2] = (-f + (b - q / C) / R);
 
-        //i[1]=i[3]=0;
-        i[1] = p[1] / Rground;
-        i[3] = p[3] / Rground;
+        calcule_i_p_blocked(p, i, alpha, 1);
+        calcule_i_p_blocked(p, i, alpha, 3);
+
 
         x_bulle -= 0.05f * f;
 

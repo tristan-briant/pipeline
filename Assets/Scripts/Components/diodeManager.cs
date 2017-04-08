@@ -40,8 +40,8 @@ public class diodeManager : BaseComponent {
         i[0] =  (f + (a - q0) / R);
         i[2] =  (-f + (b - q2) / R);
 
-        i[1] = i[3] = 0;
-        //i[0]=0;
+        calcule_i_p_blocked(p, i, alpha, 1);
+        calcule_i_p_blocked(p, i, alpha, 3);
 
         x_bulle -= 0.05f * f;
 

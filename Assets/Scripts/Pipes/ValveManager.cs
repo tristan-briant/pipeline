@@ -46,8 +46,9 @@ public class ValveManager : BaseComponent {
         i[0] = (f + (a - q1 / C) / R);
         i[2] = (-f + (b - q2 / C) / R);
 
-        i[1] = p[1] / Rground;
-        i[3] = p[3] / Rground;
+        calcule_i_p_blocked(p, i, alpha, 1);
+        calcule_i_p_blocked(p, i, alpha, 3);
+
 
         x_bulle -= 0.05f * f;
 

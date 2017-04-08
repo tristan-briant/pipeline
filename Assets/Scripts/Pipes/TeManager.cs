@@ -40,9 +40,8 @@ public class TeManager : BaseComponent
         i[2] = (f2 - f1 + (b - q / C) / R);
         i[3] = (f3 - f2 + (c - q / C) / R);
 
-        //i[1]=0;
-
-        i[1] = p[1] / Rground;
+        calcule_i_p_blocked(p, i, alpha, 1);
+       
 
     }
 

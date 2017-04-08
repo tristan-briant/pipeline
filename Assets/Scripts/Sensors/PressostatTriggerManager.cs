@@ -37,9 +37,14 @@ public class PressostatTriggerManager : BaseComponent {
 
         i[2] = (-f + (b - q / C) / R);
 
-        i[0] = p[0] / Rground;
+        calcule_i_p_blocked(p, i, alpha, 0);
+        calcule_i_p_blocked(p, i, alpha, 1);
+        calcule_i_p_blocked(p, i, alpha, 3);
+        
+
+        /*i[0] = p[0] / Rground;
         i[1] = p[1] / Rground;
-        i[3] = p[3] / Rground;
+        i[3] = p[3] / Rground;*/
 
 
         if ( risingCurve(time)-tolerance/2 < q / C && q / C < risingCurve(time) + tolerance / 2 && itemBeingDragged == null && activated)

@@ -20,6 +20,8 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public int x, y;
     public bool locked=false;
+    public bool mirror = false;
+
 
     public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
@@ -45,6 +47,17 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     }
 
     public void set_i_p(float[] p, float[] i) {
+
+        if (mirror)
+        {
+            float e = p[0];
+            p[0] = p[2];
+            p[2] = e;
+            e = i[0];
+            i[0] = i[2];
+            i[2] = e;
+        }
+
         for (int k = 0; k < 4; k++) {
             pin[k] = p[k];
             iin[k] = i[k];
@@ -60,13 +73,21 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
         for(int k = 0; k < 4; k++)
         {
-            i[k] = p[k]/Rground;
-            p[k] *= 0.99f;
+            calcule_i_p_blocked(p, i, dt, k);
         }
-
-
-
     }
+
+    public virtual void calcule_i_p_blocked(float[] p, float[] i, float dt,int index)
+    {
+        float a = p[index];
+       /* p[index] = i[index] * Rground;
+        i[index] = a / Rground;*/
+
+        //p[index] *= 0.99f;
+
+        i[index] = 0;
+    }
+
 
     protected virtual void Start()
     {
