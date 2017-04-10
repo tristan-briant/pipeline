@@ -85,13 +85,7 @@ public class gameController : MonoBehaviour {
             for (int j = 1; j < M-1; j++)
             {
                 GameObject go = Pg.transform.GetChild((i) + (j)*(N)).gameObject; //the slot
-
-        
-                if (firstPopulate)
-                {
-                    float c = 1.0f - Random.Range(0.0f, 0.3f);
-                    go.GetComponent<Image>().color = new Color(c, c, c);
-                }
+      
 
                 if (go.transform.childCount > 0)
                 {
@@ -113,6 +107,11 @@ public class gameController : MonoBehaviour {
                         {
                             go.GetComponent<Image>().sprite = Resources.Load<Sprite>("concrete");
                             go.GetComponent<Image>().color = new Color(1, 1, 1);
+                        }
+                        else{
+                            go.GetComponent<Image>().sprite = Resources.Load<Sprite>("fond-composant");
+                            float c = 1.0f - Random.Range(0.0f, 0.3f);
+                            go.GetComponent<Image>().color = new Color(c, c, c);
                         }
                         //bc.transform.GetComponent<Image>().enabled=true;
                     }
