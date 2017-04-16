@@ -42,12 +42,15 @@ public class gameController : MonoBehaviour {
             Pg = Instantiate(Resources.Load("Playgrounds/" + LVM.getPlaygroundName(currantLevel), typeof(GameObject))) as GameObject;
 
             Pg.transform.SetParent(PgHolder.transform);
+            Pg.transform.localPosition = new Vector3(0, 0, 0);
         }
         else
         {
             Pg = PgHolder.transform.GetChild(0).gameObject;
         }
-
+        if(LVM.language=="french")
+            levelText.text = "Niveau " + currantLevel;
+        else
         levelText.text = "Level " + currantLevel;
 
         N = Pg.GetComponent<GridLayoutGroup>().constraintCount; // -2 for the frontier
@@ -68,8 +71,18 @@ public class gameController : MonoBehaviour {
         RectTransform objectRectTransform = go.GetComponent<RectTransform>();
         float width = objectRectTransform.rect.width;
         float height = objectRectTransform.rect.height;
+        Debug.Log(" W :" + width + " H  " + height);
+        Debug.Log(" N :" + N + " M  " + M);
 
-        float wc = Mathf.Min(width / (N-1), (height - 120) / (M - 1));
+        float widthRef = 600;
+        float heightRef = 700;
+        float ratio = height / width / heightRef * widthRef;
+        float wc;
+        if ( ratio > 1)
+            wc = Mathf.Min(widthRef / (N - 1), ratio * heightRef / (M - 1));
+        else
+            wc = Mathf.Min(widthRef /ratio/ (N - 1), heightRef / (M - 1));
+
         Pg.transform.localScale=new Vector3( wc/100, wc / 100,1) ;
 
     }
@@ -211,7 +224,10 @@ public class gameController : MonoBehaviour {
         }
         winText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);
-        levelText.text = "Next level";
+        if (LVM.language == "french")
+            levelText.text = "Niveau suivant";
+        else
+            levelText.text = "Next level";
         levelText.GetComponent<Button>().enabled = true;
         levelText.GetComponent<Animator>().enabled = true;
 
@@ -223,7 +239,10 @@ public class gameController : MonoBehaviour {
     {
         loseText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);
-        levelText.text = "Retry";
+        if (LVM.language == "french")
+            levelText.text = "Réessayer";
+        else
+            levelText.text = "Retry";
         levelText.GetComponent<Button>().enabled = true;
         levelText.GetComponent<Animator>().enabled = true;
 
@@ -257,7 +276,6 @@ public class gameController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.Escape))
         {
-            //Application.Quit();
             SceneManager.LoadScene(0);
         }
         if (Input.GetKey(KeyCode.Menu))
@@ -267,7 +285,6 @@ public class gameController : MonoBehaviour {
     }
 
     public void backToMenu() {
-        Debug.Log("Back to menu");
         SceneManager.LoadScene(0);
     }
 

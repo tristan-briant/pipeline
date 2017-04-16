@@ -13,6 +13,18 @@ public class LevelManager : MonoBehaviour {
     public bool FirstLaunch=true;
     public bool hacked = false;
 
+    public string language = "english";
+    public string Language
+    {
+        get
+        {
+            return language;
+        }
+        set
+        {
+            language = value;
+        }
+    }
 
     List<string> playgroundName = new List<string>()
     {
@@ -62,7 +74,6 @@ public class LevelManager : MonoBehaviour {
 
         //levelMax = playgroundName.Count;
     }
-
 
     public int getLevelMax() {
         return playgroundName.Count;

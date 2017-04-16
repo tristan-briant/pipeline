@@ -108,7 +108,10 @@
     <Compile Include="Assets\Scripts\controller.cs" />
     <Compile Include="Assets\Scripts\gameController.cs" />
     <Compile Include="Assets\TransistorManager.cs" />
+    <Compile Include="Assets\intoScript.cs" />
     <Compile Include="Assets\keepalive.cs" />
+    <Compile Include="Assets\languageManager.cs" />
+    <Compile Include="Assets\optionManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
