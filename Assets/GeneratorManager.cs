@@ -39,7 +39,7 @@ public class GeneratorManager :  BaseComponent {
         if (f<0)
             velocity = Mathf.Clamp(velocity - 0.005f*f, 0, 3);
         else
-            velocity = Mathf.Clamp(velocity - 0.05f*f, 0, 3);
+            velocity = Mathf.Clamp(velocity - 0.01f*f, 0, 3);
 
         velocity -= damping * velocity * alpha;
 
@@ -90,9 +90,6 @@ public class GeneratorManager :  BaseComponent {
         {
             bubble.SetActive(false);
         }
-
-        const float ANGLEMAX = 180 / 4.8f;
-       // float angle = Mathf.Clamp(f / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
 
         float angleH = Mathf.Clamp((setPointHigh) / iMax, -1, 1);
         float angleL = Mathf.Clamp((setPointLow) / iMax, -1, 1);
