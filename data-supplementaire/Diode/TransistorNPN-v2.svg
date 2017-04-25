@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="100"
@@ -19,7 +20,41 @@
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300">
   <defs
-     id="defs4" />
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4186">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0"
+         id="stop4188" />
+      <stop
+         id="stop4204"
+         offset="0.30605063"
+         style="stop-color:#ffffff;stop-opacity:0.89490443" />
+      <stop
+         id="stop4202"
+         offset="0.53426635"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.8312102"
+         offset="0.70439082"
+         id="stop4206" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop4190" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4186"
+       id="linearGradient4192"
+       x1="50.349964"
+       y1="25.130877"
+       x2="50.349964"
+       y2="62.584225"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -27,17 +62,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.608668"
-     inkscape:cx="-67.129546"
-     inkscape:cy="67.560238"
+     inkscape:zoom="4.5500002"
+     inkscape:cx="10.166866"
+     inkscape:cy="24.425195"
      inkscape:document-units="px"
-     inkscape:current-layer="NPN-piston"
+     inkscape:current-layer="svg2"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1005"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
-     inkscape:window-maximized="1"
+     inkscape:window-width="822"
+     inkscape:window-height="433"
+     inkscape:window-x="2301"
+     inkscape:window-y="289"
+     inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -72,7 +107,7 @@
      inkscape:export-ydpi="143.29262"
      inkscape:label="#water2" />
   <path
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.52036252;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.52036252;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
      d="m 70.232291,44.736075 -36.050942,0 -1.004957,7.12587 -8.62422,11.950651 -9.840456,11.3673 12.081254,13.200965 0.83289,11.619131 44.537773,0 1.169291,-21.527592 z"
      id="transistor-water3"
      inkscape:connector-curvature="0"
@@ -82,13 +117,23 @@
      inkscape:export-xdpi="143.29262"
      inkscape:export-ydpi="143.29262" />
   <path
-     style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:#00ff00;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 29.846486,-9.8293699e-6 42.087913,0 L 70.505828,14.945045 70.835499,28.7912 l -2.715401,15.977394 -34.659032,0 -2.845348,-27.845527 z"
      id="transistor-water1"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccccc"
      inkscape:label="#path4252"
      inkscape:export-filename=".\NPN-water1.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144" />
+  <path
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4192);fill-opacity:1.0;fill-rule:evenodd;stroke:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.47852759;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     d="m 27.414624,24.96312 46.7892,0.171426 -0.01885,37.07088 -46.990814,0.391144 z"
+     id="transistor-water"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc"
+     inkscape:label="#rect4161"
+     inkscape:export-filename="transistor-water.png"
      inkscape:export-xdpi="144"
      inkscape:export-ydpi="144" />
   <g

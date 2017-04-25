@@ -138,6 +138,8 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (itemBeingDragged != null) { eventData.pointerDrag = null; return; } // If one element already draged, cancel the drag
+
         if (locked) { eventData.pointerDrag = null; return; } // If locked cancel the drag
 
         startPos = transform.position;

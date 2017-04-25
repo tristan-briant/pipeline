@@ -15,6 +15,7 @@ public class MenuManager : MonoBehaviour{
     public void LoadLevel(int levelNumber)
     {
         LVM.currantLevel = levelNumber;
+        LVM.scrollViewHight = levelList.transform.localPosition.y;
         SceneManager.LoadScene("level");
 
     }
@@ -42,21 +43,19 @@ public class MenuManager : MonoBehaviour{
         levelMax = LVM.getLevelMax();
         generateMenu();
 
-       /*float scale = Screen.width / 660f; // 660 = 100 + 120 + 50 + 120 + 50+ 120 +100
-       levelList.transform.localScale = new Vector3( scale,scale, 1f);*/
+        levelList.transform.localPosition =new Vector3(levelList.transform.localPosition.x, LVM.scrollViewHight,0);
 
     }
 
     public GameObject introScreen;
     public void removeIntro()
     {
-        //introScreen.GetComponent<Canvas>().enabled=false;
         introScreen.SetActive(false);
 
     }
 
     IEnumerator IntroScreen() {
-        //introScreen.GetComponent<Canvas>().enabled = true;
+
         introScreen.SetActive(true);
 
         yield return new WaitForSeconds(5f);
@@ -66,8 +65,6 @@ public class MenuManager : MonoBehaviour{
 
     public void generateMenu()
     {
-        //for (int i = 0; i < levelList.transform.childCount; i++)
-        //    levelList.transform.GetChild(i).gameObject. ;
 
         foreach (Transform child in levelList.transform)
         {
@@ -77,13 +74,9 @@ public class MenuManager : MonoBehaviour{
         levelCompleted = PlayerPrefs.GetInt("Level Completed");
 
         int heigh = (120 + 50) * (Mathf.CeilToInt(levelMax / 3)  ) + 50;
-
-       
+      
         levelList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, heigh);
-        
-
-        //Debug.Log(" menu !");
-
+ 
         for (int i =0; i< LVM.getLevelMax(); i++)
         {
             //Debug.Log(" menu " + i);
@@ -95,7 +88,7 @@ public class MenuManager : MonoBehaviour{
                 go = Instantiate(Resources.Load<GameObject>("ButtonUnlock"));
 
 
-            go.transform.SetParent(levelList.transform);//levelList.transform.GetChild(i).gameObject;
+            go.transform.SetParent(levelList.transform);
             go.transform.localScale = new Vector3(1, 1, 1);
             go.transform.localPosition = new Vector3(0, 0, 0);
 
@@ -108,6 +101,9 @@ public class MenuManager : MonoBehaviour{
             else
             {
                 go.GetComponentInChildren<Text>().text = (i+1).ToString();
+                if(i==LVM.currantLevel-1)
+                    go.GetComponentInChildren<Text>().color=new Color(0xFF/255.0f,0xEF/255.0f,0x31/255.0f,1);
+
                 int level = i+1; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
                 go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
             }

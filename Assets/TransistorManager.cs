@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TransistorManager : BaseComponent
 {
 
-    GameObject water1, water2, water3, bubble1, bubble2, valve;
+    GameObject water, water1, water2, water3, bubble1, bubble2, valve;
     GameObject piston;
     public float x_bulle2=0,x_bulle1 = 0;
     float r_bulle = 0.1f;
@@ -156,6 +156,7 @@ public class TransistorManager : BaseComponent
     protected override void Start()
     {
         base.Start();
+        water = this.transform.FindChild("Water").gameObject;
         water1 = this.transform.FindChild("Water1").gameObject;
         water2 = this.transform.FindChild("Water2").gameObject;
         water3 = this.transform.FindChild("Water3").gameObject;
@@ -180,12 +181,20 @@ public class TransistorManager : BaseComponent
         piston.transform.localEulerAngles = new Vector3(0, 0, xp * 180);
         valve.transform.localEulerAngles = new Vector3(0, 0, 5 * xp * 180);
 
+        if (xp * 180 > 5) {
+            water.SetActive(true);
+            water.GetComponent<Image>().color = pressureColor(0.5f * (pin[1] + pin[3]));
+        }
+        else
+        {
+            water.SetActive(false);
+        }
+
         if (NPN)
         {
             if (Mathf.Abs(f2) > fMinBubble)
             {
-
-                float x_max = 0.5f - r_bulle;
+                 float x_max = 0.5f - r_bulle;
 
                 if (x_bulle2 > x_max) x_bulle2 = -x_max;
                 if (x_bulle2 < -x_max) x_bulle2 = x_max;
