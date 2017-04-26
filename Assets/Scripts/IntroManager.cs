@@ -35,7 +35,9 @@ public class IntroManager : MonoBehaviour {
         {
             GameObject intro = Instantiate(obj) as GameObject;
             intro.transform.SetParent(gameObject.transform);
-            intro.transform.localScale = new Vector3(1,1,1);
+            intro.transform.localScale = new Vector3(1, 1, 1);
+            intro.transform.localPosition = new Vector3(0, 0, 0);
+
             StartCoroutine("IntroScreen");
         }
     }

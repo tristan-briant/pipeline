@@ -16,6 +16,8 @@ public class gameController : MonoBehaviour {
     public BaseFrontier[] borders;
     public int currantLevel;
     public Text levelText;
+    public Button nextButton;
+    public Button prevButton;
 
     public bool composantChanged;
 
@@ -31,6 +33,11 @@ public class gameController : MonoBehaviour {
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
         currantLevel = LVM.currantLevel;
+
+        if (currantLevel <= 1)
+            prevButton.gameObject.SetActive(false);
+        if (currantLevel == LVM.levelMax)
+            nextButton.gameObject.SetActive(false);
 
         if (currantLevel > 0) // 0 mean level design
         {
@@ -249,10 +256,24 @@ public class gameController : MonoBehaviour {
 
     }
 
+    public void LoadNextOrRetryLevel()
+    {
+        if (!fail)
+            LVM.currantLevel = currantLevel + 1;
+        SceneManager.LoadScene("level");
+    }
+
     public void LoadNextLevel()
     {
-        if(!fail)
-            LVM.currantLevel = currantLevel + 1;
+        //if (currantLevel < LVM.levelMax)
+        LVM.currantLevel = currantLevel + 1;
+        SceneManager.LoadScene("level");
+    }
+
+    public void LoadPrevLevel()
+    {
+        //if (currantLevel > 1)
+        LVM.currantLevel = currantLevel - 1;
         SceneManager.LoadScene("level");
     }
 
