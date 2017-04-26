@@ -20,7 +20,7 @@ public class MenuManager : MonoBehaviour{
 
     }
 
-    private void Awake()
+    private void Start()
     {
        
          LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
@@ -41,6 +41,8 @@ public class MenuManager : MonoBehaviour{
             removeIntro();
         }
         levelMax = LVM.getLevelMax();
+        LVM.completedLevel = levelCompleted = PlayerPrefs.GetInt("Level Completed");
+
         generateMenu();
 
         levelList.transform.localPosition =new Vector3(levelList.transform.localPosition.x, LVM.scrollViewHight,0);
@@ -71,13 +73,12 @@ public class MenuManager : MonoBehaviour{
             GameObject.Destroy(child.gameObject);
         }
 
-        levelCompleted = PlayerPrefs.GetInt("Level Completed");
 
         int heigh = (120 + 50) * (Mathf.CeilToInt(levelMax / 3)  ) + 50;
       
         levelList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, heigh);
  
-        for (int i =0; i< LVM.getLevelMax(); i++)
+        for (int i =0; i< LVM.levelMax; i++)
         {
             //Debug.Log(" menu " + i);
             GameObject go;

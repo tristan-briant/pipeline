@@ -34,13 +34,15 @@ public class gameController : MonoBehaviour {
 
         currantLevel = LVM.currantLevel;
 
-        if (currantLevel <= 1)
-            prevButton.gameObject.SetActive(false);
-        if (currantLevel == LVM.levelMax)
-            nextButton.gameObject.SetActive(false);
+       
 
         if (currantLevel > 0) // 0 mean level design
         {
+            if (currantLevel <= 1) 
+               prevButton.gameObject.SetActive(false);
+            if (currantLevel == LVM.levelMax || currantLevel > LVM.completedLevel) 
+               nextButton.gameObject.SetActive(false);
+
             if (PgHolder.transform.childCount > 0)
             {
                 DestroyImmediate(PgHolder.transform.GetChild(0).gameObject);
@@ -222,21 +224,26 @@ public class gameController : MonoBehaviour {
 
     IEnumerator WinAnimation()
     {
-        int levelCompleted = PlayerPrefs.GetInt("Level Completed");
+        //int levelCompleted = PlayerPrefs.GetInt("Level Completed");
 
-        if (currantLevel > levelCompleted)
+        //if (currantLevel > levelCompleted)
+        if (currantLevel > LVM.completedLevel)
         {
             PlayerPrefs.SetInt("Level Completed", currantLevel);
             PlayerPrefs.Save();
+            LVM.completedLevel = currantLevel;
         }
         winText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);
-        if (LVM.language == "french")
-            levelText.text = "Niveau suivant";
-        else
-            levelText.text = "Next level";
-        levelText.GetComponent<Button>().enabled = true;
-        levelText.GetComponent<Animator>().enabled = true;
+        if (currantLevel < LVM.levelMax)
+        {
+            if (LVM.language == "french")
+                levelText.text = "Niveau suivant";
+            else
+                levelText.text = "Next level";
+            levelText.GetComponent<Button>().enabled = true;
+            levelText.GetComponent<Animator>().enabled = true;
+        }
 
 
     }
@@ -283,11 +290,6 @@ public class gameController : MonoBehaviour {
 
         Engine.update_composant_p_i(composants);
 
-        /*if (composantChanged)
-        {
-            populateComposant(); // reorganize the componants
-            composantChanged = false;
-        }*/
 
         if (Input.GetKey(KeyCode.Home))
         {

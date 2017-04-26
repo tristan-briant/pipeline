@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour {
     private static LevelManager instanceRef;
 
     public int currantLevel;
+    public int completedLevel;
     public int levelMax;
     public float scrollViewHight = 0;
     public bool FirstLaunch=true;
@@ -66,6 +67,7 @@ public class LevelManager : MonoBehaviour {
         {
             DontDestroyOnLoad(gameObject);
             instanceRef = this;
+            levelMax = getLevelMax();
         }
         else {
             DestroyImmediate(gameObject);

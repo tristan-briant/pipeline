@@ -13,7 +13,10 @@ public class IntroManager : MonoBehaviour {
 
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
-        if (LVM.FirstLaunch)
+        foreach (Transform go in transform)
+            GameObject.DestroyImmediate(go.gameObject);
+
+        /*if (LVM.FirstLaunch)
         {
             StartCoroutine("IntroScreen");
             LVM.FirstLaunch = false;
@@ -21,36 +24,43 @@ public class IntroManager : MonoBehaviour {
         else
         {
             removeIntro();
-        }
+        }*/
 
-        int currantLevel = LVM.currantLevel;
-        string levelName = LVM.getPlaygroundName(currantLevel);
+        //int currantLevel = LVM.currantLevel;
 
-
-        Object obj = Resources.Load("Intro/" + levelName + "_intro", typeof(GameObject));
-
-        if (obj == null)
-            removeIntro();
-        else
+        if (LVM.currantLevel > LVM.completedLevel)
         {
-            GameObject intro = Instantiate(obj) as GameObject;
-            intro.transform.SetParent(gameObject.transform);
-            intro.transform.localScale = new Vector3(1, 1, 1);
-            intro.transform.localPosition = new Vector3(0, 0, 0);
+            string levelName = LVM.getPlaygroundName(LVM.currantLevel);
 
-            StartCoroutine("IntroScreen");
+
+            Object obj = Resources.Load("Intro/" + levelName + "_intro", typeof(GameObject));
+
+            if (obj == null)
+                removeIntro();
+            else
+            {
+                GameObject intro = Instantiate(obj) as GameObject;
+                intro.transform.SetParent(gameObject.transform);
+                intro.transform.localScale = new Vector3(1, 1, 1);
+                intro.transform.localPosition = new Vector3(0, 0, 0);
+
+                StartCoroutine("IntroScreen");
+            }
         }
     }
 
     public void removeIntro()
     {
         gameObject.GetComponent<Canvas>().enabled = false;
+        Debug.Log("remove intro!");
+        //transform.GetChild(0).gameObject.SetActive(false);
 
     }
 
     IEnumerator IntroScreen()
     {
         gameObject.GetComponent<Canvas>().enabled = true;
+        //transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(20f);
         removeIntro();
     }

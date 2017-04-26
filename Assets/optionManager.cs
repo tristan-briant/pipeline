@@ -21,6 +21,7 @@ public class optionManager : MonoBehaviour {
     public void resetGame()
     {
         PlayerPrefs.SetInt("Level Completed",0);
+        LVM.completedLevel = 0;
     }
 
 }
