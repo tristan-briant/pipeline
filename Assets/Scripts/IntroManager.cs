@@ -36,7 +36,10 @@ public class IntroManager : MonoBehaviour {
             Object obj = Resources.Load("Intro/" + levelName + "_intro", typeof(GameObject));
 
             if (obj == null)
+            {
+                Debug.Log("no intro found !");
                 removeIntro();
+            }
             else
             {
                 GameObject intro = Instantiate(obj) as GameObject;
@@ -46,6 +49,9 @@ public class IntroManager : MonoBehaviour {
 
                 StartCoroutine("IntroScreen");
             }
+        }
+        else {
+            removeIntro();
         }
     }
 

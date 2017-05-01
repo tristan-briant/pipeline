@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100"
+   height="100"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="intro-debimetre.svg"
+   inkscape:export-filename="debimetre-aiguille.png"
+   inkscape:export-xdpi="24.74053"
+   inkscape:export-ydpi="24.74053">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6"
+     inkscape:cx="5.1739603"
+     inkscape:cy="32.953366"
+     inkscape:document-units="px"
+     inkscape:current-layer="g4184"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     showborder="false"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="50.12882,20.32932"
+       orientation="1,0"
+       id="guide4241" />
+    <sodipodi:guide
+       position="8.9651039,22.097087"
+       orientation="0,1"
+       id="guide4243" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g4184"
+     inkscape:export-filename=".\cadran.png"
+     inkscape:export-xdpi="200"
+     inkscape:export-ydpi="200">
+    <g
+       id="g4176"
+       style="fill:#ffffff">
+      <path
+         inkscape:export-ydpi="144"
+         inkscape:export-xdpi="144"
+         inkscape:export-filename="debimetre-cadran.png"
+         sodipodi:nodetypes="ccccccc"
+         inkscape:connector-curvature="0"
+         id="path4178"
+         d="M 7.1428571,23.75 C 19.439872,15.423538 31.784942,7.1673104 50.12882,7.6785714 68.368838,9.110714 83.005012,14.346914 92.678571,24.821429 L 78.75,41.071429 C 67.716115,33.921219 63.469216,31.597333 50.12882,31.25 32.144334,32.400978 28.334544,37.686242 21.071429,41.964286 Z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <g
+       transform="matrix(0.94687889,0.32159036,-0.32159036,0.94687889,9.4228015,-17.358595)"
+       style="fill:#00ff00"
+       id="g4167">
+      <path
+         style="fill:#00ff00;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 60.230903,8.4054013 C 68.119278,6.2625693 72.747019,7.2664614 78.147577,8.9701369 L 75.222278,30.245967 C 70.65913,28.941689 66.69361,29.176845 61.982607,29.716186 Z"
+         id="path4159"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="debimetre-cadran.png"
+         inkscape:export-xdpi="144"
+         inkscape:export-ydpi="144" />
+    </g>
+    <path
+       sodipodi:nodetypes="csssszcsssczzs"
+       inkscape:connector-curvature="0"
+       id="path4203"
+       d="M 51.69902,3.6898493 C 28.365542,3.399899 4.6549026,13.598807 4.159661,23.502205 c -0.4982937,9.964432 13.36452,21.044409 16.567477,20.958373 3.407619,-0.09153 18.27379,-8.655183 28.640418,-9.730614 12.661976,-1.313549 26.077809,11.023271 30.22082,9.703342 C 86.132703,42.348338 101.03639,25.639818 95.593165,19.756373 90.149944,13.872928 74.754173,3.7168302 51.69902,3.6898493 Z M 49.298064,8.9322891 C 63.241912,9.0381095 79.784019,12.858384 87.151517,21.779712 89.847731,25.044566 79.942905,38.56076 77.672074,37.189066 72.074991,33.808151 61.552263,28.311305 50.886452,28.831981 40.023669,28.7452 29.157973,36.371807 23.622201,37.507723 18.086429,38.643639 10.576123,28.353298 11.866979,22.727409 13.157835,17.10152 35.313469,8.8261595 49.298064,8.9322891 Z"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffcc00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+  </g>
+  <g
+     id="g4180"
+     inkscape:transform-center-x="-0.11947035"
+     inkscape:transform-center-y="-20.195767"
+     transform="matrix(0.99998116,0.0061385,-0.0061385,0.99998116,0.37972004,-0.3058552)"
+     inkscape:export-filename=".\intro-arrow.png"
+     inkscape:export-xdpi="200"
+     inkscape:export-ydpi="200">
+    <path
+       id="rect4150"
+       d="m 48.297971,32.144039 0.0373,24.47436 c -1.979897,0.716542 -3.298734,2.596652 -3.298461,4.702221 0.0025,2.761423 2.243122,4.997962 5.004545,4.995451 2.761423,-0.0025 4.997962,-2.243122 4.995451,-5.004545 -0.0047,-2.10535 -1.327666,-3.982214 -3.308957,-4.694259 l -0.0373,-24.476313 z"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccscccc" />
+    <path
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-ydpi="300"
+       inkscape:export-xdpi="300"
+       aig=""
+       aiguille=""
+       inkscape:transform-center-y="-9.6358543"
+       inkscape:transform-center-x="-0.45117768"
+       inkscape:connector-curvature="0"
+       id="aiguille"
+       d="m 45.00032,37.863307 0.07614,-16.789824 5.094817,-4.372534 4.808127,4.171137 -0.07721,17.167893 c -2.9323,-1.167236 -6.029356,-1.838702 -9.901878,-0.176672 z"
+       style="fill:#ff0000;fill-rule:evenodd;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  </g>
+  <ellipse
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     id="path4161"
+     cx="49.503826"
+     cy="72.589287"
+     inkscape:export-filename="debimetre-cadran.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144"
+     r="63.660721" />
+</svg>
