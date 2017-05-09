@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100"
+   height="100"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="intro-pressostat.svg"
+   inkscape:export-filename="pressostat-water2.png"
+   inkscape:export-xdpi="144"
+   inkscape:export-ydpi="144">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="4.5589768"
+     inkscape:cy="14.415883"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:showpageshadow="false"
+     showguides="false" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <rect
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.52036252;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     id="rect4154"
+     width="248.49242"
+     height="204.55078"
+     x="-148.24966"
+     y="0" />
+  <rect
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     id="rect4149"
+     width="15.714286"
+     height="69.464287"
+     x="45.714287"
+     y="7.142858"
+     inkscape:export-filename="pressostat-water.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144" />
+  <path
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     d="m -41.95569,120.45558 72.653303,1.04079 1.759358,6.63786 12.305357,-0.49765 2.660493,-1.31967 0.717335,-46.50395 9.426122,0.13499 0.100627,53.77622 -3.766015,7.27467 -20.241928,1.07416 -3.030059,5.53682 -72.584593,0.11992 z"
+     id="rect4150"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccccccccc"
+     inkscape:export-filename=".\intro-pressostat-water.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144" />
+  <g
+     id="g4233"
+     inkscape:export-filename=".\intro-pressostat.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144">
+    <g
+       transform="translate(50.242754,50)"
+       id="tuyau">
+      <path
+         sodipodi:nodetypes="csssssccccsszsccszssccccsszsc"
+         inkscape:connector-curvature="0"
+         d="m 10.375425,26.167177 c 0.01426,4.556377 -0.4286744,47.886513 -0.6611554,53.601859 -0.125369,3.082079 -0.00937,8.035429 -2.1789736,11.000175 -2.1995719,3.005692 -8.2516198,3.906461 -15.3399136,3.558138 -4.9098594,-0.241273 -8.4704774,-0.85964 -9.5869004,1.211137 -1.072914,1.990075 -0.344533,3.613468 -2.448194,5.538654 -2.103664,1.92518 -66.845939,0.62659 -66.845939,0.62659 l 0.0995,5.99365 -5.11892,0.11701 0,-11.579597 c 0,0 66.412972,1.213812 67.911678,0.214199 1.498705,-0.999612 0.901815,-3.218723 2.669287,-5.515263 1.455952,-1.891771 6.986802,-1.524895 13.734981,-1.21352 6.7481786,0.311375 7.73314755,0.781177 10.4727266,-3.518926 3.440116,-5.399683 2.648518,-53.519051 2.639909,-58.483796 m -10.087029,-0.83721 c -0.370124,4.706352 -0.5766391,39.242608 -0.370124,42.474119 0.5448027,8.524973 -1.6196855,7.813439 -5.9974736,7.577612 -4.377788,-0.235827 -4.085382,-0.218398 -4.735249,-1.034503 -1.408364,-1.768629 -0.03243,-6.045965 -2.21782,-7.767393 -2.185388,-1.721429 -67.866656,-2.05097 -67.866656,-2.05097 l -0.0402,-6.016203 -6.11403,0.160997 0,11.5796 c 0,0 67.705365,0.754117 68.559656,1.139636 2.95344,1.33281 1.71895,4.835698 3.313516,7.133529 0.668885,0.963889 13.4440603,1.461828 15.9905342,0.534437 2.5464739,-0.927392 3.45303233,-4.91294 3.53633135,-7.789805 0.0870866,-3.007675 0.286262,-42.00709 0.201958,-45.486032"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#93a7ac;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;marker:none;enable-background:accumulate"
+         id="path4139" />
+    </g>
+    <path
+       sodipodi:nodetypes="ssccccsccccc"
+       inkscape:connector-curvature="0"
+       id="rect4148"
+       d="M 56.378729,2.8671875 C 55.630811,2.8570541 54.858652,2.866812 54.066162,2.8984375 41.386297,3.4044462 35.355391,7.1914062 35.355391,7.1914062 l 0,72.2229348 c 12.802907,3.637673 29.505798,1.805344 35.907251,-0.227629 L 71.935999,6.4980469 C 69.366111,5.1438224 64.105114,2.971871 56.378729,2.8671875 Z m 4.668493,6.4066369 0,63.8962956 c -4.661696,1.441958 -9.323394,1.58706 -13.98509,0 l 0,-63.8962956 c 4.712003,-1.7116143 9.8841,-1.6713752 13.98509,0 z"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffcc00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+  </g>
+  <path
+     style="fill:#ff0000;fill-rule:evenodd;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 45.614671,37.678602 16.95544,0.0933 4.286657,4.951565 -4.114534,4.951565 -17.127563,-0.0947 -4.113096,-4.950865 z"
+     id="aiguille"
+     inkscape:connector-curvature="0"
+     inkscape:transform-center-x="-8.620969"
+     inkscape:transform-center-y="0.451178"
+     aiguille=""
+     aig=""
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144"
+     sodipodi:nodetypes="ccccccc"
+     inkscape:export-filename="intro-pressostat-arrow.png" />
+  <g
+     id="g4204"
+     transform="translate(10.606601,0)"
+     inkscape:export-filename=".\intro-piston.png"
+     inkscape:export-xdpi="144"
+     inkscape:export-ydpi="144">
+    <path
+       id="rect4171"
+       d="m -101.6399,-121.60715 7.565511,0 0,55.71429 -7.565511,0 z"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:connector-curvature="0" />
+    <rect
+       y="87.14286"
+       x="-67.175613"
+       height="21.428572"
+       width="7.5655117"
+       id="rect4153"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4173"
+       d="m -111.05412,96.964284 39.089836,0"
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -65.621152,89.630164 4.558699,0"
+       id="path4175"
+       inkscape:connector-curvature="0" />
+    <path
+       id="path4177"
+       d="M -135,83.75 A 13.75,13.75 0 0 0 -148.75,97.5 13.75,13.75 0 0 0 -135,111.25 13.75,13.75 0 0 0 -121.25,97.5 13.75,13.75 0 0 0 -135,83.75 Z m 0,5 a 8.75,8.75 0 0 1 8.75,8.75 8.75,8.75 0 0 1 -8.75,8.75 8.75,8.75 0 0 1 -8.75,-8.75 8.75,8.75 0 0 1 8.75,-8.75 z"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4195"
+       width="4.7083688"
+       height="28.928572"
+       x="-122.17561"
+       y="83.39286" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4200"
+       d="m -120.927,85.715823 2.12895,0"
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:transform-center-y="-10.48153"
+       inkscape:transform-center-x="-4.1727051"
+       sodipodi:nodetypes="cc"
+       style="fill:none;fill-rule:evenodd;stroke:#cccccc;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -134.53755,85.641116 c 2.98514,0.23974 5.43331,1.340016 7.47994,3.01202"
+       id="path4202"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

@@ -16,6 +16,7 @@ public class IntroManager : MonoBehaviour {
         foreach (Transform go in transform)
             GameObject.DestroyImmediate(go.gameObject);
 
+        transform.localPosition = new Vector3(0, 0, 0);
         /*if (LVM.FirstLaunch)
         {
             StartCoroutine("IntroScreen");
@@ -67,7 +68,7 @@ public class IntroManager : MonoBehaviour {
     {
         gameObject.GetComponent<Canvas>().enabled = true;
         //transform.GetChild(0).gameObject.SetActive(true);
-        yield return new WaitForSeconds(20f);
+        yield return new WaitForSeconds(40f);
         removeIntro();
     }
 }
