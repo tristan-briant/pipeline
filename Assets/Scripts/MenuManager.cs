@@ -74,16 +74,16 @@ public class MenuManager : MonoBehaviour{
         }
 
 
-        int heigh = (120 + 50) * (Mathf.CeilToInt(levelMax / 3)  ) + 50;
+        int heigh = (120 + 50) * (Mathf.CeilToInt( (levelMax+2) / 3)  ) + 50;
       
         levelList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, heigh);
  
-        for (int i =0; i< LVM.levelMax; i++)
+        for (int i =1; i<= LVM.levelMax; i++)
         {
             //Debug.Log(" menu " + i);
             GameObject go;
 
-            if (LVM.getPlaygroundName(i+1).Contains("jelly"))
+            if (LVM.getPlaygroundName(i).Contains("jelly"))
                 go = Instantiate(Resources.Load<GameObject>("ButtonJelly"));
             else
                 go = Instantiate(Resources.Load<GameObject>("ButtonUnlock"));
@@ -93,19 +93,32 @@ public class MenuManager : MonoBehaviour{
             go.transform.localScale = new Vector3(1, 1, 1);
             go.transform.localPosition = new Vector3(0, 0, 0);
 
-            if (i > levelCompleted && !LVM.hacked)
+            //if (i > levelCompleted && !LVM.hacked)
+            if (!LVM.levelIsCompleted(i-1) && !LVM.levelIsCompleted(i))
             {
                 go.GetComponentInChildren<Image>().sprite = Locked;
                 go.GetComponentInChildren<Text>().text = "";
+                go.GetComponentInChildren<languageManager>().enabled = false;
+                go.GetComponent<Animator>().enabled = false;
                 go.transform.GetComponentInChildren<Button>().interactable = false;
             }
             else
             {
-                go.GetComponentInChildren<Text>().text = (i+1).ToString();
-                if(i==LVM.currantLevel-1)
+                if (!LVM.levelIsCompleted(i))
+                {
+                    go.GetComponentInChildren<languageManager>().enabled = true;
+                    go.GetComponent<Animator>().enabled = true;
+                }
+                else
+                {
+                    go.GetComponentInChildren<languageManager>().enabled = false;
+                    go.GetComponent<Animator>().enabled = false;
+                    go.GetComponentInChildren<Text>().text = i.ToString();
+                }
+                if(i==LVM.currantLevel)
                     go.GetComponentInChildren<Text>().color=new Color(0xFF/255.0f,0xEF/255.0f,0x31/255.0f,1);
 
-                int level = i+1; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
+                int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
                 go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
             }
 

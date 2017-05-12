@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class IntroManager : MonoBehaviour {
 
     public LevelManager LVM;
+    public GameObject TipButton;
     //public GameObject introScreen;
 
     private void Awake()
@@ -17,57 +18,48 @@ public class IntroManager : MonoBehaviour {
             GameObject.DestroyImmediate(go.gameObject);
 
         transform.localPosition = new Vector3(0, 0, 0);
-        /*if (LVM.FirstLaunch)
+       
+        /// Prepare intro if any
+        string levelName = LVM.getPlaygroundName(LVM.currantLevel);
+        Object obj = Resources.Load("Intro/" + levelName + "_intro", typeof(GameObject));
+
+        if (obj == null)
         {
-            StartCoroutine("IntroScreen");
-            LVM.FirstLaunch = false;
+            removeIntro();
+            TipButton.SetActive(false);
         }
         else
         {
-            removeIntro();
-        }*/
-
-        //int currantLevel = LVM.currantLevel;
-
-        if (LVM.currantLevel > LVM.completedLevel)
-        {
-            string levelName = LVM.getPlaygroundName(LVM.currantLevel);
+            TipButton.SetActive(true);
+            GameObject intro = Instantiate(obj) as GameObject;
+            intro.transform.SetParent(gameObject.transform);
+            intro.transform.localScale = new Vector3(1, 1, 1);
+            intro.transform.localPosition = new Vector3(0, 0, 0);
 
 
-            Object obj = Resources.Load("Intro/" + levelName + "_intro", typeof(GameObject));
-
-            if (obj == null)
+            if (LVM.currantLevel > LVM.completedLevel)
             {
-                Debug.Log("no intro found !");
-                removeIntro();
+                StartCoroutine("IntroScreen");
             }
             else
             {
-                GameObject intro = Instantiate(obj) as GameObject;
-                intro.transform.SetParent(gameObject.transform);
-                intro.transform.localScale = new Vector3(1, 1, 1);
-                intro.transform.localPosition = new Vector3(0, 0, 0);
-
-                StartCoroutine("IntroScreen");
+                removeIntro();
             }
-        }
-        else {
-            removeIntro();
         }
     }
 
     public void removeIntro()
     {
         gameObject.GetComponent<Canvas>().enabled = false;
-        Debug.Log("remove intro!");
-        //transform.GetChild(0).gameObject.SetActive(false);
-
     }
 
-    IEnumerator IntroScreen()
+    public void playIntro() {
+        StartCoroutine("IntroScreen");
+    }
+
+    public IEnumerator IntroScreen()
     {
         gameObject.GetComponent<Canvas>().enabled = true;
-        //transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(40f);
         removeIntro();
     }

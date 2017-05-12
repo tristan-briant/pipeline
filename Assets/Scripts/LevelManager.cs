@@ -30,6 +30,7 @@ public class LevelManager : MonoBehaviour {
     List<string> playgroundName = new List<string>()
     {
         "Pg 0",
+        //"titi",
         "Pg 0b",
         "playground1",
         "playground2",
@@ -61,6 +62,55 @@ public class LevelManager : MonoBehaviour {
         "PG TransistorNot PNP"
     };
 
+    List<string> playgroundNameLegacy = new List<string>()
+    {
+        "Pg 0",
+        "Pg 0b",
+        "playground1",
+        "playground2",
+        "Pg 3 DBM",
+        "Pg jelly0",
+        "Pg double DBM",
+        "playground3",
+        "PG bonus1",
+        "PG bonus2",
+        "Pg 4 pressostats",
+        "Pg 1P2R",
+        "Pg jelly1",
+        "Pg double DBM2",
+        "Pg Rampe tension",
+        "PG DBM+PST",
+        "PG Capa1",
+        "PG Capa2",
+        "Pg jelly2",
+        "PG Capa3",
+        "PG Capa4",
+        "PG Diode Capa",
+        "PG Diode1",
+        "PG Diode2",
+        "PG D demi pont",
+        "PG Transistor0a",
+        "PG Transistor0b",
+        "PG Transistor1",
+        "PG TransistorNot",
+        "PG TransistorNot PNP"
+    };
+
+    public bool levelIsCompleted(int i) {
+        if (i < 1) return true; // level 0 alway completed
+        string s = PlayerPrefs.GetString("Level-" + playgroundName[i-1]);
+        if (s == "completed") return true;
+        return false;
+    }
+
+    public void levelCompleted(int i)
+    {
+        if (i < 1) return;
+        PlayerPrefs.SetString("Level-" + playgroundName[i-1], "completed");
+        PlayerPrefs.Save();
+    }
+
+
     private void Awake()
     {
         if (instanceRef == null)
@@ -68,13 +118,21 @@ public class LevelManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
             instanceRef = this;
             levelMax = getLevelMax();
+            // for legacy purpose
+            
+            int lvc=PlayerPrefs.GetInt("Level Completed");
+
+
+            for(int i = 0; i < lvc; i++)
+            {
+                PlayerPrefs.SetString("Level-" + playgroundNameLegacy[i], "completed");
+            }
+            //PlayerPrefs.DeleteKey("Level Completed");
+
         }
         else {
             DestroyImmediate(gameObject);
         }
-
-
-        //levelMax = playgroundName.Count;
     }
 
     public int getLevelMax() {

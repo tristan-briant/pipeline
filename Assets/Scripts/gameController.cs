@@ -38,9 +38,9 @@ public class gameController : MonoBehaviour {
 
         if (currantLevel > 0) // 0 mean level design
         {
-            if (currantLevel <= 1) 
+            if (currantLevel == 1) 
                prevButton.gameObject.SetActive(false);
-            if (currantLevel == LVM.levelMax || currantLevel > LVM.completedLevel) 
+            if (currantLevel == LVM.levelMax || !LVM.levelIsCompleted(currantLevel)) 
                nextButton.gameObject.SetActive(false);
 
             if (PgHolder.transform.childCount > 0)
@@ -227,12 +227,16 @@ public class gameController : MonoBehaviour {
         //int levelCompleted = PlayerPrefs.GetInt("Level Completed");
 
         //if (currantLevel > levelCompleted)
-        if (currantLevel > LVM.completedLevel)
+       /* if (currantLevel > LVM.completedLevel)
         {
-            PlayerPrefs.SetInt("Level Completed", currantLevel);
+           PlayerPrefs.SetInt("Level Completed", currantLevel);
+
             PlayerPrefs.Save();
-            LVM.completedLevel = currantLevel;
-        }
+            
+            //LVM.completedLevel = currantLevel;
+        }*/
+        LVM.levelCompleted(currantLevel);
+
         winText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);
         if (currantLevel < LVM.levelMax)
