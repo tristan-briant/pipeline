@@ -156,14 +156,14 @@ public class TransistorManager : BaseComponent
     protected override void Start()
     {
         base.Start();
-        water = this.transform.FindChild("Water").gameObject;
-        water1 = this.transform.FindChild("Water1").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
-        water3 = this.transform.FindChild("Water3").gameObject;
-        piston = transform.FindChild("Piston").gameObject;
-        bubble1 = transform.FindChild("Bubble1").gameObject;
-        bubble2 = transform.FindChild("Bubble2").gameObject;
-        valve = transform.FindChild("Valve").gameObject;
+        water = this.transform.Find("Water").gameObject;
+        water1 = this.transform.Find("Water1").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+        water3 = this.transform.Find("Water3").gameObject;
+        piston = transform.Find("Piston").gameObject;
+        bubble1 = transform.Find("Bubble1").gameObject;
+        bubble2 = transform.Find("Bubble2").gameObject;
+        valve = transform.Find("Valve").gameObject;
 
     }
 

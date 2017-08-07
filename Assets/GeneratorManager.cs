@@ -54,12 +54,12 @@ public class GeneratorManager :  BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.FindChild("Water0").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
 
-        bubble = this.transform.FindChild("Bubble").gameObject;
-        shine = this.transform.FindChild("Shine").gameObject;
-        helice = this.transform.FindChild("Helice").gameObject;
+        bubble = this.transform.Find("Bubble").gameObject;
+        shine = this.transform.Find("Shine").gameObject;
+        helice = this.transform.Find("Helice").gameObject;
     }
 
 

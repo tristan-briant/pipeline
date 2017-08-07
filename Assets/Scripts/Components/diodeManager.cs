@@ -50,10 +50,10 @@ public class diodeManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.FindChild("Water0").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
-        piston = transform.FindChild("Piston").gameObject;
-        bubble = transform.FindChild("Bubble").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+        piston = transform.Find("Piston").gameObject;
+        bubble = transform.Find("Bubble").gameObject;
     }
 
     private void Update()

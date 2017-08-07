@@ -40,11 +40,11 @@ public class InductorManager : BaseComponent
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.FindChild("Water0").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
-        water = this.transform.FindChild("Water").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+        water = this.transform.Find("Water").gameObject;
 
-        propeller = this.transform.FindChild("Propeller").gameObject;
+        propeller = this.transform.Find("Propeller").gameObject;
         //bubble = this.transform.FindChild("Bubble").gameObject;
 
     }

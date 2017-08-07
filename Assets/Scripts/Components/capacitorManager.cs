@@ -42,15 +42,15 @@ public class capacitorManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        waterIn0 = this.transform.FindChild("Water-in0").gameObject;
-        waterIn2 = this.transform.FindChild("Water-in2").gameObject;
-        water0 = this.transform.FindChild("Water0").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
-        spring1 = transform.FindChild("Spring1").gameObject;
-        spring2 = transform.FindChild("Spring2").gameObject;
-        spring3 = transform.FindChild("Spring3").gameObject;
-        spring4 = transform.FindChild("Spring4").gameObject;
-        piston = transform.FindChild("Piston").gameObject;
+        waterIn0 = this.transform.Find("Water-in0").gameObject;
+        waterIn2 = this.transform.Find("Water-in2").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+        spring1 = transform.Find("Spring1").gameObject;
+        spring2 = transform.Find("Spring2").gameObject;
+        spring3 = transform.Find("Spring3").gameObject;
+        spring4 = transform.Find("Spring4").gameObject;
+        piston = transform.Find("Piston").gameObject;
     }
 
     private void Update()

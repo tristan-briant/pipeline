@@ -19,13 +19,13 @@ public class InletJellyManager : BaseFrontier {
     protected override void Start()
     {
         base.Start();
-        jelly0 = this.transform.FindChild("Jelly0").gameObject;
-        jelly2 = this.transform.FindChild("Jelly2").gameObject;
+        jelly0 = this.transform.Find("Jelly0").gameObject;
+        jelly2 = this.transform.Find("Jelly2").gameObject;
 
         jelly0.GetComponent<Image>().fillAmount = 0;
         jelly2.GetComponent<Image>().fillAmount = 0;
 
-        arrow = this.transform.FindChild("Arrow").gameObject;
+        arrow = this.transform.Find("Arrow").gameObject;
 
     }
 

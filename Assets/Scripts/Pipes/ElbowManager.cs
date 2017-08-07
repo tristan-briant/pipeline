@@ -34,9 +34,9 @@ public class ElbowManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water2 = this.transform.FindChild("Water2").gameObject;
-        water3 = this.transform.FindChild("Water3").gameObject;
-        bubble = this.transform.FindChild("Bubble").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+        water3 = this.transform.Find("Water3").gameObject;
+        bubble = this.transform.Find("Bubble").gameObject;
 
 
 

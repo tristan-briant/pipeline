@@ -87,13 +87,13 @@ public class PressostatDigitalManager : BaseComponent
     protected override void Start()
     {
         base.Start();
-        water = this.transform.FindChild("Water").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
+        water = this.transform.Find("Water").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
 
-        arrow = this.transform.FindChild("Arrow").gameObject;
-        shine = this.transform.FindChild("Shine").gameObject;
-        red = this.transform.FindChild("Red").gameObject;
-        green = this.transform.FindChild("Green").gameObject;
+        arrow = this.transform.Find("Arrow").gameObject;
+        shine = this.transform.Find("Shine").gameObject;
+        red = this.transform.Find("Red").gameObject;
+        green = this.transform.Find("Green").gameObject;
 
         arrowStartPosition = new Vector3(7.6f, -19.14f, 0);// arrow.transform.localPosition;
         success = 0;

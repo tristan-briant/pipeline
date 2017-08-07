@@ -55,10 +55,10 @@ public class ElbowJellyManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        jelly3 = this.transform.FindChild("Jelly3").gameObject;
-        jelly2 = this.transform.FindChild("Jelly2").gameObject;
+        jelly3 = this.transform.Find("Jelly3").gameObject;
+        jelly2 = this.transform.Find("Jelly2").gameObject;
 
-        bubble = this.transform.FindChild("Bubble").gameObject;
+        bubble = this.transform.Find("Bubble").gameObject;
         jelly3.GetComponent<Image>().fillAmount = 0;
         jelly2.GetComponent<Image>().fillAmount = 0;
     }

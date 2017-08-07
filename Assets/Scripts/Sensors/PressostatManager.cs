@@ -45,15 +45,15 @@ public class PressostatManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water = this.transform.FindChild("Water").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
+        water = this.transform.Find("Water").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
 
         //bubble = this.transform.FindChild("Bubble").gameObject;
-        cadranMin = this.transform.FindChild("Cadran Min").gameObject;
-        cadranMax = this.transform.FindChild("Cadran Max").gameObject;
+        cadranMin = this.transform.Find("Cadran Min").gameObject;
+        cadranMax = this.transform.Find("Cadran Max").gameObject;
 
-        arrow = this.transform.FindChild("Arrow").gameObject;
-        shine = this.transform.FindChild("Shine").gameObject;
+        arrow = this.transform.Find("Arrow").gameObject;
+        shine = this.transform.Find("Shine").gameObject;
 
         arrowStartPosition=arrow.transform.localPosition;
     }

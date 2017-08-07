@@ -48,13 +48,13 @@ public class TeManager : BaseComponent
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.FindChild("Water0").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
-        water3 = this.transform.FindChild("Water3").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+        water3 = this.transform.Find("Water3").gameObject;
 
-        bubble0 = this.transform.FindChild("Bubble0").gameObject;
-        bubble2 = this.transform.FindChild("Bubble2").gameObject;
-        bubble3 = this.transform.FindChild("Bubble3").gameObject;
+        bubble0 = this.transform.Find("Bubble0").gameObject;
+        bubble2 = this.transform.Find("Bubble2").gameObject;
+        bubble3 = this.transform.Find("Bubble3").gameObject;
 
     }
 

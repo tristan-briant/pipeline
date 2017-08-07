@@ -37,11 +37,11 @@ public class ResistorManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water = this.transform.FindChild("Water").gameObject;
-        water0 = this.transform.FindChild("Water0").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
+        water = this.transform.Find("Water").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
 
-        bubble = this.transform.FindChild("Bubble").gameObject;
+        bubble = this.transform.Find("Bubble").gameObject;
 
     }
 

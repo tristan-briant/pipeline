@@ -58,14 +58,14 @@ public class PressostatTriggerManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water = this.transform.FindChild("Water").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
+        water = this.transform.Find("Water").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
 
-        cadran = this.transform.FindChild("Cadran").gameObject;
-        cadran2 = this.transform.FindChild("Cadran2").gameObject;
+        cadran = this.transform.Find("Cadran").gameObject;
+        cadran2 = this.transform.Find("Cadran2").gameObject;
 
-        arrow = this.transform.FindChild("Arrow").gameObject;
-        shine = this.transform.FindChild("Shine").gameObject;
+        arrow = this.transform.Find("Arrow").gameObject;
+        shine = this.transform.Find("Shine").gameObject;
 
         arrowStartPosition = arrow.transform.localPosition;
         cadranStartPosition = cadran.transform.localPosition;

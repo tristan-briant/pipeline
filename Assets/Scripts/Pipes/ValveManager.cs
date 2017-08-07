@@ -57,12 +57,12 @@ public class ValveManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.FindChild("Water0").gameObject;
-        water2 = this.transform.FindChild("Water2").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
 
-        bubble = this.transform.FindChild("Bubble").gameObject;
-        tubeOpen = this.transform.FindChild("TubeOpen").gameObject;
-        tubeClosed = this.transform.FindChild("TubeClosed").gameObject;
+        bubble = this.transform.Find("Bubble").gameObject;
+        tubeOpen = this.transform.Find("TubeOpen").gameObject;
+        tubeClosed = this.transform.Find("TubeClosed").gameObject;
     }
 
     IEnumerator countDown() {

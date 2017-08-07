@@ -103,10 +103,10 @@ public class InletManager : BaseFrontier {
     protected override void Start()
     {
         base.Start();
-        water = this.transform.FindChild("Water").gameObject;
-        water0 = this.transform.FindChild("Water0").gameObject;
+        water = this.transform.Find("Water").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
 
-        arrow = this.transform.FindChild("Arrow").gameObject;
+        arrow = this.transform.Find("Arrow").gameObject;
 
         if (jelly)
         {
