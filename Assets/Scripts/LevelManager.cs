@@ -30,7 +30,6 @@ public class LevelManager : MonoBehaviour {
     List<string> playgroundName = new List<string>()
     {
         "Pg 0",
-        //"titi",
         "Pg 0b",
         "playground1",
         "playground2",
@@ -39,14 +38,15 @@ public class LevelManager : MonoBehaviour {
         "Pg double DBM",
         "playground3",
         "PG bonus1",
-        "PG bonus2",
+        "PG bonus2",          //10
         "Pg 4 pressostats",
-        "Pg 1P2R",
+		"Pg 1P2R",
+		"PG res parallele 3",
         "Pg jelly1",
         "Pg double DBM2",
         "Pg Rampe tension",
         "PG DBM+PST",
-        "PG Capa1",
+       "PG Capa1",
         "PG Capa2",
         "Pg jelly2",
         "PG Capa3",
@@ -98,6 +98,7 @@ public class LevelManager : MonoBehaviour {
 
     public bool levelIsCompleted(int i) {
         if (i < 1) return true; // level 0 alway completed
+        if (hacked == true) return true; //for debug purpose
         string s = PlayerPrefs.GetString("Level-" + playgroundName[i-1]);
         if (s == "completed") return true;
         return false;

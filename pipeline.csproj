@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\Pipes\WatchManager.cs" />
     <Compile Include="Assets\Scripts\Pipes\triggerAction.cs" />
     <Compile Include="Assets\Scripts\Sensors\DebitmeterManager.cs" />
+    <Compile Include="Assets\Scripts\Sensors\MetronomeManager.cs" />
     <Compile Include="Assets\Scripts\Sensors\PressostatManager.cs" />
     <Compile Include="Assets\Scripts\Sensors\PressostatTriggerManager.cs" />
     <Compile Include="Assets\Scripts\WallManager.cs" />
