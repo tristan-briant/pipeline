@@ -11,15 +11,17 @@ public class MetronomeManager : BaseComponent {
     GameObject water0, water2, bubble,cadranMin,cadranMax,arrow,shine,pendulum;
     public float x_bulle = 0;
     float r_bulle = 0.1f;
-    public float setPointHigh, setPointLow, iMax;
-    float SPH, SPL, successSpeed;
+    public float setPointHigh, setPointLow, iMax,freqMax;
+    float SPH, SPL, successSpeed=0.005f;
     public int mode = 0;
     public float periode = 0,time=0,direction=+1;//,phase = 0;
     float t_shine = 0;
     //public new float f;
     float ff=0;
-    const float beta=0.5f;
- 
+    const float beta=0.2f;
+    Vector3 arrowStartPosition;
+    float rate = 0;
+    float angle = 0.0f;
 
     public override void OnPointerClick(PointerEventData eventData)
     {
@@ -66,8 +68,6 @@ public class MetronomeManager : BaseComponent {
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
-        //C = 5.0f;
-        //L = 3f;
         float a = p[0], b = p[2];
 
         q += (i[0] + i[2]) * alpha; 
@@ -86,8 +86,8 @@ public class MetronomeManager : BaseComponent {
 
         ff = (1 - beta) * ff + beta * f;
 
-        //calculateSetPoint();
-        if ( SPL < -ff  && -ff <SPH && itemBeingDragged == null)
+
+        if ( SPL < 1 / periode  && 1 / periode < SPH && itemBeingDragged == null)
             success = Mathf.Clamp(success + successSpeed, 0, 1);
         else
             success = Mathf.Clamp(success - 0.05f, 0, 1);
@@ -109,9 +109,21 @@ public class MetronomeManager : BaseComponent {
         pendulum = this.transform.Find("Pendulum").gameObject;
         shine = this.transform.Find("Shine").gameObject;
 
+        arrowStartPosition = arrow.transform.localPosition;
+
+        time = Time.time;
+
+        SPH = setPointHigh;
+        SPL = setPointLow;
+
+        cadranMax.GetComponent<Image>().fillAmount = (SPH / freqMax) * (SPH / freqMax);
+        cadranMin.GetComponent<Image>().fillAmount = (SPL / freqMax) * (SPL / freqMax);
+
+        successSpeed = 0.01f * ((SPH + SPL) / 2.0f) / 6;  // 6 * expected periode 
+
     }
 
-   
+
     private void Update()
     {
 
@@ -135,24 +147,38 @@ public class MetronomeManager : BaseComponent {
         }
 
         const float ANGLEMAX = 180 / 4.8f;
-        float angle = Mathf.Clamp(ff / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
 
-       
-        float angleH = Mathf.Clamp((SPH) / iMax, -1, 1);
-        float angleL = Mathf.Clamp((SPL) / iMax, -1, 1);
+        if (Time.time < time + 4.0f)
+            angle = 0.2f * angle + 0.8f * Mathf.Atan(ff / iMax ) * ANGLEMAX;//Mathf.Clamp(ff / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
+        else
+            angle = 0.2f * angle;
+
+        //float angleH = Mathf.Clamp((SPH) / iMax, -1, 1);
+        //float angleL = Mathf.Clamp((SPL) / iMax, -1, 1);
 
         pendulum.transform.localEulerAngles= new Vector3(0, 0, angle);
-        cadranMax.GetComponent<Image>().fillAmount = 0.5f-angleH*0.33f  ;
-        cadranMin.GetComponent<Image>().fillAmount = 0.5f-angleL * 0.33f;
-
 
         // compute the periode :
-        if (Mathf.Abs(f)>iMax*0.2 && Mathf.Sign(f)!= Mathf.Sign(direction))
+        
+        if (Mathf.Abs(f) > iMax * 0.1 && Mathf.Sign(f) != Mathf.Sign(direction) && Time.time > time + 0.5f) 
         {
             direction = -direction;
             periode = Time.time-time;
             time = Time.time;
         }
+
+        if (Time.time > time + 4.0f) periode = Mathf.Clamp(periode + 0.2f, 0, 1000);
+
+        if (periode <= 0.1f) periode = 10000f;
+
+
+        rate = 0.9f * rate + 0.1f * Mathf.Clamp((1 / periode) / (freqMax), 0, 1);
+        Vector3 pos = new Vector3(0, rate * rate * 56.6f, 0);
+
+        arrow.transform.localPosition = arrowStartPosition + pos;
+
+
+        
 
 
         float alpha;

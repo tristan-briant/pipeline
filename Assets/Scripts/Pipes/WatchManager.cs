@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class WatchManager : BaseComponent {
 
     protected Animation Animation;
-
+    public float timeOut=4.0f;
 
     protected void Awake()
     {
