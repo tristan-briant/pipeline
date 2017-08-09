@@ -78,18 +78,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\DragThresholdUtil.cs" />
-    <Compile Include="Assets\GeneratorManager.cs" />
-    <Compile Include="Assets\InductorManager.cs" />
-    <Compile Include="Assets\InletDigitalManager.cs" />
-    <Compile Include="Assets\PlaygroundParameters.cs" />
-    <Compile Include="Assets\PressostatDigitalManager.cs" />
     <Compile Include="Assets\Scripts\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\BaseFrontier.cs" />
     <Compile Include="Assets\Scripts\Components\ResistorManager.cs" />
     <Compile Include="Assets\Scripts\Components\capacitorManager.cs" />
     <Compile Include="Assets\Scripts\Components\diodeManager.cs" />
+    <Compile Include="Assets\Scripts\DragThresholdUtil.cs" />
     <Compile Include="Assets\Scripts\Engine.cs" />
+    <Compile Include="Assets\Scripts\GeneratorManager.cs" />
+    <Compile Include="Assets\Scripts\InductorManager.cs" />
+    <Compile Include="Assets\Scripts\InletDigitalManager.cs" />
     <Compile Include="Assets\Scripts\InletManager.cs" />
     <Compile Include="Assets\Scripts\IntroManager.cs" />
     <Compile Include="Assets\Scripts\Jelly\ElbowJellyManager.cs" />
@@ -104,19 +102,21 @@
     <Compile Include="Assets\Scripts\Pipes\ValveManager.cs" />
     <Compile Include="Assets\Scripts\Pipes\WatchManager.cs" />
     <Compile Include="Assets\Scripts\Pipes\triggerAction.cs" />
+    <Compile Include="Assets\Scripts\PlaygroundParameters.cs" />
+    <Compile Include="Assets\Scripts\PressostatDigitalManager.cs" />
     <Compile Include="Assets\Scripts\Sensors\DebitmeterManager.cs" />
     <Compile Include="Assets\Scripts\Sensors\MetronomeManager.cs" />
     <Compile Include="Assets\Scripts\Sensors\PressostatManager.cs" />
     <Compile Include="Assets\Scripts\Sensors\PressostatTriggerManager.cs" />
+    <Compile Include="Assets\Scripts\TransistorManager.cs" />
     <Compile Include="Assets\Scripts\WallManager.cs" />
     <Compile Include="Assets\Scripts\calculate.cs" />
     <Compile Include="Assets\Scripts\controller.cs" />
     <Compile Include="Assets\Scripts\gameController.cs" />
-    <Compile Include="Assets\TransistorManager.cs" />
-    <Compile Include="Assets\intoScript.cs" />
-    <Compile Include="Assets\keepalive.cs" />
-    <Compile Include="Assets\languageManager.cs" />
-    <Compile Include="Assets\optionManager.cs" />
+    <Compile Include="Assets\Scripts\intoScript.cs" />
+    <Compile Include="Assets\Scripts\keepalive.cs" />
+    <Compile Include="Assets\Scripts\languageManager.cs" />
+    <Compile Include="Assets\Scripts\optionManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

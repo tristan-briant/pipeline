@@ -12,7 +12,7 @@ public class WatchManager : BaseComponent {
     protected void Awake()
     {
         Animation = GetComponent<Animation>();
-
+        Animation["WatchAnimation"].speed = 4 / timeOut;
     }
 
     public override void OnPointerClick(PointerEventData eventData)
