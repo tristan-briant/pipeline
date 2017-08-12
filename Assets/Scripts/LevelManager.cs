@@ -51,6 +51,7 @@ public class LevelManager : MonoBehaviour {
         "Pg jelly2",
         "PG Capa3",
         "PG Capa4",
+        "PG LC1",
         "PG Diode Capa",
         "PG Diode1",
         "PG Diode2",

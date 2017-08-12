@@ -14,7 +14,7 @@ public class MetronomeManager : BaseComponent {
     public float setPointHigh, setPointLow, iMax,freqMax;
     float SPH, SPL, successSpeed=0.005f;
     public int mode = 0;
-    public float periode = 0,time=0,direction=+1;//,phase = 0;
+    public float periode = 0,time=0,direction=0;//,phase = 0;
     float t_shine = 0;
     //public new float f;
     float ff=0;
@@ -162,12 +162,16 @@ public class MetronomeManager : BaseComponent {
         
         if (Mathf.Abs(f) > iMax * 0.1 && Mathf.Sign(f) != Mathf.Sign(direction) && Time.time > time + 0.5f) 
         {
-            direction = -direction;
+            direction = Mathf.Sign(f);
             periode = Time.time-time;
             time = Time.time;
         }
 
-        if (Time.time > time + 4.0f) periode = Mathf.Clamp(periode + 0.2f, 0, 1000);
+        if (Time.time > time + 4.0f)
+        {
+            periode = Mathf.Clamp(periode + 0.2f, 0, 1000);
+            direction = 0;
+        }
 
         if (periode <= 0.1f) periode = 10000f;
 
