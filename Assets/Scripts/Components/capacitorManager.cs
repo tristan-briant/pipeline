@@ -13,6 +13,12 @@ public class capacitorManager : BaseComponent {
     float q0, q2;
     public float xp;
 
+    public override void Reset_i_p()
+    {
+        base.Reset_i_p();
+        q0 = q2 = 0;
+    }
+
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[0], b = p[2];
@@ -61,7 +67,8 @@ public class capacitorManager : BaseComponent {
         water2.GetComponent<Image>().color = pressureColor(pin[2]);
 
         float xMax = 32f;
-        xp = Mathf.Clamp((q2-q0)/Cin*xMax, -xMax,xMax);
+        //xp = Mathf.Clamp((q2-q0)/Cin*xMax, -xMax,xMax);
+        xp = xMax * Mathf.Atan((q2 - q0) / Cin * xMax * 0.1f) / 1.5f;
         piston.transform.localPosition= new Vector3(xp,0,0);
 
         waterIn2.GetComponent<Image>().fillAmount = 0.6f + 0.4f*xp/xMax;

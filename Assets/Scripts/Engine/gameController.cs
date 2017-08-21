@@ -315,5 +315,10 @@ public class gameController : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
+    public void ResetComponant()
+    {
+        Engine.Reset_p_i(composants);
+    }
+
 }
 

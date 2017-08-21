@@ -12,8 +12,12 @@ public class ValveManager : BaseComponent {
     public bool open=false;
     float q1=0, q2=0;
     public float openTime=4.0f;
- 
 
+    public override void Reset_i_p()
+    {
+        base.Reset_i_p();
+        q1 = q2 = 0;
+    }
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {

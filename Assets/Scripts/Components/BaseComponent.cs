@@ -17,6 +17,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     public float success = 1;
     public float fail = 0;
     public const float fMinBubble = 0.1f;
+    //public bool empty = true;
 
     public int x, y;
     public bool locked=false;
@@ -46,7 +47,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     }
 
-    public void set_i_p(float[] p, float[] i) {
+    public void Set_i_p(float[] p, float[] i) {
 
         if (mirror)
         {
@@ -62,6 +63,16 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
             pin[k] = p[k];
             iin[k] = i[k];
         }
+    }
+
+    public virtual void Reset_i_p()
+    {
+        for (int k = 0; k < 4; k++)
+        {
+            pin[k] = 0;
+            iin[k] = 0;
+        }
+        q = f = 0;
     }
 
     public virtual void calcule_i_p(float[] p, float[] i,float dt)
@@ -126,6 +137,9 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
             transform.rotation = Quaternion.identity;
             transform.Rotate(new Vector3(0, 0, dir * 90));
             //Debug.Log("Object " + Name + " clicked !" + dir);
+
+            AudioSource[] audio = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
+            audio[0].Play();
         }
     }
 

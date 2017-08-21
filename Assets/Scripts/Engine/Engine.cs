@@ -32,6 +32,8 @@ public class Engine  {
         }
     }
 
+   
+
     public static void rotate_currant(int dir, float[] pc, float[] ic)
     { // permutation circulaire des courrants  
         float i, p;
@@ -328,10 +330,31 @@ public class Engine  {
                     Engine.rotate_currant(composants[k][l].dir, pp, ii);
                 }
                 //Debug.Log("composant " + k + "   " + l);
-                composants[k][l].set_i_p(pp, ii);
+                composants[k][l].Set_i_p(pp, ii);
             }
         }
     }
 
+    public static void Reset_p_i(BaseComponent[][] composants)
+    {
+        int N = composants.Length;
+        int M = composants[0].Length;
 
+        for (int k = 0; k < N - 1; k++)
+        {
+            for (int l = 0; l < 2 * (M - 2) + 1; l++)
+            {
+                intensite[k][l] = pression[k][l] = 0;
+            }
+        }
+
+        for (int k = 0; k < N; k++)
+        {
+            for (int l = 0; l < M; l++)
+            {
+                if (composants[k][l] == null) continue;  // Corner
+                composants[k][l].Reset_i_p();
+            }
+        }
+    }
 }

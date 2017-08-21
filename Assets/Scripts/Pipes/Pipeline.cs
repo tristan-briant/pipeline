@@ -5,12 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
+
 public class Pipeline : BaseComponent { 
 
     GameObject water0,water2,bubble;
     public float x_bulle = 0;
     float r_bulle=0.1f;
- 
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {

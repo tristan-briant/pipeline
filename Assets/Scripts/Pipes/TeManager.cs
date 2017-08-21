@@ -17,6 +17,12 @@ public class TeManager : BaseComponent
     //float f=0;
     //float[] pin = new float[4];
 
+    public override void Reset_i_p()
+    {
+        base.Reset_i_p();
+        i1 = i2 = i3 = f1 = f2 = f3 = 0;
+    }
+
     public override void calcule_i_p(float[] p, float[] i,float alpha)
     {
 

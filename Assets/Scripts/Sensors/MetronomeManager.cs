@@ -66,6 +66,13 @@ public class MetronomeManager : BaseComponent {
         return x;
     }
 
+    public override void Reset_i_p()
+    {
+        base.Reset_i_p();
+        success = 0;
+        time = 0;
+    }
+
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[0], b = p[2];
