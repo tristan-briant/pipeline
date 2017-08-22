@@ -49,7 +49,12 @@ public class ElbowJellyManager : BaseComponent {
         x_bulle -= 0.01f * f * 100 / Capa;
 
         if (q > 1 + 2 / Capa / alpha)
+        {
             fail = 1;
+            i[3] = i[2] = 0; f = 0;
+        }
+
+        
     }
 
     protected override void Start()
@@ -70,8 +75,8 @@ public class ElbowJellyManager : BaseComponent {
 
         if (fail>=1) //(q > 1 + 2 / Capa / alpha)
         {
-            jelly3.GetComponent<Image>().color = new Color(255, 255, 255);
-            jelly2.GetComponent<Image>().color = new Color(255, 255, 255);
+            jelly3.GetComponent<Image>().color = Color.Lerp(jelly3.GetComponent<Image>().color , new Color(1, 1, 1),0.1f);
+            jelly2.GetComponent<Image>().color = Color.Lerp(jelly2.GetComponent<Image>().color, new Color(1, 1, 1), 0.1f);
         }
 
         if (full && Mathf.Abs(f) > 0.01f){

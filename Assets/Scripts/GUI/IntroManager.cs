@@ -8,11 +8,14 @@ public class IntroManager : MonoBehaviour {
     public LevelManager LVM;
     public GameObject TipButton;
     //public GameObject introScreen;
+    gameController gc; // le moteur du jeu à invoquer parfois
 
     private void Awake()
     {
 
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+        gc = (gameController)GameObject.Find("gameController").GetComponent(typeof(gameController)); //find the game engine
+
 
         foreach (Transform go in transform)
             GameObject.DestroyImmediate(go.gameObject);
@@ -48,9 +51,15 @@ public class IntroManager : MonoBehaviour {
         }
     }
 
+    public void Update()
+    {
+        if(gameObject.GetComponent<Canvas>().enabled) gc.pause(true);
+    }
+
     public void removeIntro()
     {
         gameObject.GetComponent<Canvas>().enabled = false;
+        gc.pause(false);
     }
 
     public void playIntro() {

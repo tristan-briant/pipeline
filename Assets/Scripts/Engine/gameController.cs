@@ -27,6 +27,13 @@ public class gameController : MonoBehaviour {
 
     //public float alpha=0.001f;
 
+
+    public void pause(bool pause)
+    {
+        if(pause) CancelInvoke();
+        else InvokeRepeating("evolution", 0.0f, 0.01f);
+    }
+
     private void Awake()
     {
         ///////////// Array Initialization /////////////
@@ -216,7 +223,7 @@ public class gameController : MonoBehaviour {
         if (success < 0 && !gameOver) {
             gameOver = true;
             fail = true;
-            CancelInvoke(); // Stop calculate the evolution
+            //CancelInvoke(); // Stop calculate the evolution
             StartCoroutine("LoseAnimation");
         }
 

@@ -12,9 +12,12 @@ public class FlushManager : BaseFrontier {
 
     //public float timeOut = 4.0f;
 
+
+
     protected void Awake()
     {
         Animation = GetComponent<Animation>();
+        audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
         //Animation["WatchAnimation"].speed = 4 / timeOut;
     }
 
@@ -23,6 +26,8 @@ public class FlushManager : BaseFrontier {
 
         Animation.Play("FlushAnimation");
         gc.ResetComponant();
+
+        audios[6].Play();
 
     }
 

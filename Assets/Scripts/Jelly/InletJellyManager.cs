@@ -27,6 +27,8 @@ public class InletJellyManager : BaseFrontier {
 
         arrow = this.transform.Find("Arrow").gameObject;
 
+        audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
+        audios[7].Play();
     }
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
@@ -63,9 +65,15 @@ public class InletJellyManager : BaseFrontier {
             else
                 success = 0;
         }
-
-        if (q > 1 + 10 / Capa )
+        else if (q > 1 + 2 / Capa / alpha)
+        {
             fail = 1;
+            ii = i[0] = 0; f = 0;
+        }
+
+
+        /*if (q > 1 + 10 / Capa )
+            fail = 1;*/
 
     }
 
@@ -75,11 +83,14 @@ public class InletJellyManager : BaseFrontier {
         if (f > 0) jelly0.GetComponent<Image>().fillAmount = q;
         if (f < 0) jelly2.GetComponent<Image>().fillAmount = q;
 
-        if (fail >= 1 && success<1) //(q > 1+2/Capa)
+        if (fail >= 1)// && success < 1) //(q > 1+2/Capa)
         {
-            jelly0.GetComponent<Image>().color = new Color(255, 255, 255);
-            jelly2.GetComponent<Image>().color = new Color(255, 255, 255);
+            jelly0.GetComponent<Image>().color = Color.Lerp(jelly0.GetComponent<Image>().color, new Color(1, 1, 1), 0.1f);
+            jelly2.GetComponent<Image>().color = Color.Lerp(jelly2.GetComponent<Image>().color, new Color(1, 1, 1), 0.1f);
+            audios[7].Stop();
         }
+       
+        
 
         if (pset <= 0)
         {
