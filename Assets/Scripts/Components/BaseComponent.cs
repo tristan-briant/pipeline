@@ -11,6 +11,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     protected float q = 0, f = 0;
     public int dir=0;
     protected float R = 2f, L = 1f, C =1f, Rground = 50;
+    protected float fluxMinSound =0.01f;
     //protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
@@ -20,13 +21,15 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     //public bool empty = true;
 
     public int x, y;
-    public bool locked=false;
+    public bool locked = false;
+    public bool dir_locked = false;
     public bool mirror = false;
 
 
     public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
     gameController gc; // le moteur du jeu à invoquer parfois
+    protected AudioSource[] audios;
     PlaygroundParameters parameters;
 
     protected Color pressureColor(float p)
@@ -105,6 +108,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
         success = 1;
         gc = (gameController)GameObject.Find("gameController").GetComponent(typeof(gameController)); //find the game engine
         parameters = (PlaygroundParameters)transform.parent.transform.parent.GetComponent(typeof(PlaygroundParameters)); //find the game engine
+        audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
 
         if (parameters != null)
         {
@@ -120,6 +124,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     private void Update()
     {
+        
         //c += 0.01f;
         //if (c > 1) c = 0.0f;
         //water.GetComponent<Image>().color = new Color(1, c, 1);
@@ -130,16 +135,19 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (!dragged && !locked)
+        if (!dragged && !locked && !dir_locked)
         {
             dir++;
             if (dir == 4) dir = 0;
             transform.rotation = Quaternion.identity;
             transform.Rotate(new Vector3(0, 0, dir * 90));
             //Debug.Log("Object " + Name + " clicked !" + dir);
+            
+            audios[0].Play();
+        }
 
-            AudioSource[] audio = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
-            audio[0].Play();
+        if (!dragged && (locked || dir_locked)) {
+            audios[1].Play();
         }
     }
 
@@ -195,6 +203,6 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
         dragged = false;
 
         gc.populateComposant();
-       
+        audios[1].Play();
     }
 }

@@ -60,6 +60,14 @@ public class ElbowManager : BaseComponent {
  
             bubble.transform.localPosition = new Vector3((Mathf.Cos((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, (-Mathf.Sin((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, 0);
             bubble.SetActive(true);
+
+            if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
+            {
+                int r = UnityEngine.Random.Range(0, 3);
+                audios[3 + r].Play();
+            }
+            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
+
         }
         else
         {

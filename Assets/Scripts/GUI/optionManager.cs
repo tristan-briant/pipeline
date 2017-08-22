@@ -10,6 +10,12 @@ public class optionManager : MonoBehaviour {
 	void Awake () {
         gameObject.SetActive(false);
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+
+    }
+
+    public void Start()
+    {
+        GameObject.Find("SliderVolume").GetComponent<Slider>().normalizedValue = LVM.Volume;
     }
 
     public void setLanguage(string language)
@@ -22,6 +28,15 @@ public class optionManager : MonoBehaviour {
     {
         PlayerPrefs.SetInt("Level Completed",0);
         LVM.completedLevel = 0;
+    }
+
+    public void setVolume() {
+        float vol = GameObject.Find("SliderVolume").GetComponent<Slider>().normalizedValue;
+        PlayerPrefs.SetFloat("Volume", vol);
+        LVM.Volume = vol;
+        AudioListener.volume = LVM.Volume;
+        AudioSource bip=GetComponent<AudioSource>();
+        if(!bip.isPlaying) bip.Play();
     }
 
 }

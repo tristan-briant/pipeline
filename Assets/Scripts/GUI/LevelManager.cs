@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour {
     public bool FirstLaunch=true;
     public bool hacked = false;
 
+    public float Volume = 0.5f;
     public string language = "english";
     public string Language
     {

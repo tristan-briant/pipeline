@@ -101,6 +101,7 @@
     <Compile Include="Assets\Scripts\GUI\IntroManager.cs" />
     <Compile Include="Assets\Scripts\GUI\LevelManager.cs" />
     <Compile Include="Assets\Scripts\GUI\MenuManager.cs" />
+    <Compile Include="Assets\Scripts\GUI\VolumeManager.cs" />
     <Compile Include="Assets\Scripts\GUI\intoScript.cs" />
     <Compile Include="Assets\Scripts\GUI\languageManager.cs" />
     <Compile Include="Assets\Scripts\GUI\optionManager.cs" />

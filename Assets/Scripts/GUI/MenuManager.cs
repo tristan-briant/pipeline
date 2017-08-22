@@ -32,6 +32,9 @@ public class MenuManager : MonoBehaviour{
         else
             LVM.language = "english";
 
+        float volume= PlayerPrefs.GetFloat("Volume",0.5f);
+        LVM.Volume = volume;
+
         if (LVM.FirstLaunch)
         {
             StartCoroutine("IntroScreen");

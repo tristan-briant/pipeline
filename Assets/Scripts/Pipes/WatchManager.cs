@@ -17,7 +17,7 @@ public class WatchManager : BaseComponent {
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        
+        audios[2].Play();
         Animation.Play("WatchAnimation");
 
         broadcastTrigger();
