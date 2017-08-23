@@ -53,16 +53,16 @@ public class IntroManager : MonoBehaviour {
 
     public void Update()
     {
-        if(gameObject.GetComponent<Canvas>().enabled) gc.pause(true);
+        if(gameObject.GetComponent<Canvas>().enabled) gc.Pause(true);
     }
 
     public void removeIntro()
     {
         gameObject.GetComponent<Canvas>().enabled = false;
-        gc.pause(false);
+        gc.Pause(false);
     }
 
-    public void playIntro() {
+    public void PlayIntro() {
         StartCoroutine("IntroScreen");
     }
 

@@ -49,14 +49,17 @@ public class LevelManager : MonoBehaviour {
         "PG DBM+PST",
        "PG Capa1",
         "PG Capa2",
-        "Pg jelly2",
+        "Pg jelly2",  //20
         "PG Capa3",
         "PG Capa4",
         "PG LC1",
-        "PG Diode Capa",
+        "PG LC2",
+        "PG LC3",
+        "PG LC4",
         "PG Diode1",
+        "PG Diode Capa",
         "PG Diode2",
-        "PG D demi pont",
+        "PG D demi pont", //30
         "PG Transistor0a",
         "PG Transistor0b",
         "PG Transistor1",
@@ -98,7 +101,7 @@ public class LevelManager : MonoBehaviour {
         "PG TransistorNot PNP"
     };
 
-    public bool levelIsCompleted(int i) {
+    public bool LevelIsCompleted(int i) {
         if (i < 1) return true; // level 0 alway completed
         if (hacked == true) return true; //for debug purpose
         string s = PlayerPrefs.GetString("Level-" + playgroundName[i-1]);
@@ -106,7 +109,7 @@ public class LevelManager : MonoBehaviour {
         return false;
     }
 
-    public void levelCompleted(int i)
+    public void LevelCompleted(int i)
     {
         if (i < 1) return;
         PlayerPrefs.SetString("Level-" + playgroundName[i-1], "completed");
@@ -131,6 +134,8 @@ public class LevelManager : MonoBehaviour {
                 PlayerPrefs.SetString("Level-" + playgroundNameLegacy[i], "completed");
             }
             //PlayerPrefs.DeleteKey("Level Completed");
+
+            //AudioListener.volume = Volume;
 
         }
         else {

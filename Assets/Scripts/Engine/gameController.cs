@@ -20,6 +20,7 @@ public class gameController : MonoBehaviour {
     public Button prevButton;
 
     public bool composantChanged;
+    protected bool paused = false;
 
     public LevelManager LVM;
     public GameObject PgHolder; //The "playground Holder" 
@@ -28,10 +29,19 @@ public class gameController : MonoBehaviour {
     //public float alpha=0.001f;
 
 
-    public void pause(bool pause)
+    public void Pause(bool pause)
     {
-        if(pause) CancelInvoke();
-        else InvokeRepeating("evolution", 0.0f, 0.01f);
+        if (pause)
+        {
+            CancelInvoke();
+            paused = true;
+        }
+        else
+        {
+            //CancelInvoke(); // Not to have 2 evolution running in parallel
+            if (paused) InvokeRepeating("evolution", 0.0f, 0.01f);
+            paused = false;
+        }
     }
 
     private void Awake()
@@ -47,7 +57,7 @@ public class gameController : MonoBehaviour {
         {
             if (currantLevel == 1) 
                prevButton.gameObject.SetActive(false);
-            if (currantLevel == LVM.levelMax || !LVM.levelIsCompleted(currantLevel)) 
+            if (currantLevel == LVM.levelMax || !LVM.LevelIsCompleted(currantLevel)) 
                nextButton.gameObject.SetActive(false);
 
             if (PgHolder.transform.childCount > 0)
@@ -242,7 +252,7 @@ public class gameController : MonoBehaviour {
             
             //LVM.completedLevel = currantLevel;
         }*/
-        LVM.levelCompleted(currantLevel);
+        LVM.LevelCompleted(currantLevel);
 
         winText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);

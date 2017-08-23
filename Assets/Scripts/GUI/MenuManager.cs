@@ -34,6 +34,7 @@ public class MenuManager : MonoBehaviour{
 
         float volume= PlayerPrefs.GetFloat("Volume",0.5f);
         LVM.Volume = volume;
+        AudioListener.volume = LVM.Volume;
 
         if (LVM.FirstLaunch)
         {
@@ -87,17 +88,18 @@ public class MenuManager : MonoBehaviour{
             GameObject go;
 
             if (LVM.getPlaygroundName(i).Contains("jelly"))
-                go = Instantiate(Resources.Load<GameObject>("ButtonJelly"));
+                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonJelly"));
             else
-                go = Instantiate(Resources.Load<GameObject>("ButtonUnlock"));
+                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonUnlock"));
 
+           
 
             go.transform.SetParent(levelList.transform);
             go.transform.localScale = new Vector3(1, 1, 1);
             go.transform.localPosition = new Vector3(0, 0, 0);
 
             //if (i > levelCompleted && !LVM.hacked)
-            if (!LVM.levelIsCompleted(i-1) && !LVM.levelIsCompleted(i))
+            if (!LVM.LevelIsCompleted(i-1) && !LVM.LevelIsCompleted(i))
             {
                 go.GetComponentInChildren<Image>().sprite = Locked;
                 go.GetComponentInChildren<Text>().text = "";
@@ -107,7 +109,7 @@ public class MenuManager : MonoBehaviour{
             }
             else
             {
-                if (!LVM.levelIsCompleted(i))
+                if (!LVM.LevelIsCompleted(i))
                 {
                     go.GetComponentInChildren<languageManager>().enabled = true;
                     go.GetComponent<Animator>().enabled = true;
@@ -117,6 +119,16 @@ public class MenuManager : MonoBehaviour{
                     go.GetComponentInChildren<languageManager>().enabled = false;
                     go.GetComponent<Animator>().enabled = false;
                     go.GetComponentInChildren<Text>().text = i.ToString();
+
+                    // Show the icon if it exists
+                    Object obj = Resources.Load("MenuButtons/Icons/icon-" + LVM.getPlaygroundName(i), typeof(Sprite));
+                    Debug.Log("MenuButtons/Icons/icon-" + LVM.getPlaygroundName(i));
+                    if (obj != null)
+                    {
+                        GameObject icon = go.transform.Find("Icon").gameObject;
+                        icon.SetActive(true);
+                        icon.GetComponent<Image>().sprite=(Sprite)obj;
+                    }
                 }
                 if(i==LVM.currantLevel)
                     go.GetComponentInChildren<Text>().color=new Color(0xFF/255.0f,0xEF/255.0f,0x31/255.0f,1);

@@ -9,11 +9,11 @@ public class InductorManager : BaseComponent
 {
 
     GameObject water, water0, water2, bubble, propeller;
-    //public float x_bulle = 0;
+    public float x_bulle = 0;
     public float Lin = 10;
     float r_bulle = 0.1f;
     float angle;
-
+    Animation anim;
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
@@ -45,7 +45,9 @@ public class InductorManager : BaseComponent
         water = this.transform.Find("Water").gameObject;
 
         propeller = this.transform.Find("Propeller").gameObject;
-        //bubble = this.transform.FindChild("Bubble").gameObject;
+        bubble = this.transform.Find("Bubble").gameObject;
+        anim=bubble.GetComponent<Animation>();
+
 
     }
 
@@ -57,6 +59,26 @@ public class InductorManager : BaseComponent
 
         
         propeller.transform.localEulerAngles = new Vector3(0, 0, angle*300);
+
+
+        if (Mathf.Abs(f) > fMinBubble)
+        {
+
+            anim["bubble-inductor"].speed = -3*f;
+            
+            bubble.SetActive(true);
+            /*if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
+            {
+                int r = UnityEngine.Random.Range(0, 3);
+                audios[3 + r].Play();
+            }
+            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;*/
+
+        }
+        else
+        {
+            bubble.SetActive(false);
+        }
 
 
     }
