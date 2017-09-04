@@ -17,10 +17,11 @@ public class PressostatManager : BaseComponent {
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
         float b = p[2];
-
+        C = 0.01f;
         q += (i[2])  * alpha;
-        q *=0.998f;
-        f += (p[0] - p[2]) / L * 0;
+        q *=0.9f;
+        //f += (p[0] - p[2]) / L * 0;
+        f = 0;
 
         //p[0] = (1-alpha)*p[0] + alpha*( q + (i[0]-f)*R);
         p[2] = (q / C + (i[2] + f) * R);
