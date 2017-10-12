@@ -109,6 +109,12 @@ public class LevelManager : MonoBehaviour {
         return false;
     }
 
+    public void ResetGame() {
+        for (int i = 0; i < getLevelMax(); i++) {
+            PlayerPrefs.SetString("Level-" + playgroundName[i],"");
+        }
+    }
+
     public void LevelCompleted(int i)
     {
         if (i < 1) return;

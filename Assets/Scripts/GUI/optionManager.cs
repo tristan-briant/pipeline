@@ -28,6 +28,7 @@ public class optionManager : MonoBehaviour {
     {
         PlayerPrefs.SetInt("Level Completed",0);
         LVM.completedLevel = 0;
+        LVM.ResetGame();
     }
 
     public void setVolume() {
