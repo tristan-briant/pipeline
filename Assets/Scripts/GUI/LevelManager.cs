@@ -39,8 +39,7 @@ public class LevelManager : MonoBehaviour {
         "Pg double DBM",
         "playground3",
         "PG bonus1",
-        "PG bonus2",          //10
-        "Pg 4 pressostats",
+        "Pg 4 pressostats",  //10
 		"Pg 1P2R",
 		"PG res parallele 3",
         "Pg jelly1",
@@ -48,11 +47,12 @@ public class LevelManager : MonoBehaviour {
         "Pg Rampe tension",
         "PG DBM+PST",
        "PG Capa1",
-        "PG Capa2",
-        "Pg jelly2",  //20
-        "PG Capa3",
+        "PG Capa2",  
+        "Pg jelly2",  
+        "PG Capa3", //20
         "PG Capa4",
         "PG LC1",
+        "PG bonus2",          
         "PG LC2",
         "PG LC3",
         "PG LC4",
