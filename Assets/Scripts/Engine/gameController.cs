@@ -14,7 +14,7 @@ public class gameController : MonoBehaviour {
     public BaseComponent[][] composants;
     public BaseComponent vide;
     public BaseFrontier[] borders;
-    public int currantLevel;
+    public int currentLevel;
     public Text levelText;
     public Button nextButton;
     public Button prevButton;
@@ -28,7 +28,6 @@ public class gameController : MonoBehaviour {
 
     //public float alpha=0.001f;
 
-
     public void Pause(bool pause)
     {
         if (pause)
@@ -39,7 +38,7 @@ public class gameController : MonoBehaviour {
         else
         {
             //CancelInvoke(); // Not to have 2 evolution running in parallel
-            if (paused) InvokeRepeating("evolution", 0.0f, 0.01f);
+            if (paused) InvokeRepeating("Evolution", 0.0f, 0.01f);
             paused = false;
         }
     }
@@ -49,15 +48,15 @@ public class gameController : MonoBehaviour {
         ///////////// Array Initialization /////////////
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
-        currantLevel = LVM.currantLevel;
+        currentLevel = LVM.currentLevel;
 
        
 
-        if (currantLevel > 0) // 0 mean level design
+        if (currentLevel > 0) // 0 mean level design
         {
-            if (currantLevel == 1) 
+            if (currentLevel == 1) 
                prevButton.gameObject.SetActive(false);
-            if (currantLevel == LVM.levelMax || !LVM.LevelIsCompleted(currantLevel)) 
+            if (currentLevel == LVM.levelMax || !LVM.LevelIsCompleted(currentLevel)) 
                nextButton.gameObject.SetActive(false);
 
             if (PgHolder.transform.childCount > 0)
@@ -65,7 +64,7 @@ public class gameController : MonoBehaviour {
                 DestroyImmediate(PgHolder.transform.GetChild(0).gameObject);
             }
 
-            Pg = Instantiate(Resources.Load("Playgrounds/" + LVM.getPlaygroundName(currantLevel), typeof(GameObject))) as GameObject;
+            Pg = Instantiate(Resources.Load("Playgrounds/" + LVM.getPlaygroundName(currentLevel), typeof(GameObject))) as GameObject;
 
             Pg.transform.SetParent(PgHolder.transform);
             Pg.transform.localPosition = new Vector3(0, 0, 0);
@@ -75,9 +74,9 @@ public class gameController : MonoBehaviour {
             Pg = PgHolder.transform.GetChild(0).gameObject;
         }
         if(LVM.language=="french")
-            levelText.text = "Niveau " + currantLevel;
+            levelText.text = "Niveau " + currentLevel;
         else
-        levelText.text = "Level " + currantLevel;
+        levelText.text = "Level " + currentLevel;
 
         N = Pg.GetComponent<GridLayoutGroup>().constraintCount; // -2 for the frontier
         M = Pg.transform.childCount/N; //itou
@@ -91,7 +90,7 @@ public class gameController : MonoBehaviour {
         for (int k = 0; k < N; k++) {
             composants[k] = new BaseComponent[M];
         }
-        populateComposant();
+        PopulateComposant();
 
         Transform go = Pg.transform.parent;
         RectTransform objectRectTransform = go.GetComponent<RectTransform>();
@@ -116,7 +115,7 @@ public class gameController : MonoBehaviour {
 
     bool firstPopulate = true;
 
-    public void populateComposant()
+    public void PopulateComposant()
     {
         //Debug.Log("Populate!");
 
@@ -213,10 +212,10 @@ public class gameController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        InvokeRepeating("evolution", 0.0f, 0.01f);
+        InvokeRepeating("Evolution", 0.0f, 0.01f);
     }
 
-    void evolution()
+    void Evolution()
     {
 
         float success=0; 
@@ -252,11 +251,11 @@ public class gameController : MonoBehaviour {
             
             //LVM.completedLevel = currantLevel;
         }*/
-        LVM.LevelCompleted(currantLevel);
+        LVM.LevelCompleted(currentLevel);
 
         winText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);
-        if (currantLevel < LVM.levelMax)
+        if (currentLevel < LVM.levelMax)
         {
             if (LVM.language == "french")
                 levelText.text = "Niveau suivant";
@@ -287,21 +286,21 @@ public class gameController : MonoBehaviour {
     public void LoadNextOrRetryLevel()
     {
         if (!fail)
-            LVM.currantLevel = currantLevel + 1;
+            LVM.currentLevel = currentLevel + 1;
         SceneManager.LoadScene("level");
     }
 
     public void LoadNextLevel()
     {
         //if (currantLevel < LVM.levelMax)
-        LVM.currantLevel = currantLevel + 1;
+        LVM.currentLevel = currentLevel + 1;
         SceneManager.LoadScene("level");
     }
 
     public void LoadPrevLevel()
     {
         //if (currantLevel > 1)
-        LVM.currantLevel = currantLevel - 1;
+        LVM.currentLevel = currentLevel - 1;
         SceneManager.LoadScene("level");
     }
 
@@ -328,7 +327,7 @@ public class gameController : MonoBehaviour {
         }
     }
 
-    public void backToMenu() {
+    public void BackToMenu() {
         SceneManager.LoadScene(0);
     }
 

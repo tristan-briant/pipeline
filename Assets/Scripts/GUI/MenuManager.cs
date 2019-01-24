@@ -14,7 +14,7 @@ public class MenuManager : MonoBehaviour{
 
     public void LoadLevel(int levelNumber)
     {
-        LVM.currantLevel = levelNumber;
+        LVM.currentLevel = levelNumber;
         LVM.scrollViewHight = levelList.transform.localPosition.y;
         SceneManager.LoadScene("level");
 
@@ -130,7 +130,7 @@ public class MenuManager : MonoBehaviour{
                         icon.GetComponent<Image>().sprite=(Sprite)obj;
                     }
                 }
-                if(i==LVM.currantLevel)
+                if(i==LVM.currentLevel)
                     go.GetComponentInChildren<Text>().color=new Color(0xFF/255.0f,0xEF/255.0f,0x31/255.0f,1);
 
                 int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used

@@ -23,7 +23,7 @@ public class IntroManager : MonoBehaviour {
         transform.localPosition = new Vector3(0, 0, 0);
        
         /// Prepare intro if any
-        string levelName = LVM.getPlaygroundName(LVM.currantLevel);
+        string levelName = LVM.getPlaygroundName(LVM.currentLevel);
         Object obj = Resources.Load("Intro/" + levelName + "_intro", typeof(GameObject));
 
         if (obj == null)
@@ -40,7 +40,7 @@ public class IntroManager : MonoBehaviour {
             intro.transform.localPosition = new Vector3(0, 0, 0);
 
 
-            if (LVM.currantLevel > LVM.completedLevel)
+            if (LVM.currentLevel > LVM.completedLevel)
             {
                 StartCoroutine("IntroScreen");
             }

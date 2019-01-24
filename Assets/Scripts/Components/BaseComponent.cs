@@ -171,7 +171,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
         canvas = GameObject.FindGameObjectWithTag("Playground").transform;
         transform.SetParent(canvas);
         dragged = true;
-        gc.populateComposant();
+        gc.PopulateComposant();
 
         transform.localScale = transform.localScale * 1.2f;
     }
@@ -202,7 +202,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
         dragged = false;
 
-        gc.populateComposant();
+        gc.PopulateComposant();
         audios[1].Play();
     }
 }

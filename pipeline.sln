@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pipeline", "pipeline.csproj", "{744683A7-0FD8-69C4-3BED-516BD4147D36}"
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{C4FFDC1B-AC55-6CB8-F507-918688E03D72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{744683A7-0FD8-69C4-3BED-516BD4147D36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{744683A7-0FD8-69C4-3BED-516BD4147D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{744683A7-0FD8-69C4-3BED-516BD4147D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{744683A7-0FD8-69C4-3BED-516BD4147D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4FFDC1B-AC55-6CB8-F507-918688E03D72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4FFDC1B-AC55-6CB8-F507-918688E03D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4FFDC1B-AC55-6CB8-F507-918688E03D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4FFDC1B-AC55-6CB8-F507-918688E03D72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

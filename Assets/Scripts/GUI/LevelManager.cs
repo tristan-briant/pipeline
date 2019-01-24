@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using System.IO;
 
 
 public class LevelManager : MonoBehaviour {
 
     private static LevelManager instanceRef;
 
-    public int currantLevel;
+    public int currentLevel;
     public int completedLevel;
     public int levelMax;
     public float scrollViewHight = 0;
@@ -26,6 +28,56 @@ public class LevelManager : MonoBehaviour {
         {
             language = value;
         }
+    }
+
+
+    public string jsonFile;
+    public BaseComponent objectToExport;
+
+    [ContextMenu("SaveToFile")]
+    public void SaveToFile()
+    {
+        string data = "";
+        //gameController gc = GameObject.Find("gameController").GetComponent<gameController>();
+        PlaygroundParameters parameters = GameObject.FindObjectOfType<PlaygroundParameters>();
+        data = JsonUtility.ToJson(parameters) + "\n";
+
+        /* for (int i = 0; i < parameters.N; i++)
+             for (int j = 0; j < parameters.M; j++) */
+        foreach(Transform slot in parameters.transform) {
+            //Debug.Log(slot);
+            BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
+            Object parentObject = PrefabUtility.GetCorrespondingObjectFromSource(component);
+            if (parentObject != null)
+            {
+                string path = AssetDatabase.GetAssetPath(parentObject);
+                path = path.Substring("Assets/Resources/".Length, path.Length - "Assets/Resources/".Length - ".prefab".Length);
+                data += path + "\n";
+            }
+            else
+            {
+                data += "\n";
+            }
+            data += JsonUtility.ToJson(component) + "\n";
+            }
+
+
+        Debug.Log(data);
+
+
+        //Debug.Log(gc);
+        /*Object parentObject = PrefabUtility.GetCorrespondingObjectFromSource(objectToExport);
+        string path =  AssetDatabase.GetAssetPath(parentObject);
+        path = path.Substring("Assets/Resources/".Length, path.Length - "Assets/Resources/".Length - ".prefab".Length); //remove absolute path and extension
+        Debug.Log("prefab path:" + path);
+        //Debug.Log(AssetDatabase.GetAssetPath(objectToExport));
+        Debug.Log(JsonUtility.ToJson(path));
+        Debug.Log(JsonUtility.ToJson(objectToExport));
+        string json = JsonUtility.ToJson(objectToExport);*/
+
+        //GameObject c = Instantiate(Resources.Load(path, typeof(GameObject))) as GameObject;
+
+        //JsonUtility.FromJsonOverwrite(json,c.GetComponent<BaseComponent>());
     }
 
     List<string> playgroundName = new List<string>()
