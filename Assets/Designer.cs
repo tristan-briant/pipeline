@@ -7,27 +7,24 @@ using UnityEditor;
 
 public class Designer : MonoBehaviour {
 
+    const int MaxSize = 8;
+    const int MinSize = 5;
+
     public GameObject Pg;
 
     [ContextMenu("SaveToFile")]
     public void SaveToFile()
     {
         string data = "";
-        //gameController gc = GameObject.Find("gameController").GetComponent<gameController>();
         PlaygroundParameters parameters = GameObject.FindObjectOfType<PlaygroundParameters>();
         data = JsonUtility.ToJson(parameters) + "\n";
 
-        /* for (int i = 0; i < parameters.N; i++)
-             for (int j = 0; j < parameters.M; j++) */
         foreach (Transform slot in Pg.transform)
         {
-            //Debug.Log(slot);
             BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
-            //Object parentObject = PrefabUtility.GetCorrespondingObjectFromSource(component);
             if (component != null && component.name!="")
             {
                 string path = component.PrefabPath;
-                //path = path.Substring("Assets/Resources/".Length, path.Length - "Assets/Resources/".Length - ".prefab".Length);
                 data += path + "\n";
                 data += JsonUtility.ToJson(component) + "\n";
             }
@@ -38,23 +35,68 @@ public class Designer : MonoBehaviour {
             
         }
 
-
         Debug.Log(data);
+        PlayerPrefs.SetString("SavedPlaygroud", data);
+    }
+
+    [ContextMenu("LoadFromFile")]
+    public void LoadFromFile()
+    {
+        string data =PlayerPrefs.GetString("SavedPlaygroud");
+        if (data == null) return;
+
+        int count = Pg.transform.childCount;
+        for (int i = 0; i < count; i++)        // On retire tout
+        {
+            Transform child = Pg.transform.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+
+        string[] tokens = data.Split('\n');
+  
+        int k = 0;
+        JsonUtility.FromJsonOverwrite(tokens[k++], Pg.GetComponent<PlaygroundParameters>()); //k=0 puis 1  
+
+        N = Pg.GetComponent<PlaygroundParameters>().N;
+        M = Pg.GetComponent<PlaygroundParameters>().M;
+
+        Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
+
+        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 1, tokens[k++]);
+
+        for (int i = 1; i < N - 1; i++)
+        {
+            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 0, tokens[k++]);
+        }
+
+        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 0, tokens[k++]);
+
+        for (int j = 1; j < M - 1; j++)
+        {
+            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 1, tokens[k++]);
+            for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotComponent", tokens[k++], 0, tokens[k++]); //empty component
+            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 3, tokens[k++]);
+        }
+
+        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 2, tokens[k++]);
+
+        for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", tokens[k++], 2, tokens[k++]);
+
+        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
+
+        GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+
+        ResizePlayGround();
 
 
-        //Debug.Log(gc);
-        /*Object parentObject = PrefabUtility.GetCorrespondingObjectFromSource(objectToExport);
-        string path =  AssetDatabase.GetAssetPath(parentObject);
-        path = path.Substring("Assets/Resources/".Length, path.Length - "Assets/Resources/".Length - ".prefab".Length); //remove absolute path and extension
-        Debug.Log("prefab path:" + path);
-        //Debug.Log(AssetDatabase.GetAssetPath(objectToExport));
-        Debug.Log(JsonUtility.ToJson(path));
-        Debug.Log(JsonUtility.ToJson(objectToExport));
-        string json = JsonUtility.ToJson(objectToExport);*/
+       /* int i = 0;
+        while(i < tokens.Length)
+        {
+            if(tokens[i]);
+            Debug.Log(s);
+            if()
+        }*/
 
-        //GameObject c = Instantiate(Resources.Load(path, typeof(GameObject))) as GameObject;
-
-        //JsonUtility.FromJsonOverwrite(json,c.GetComponent<BaseComponent>());
     }
 
     [ContextMenu("ChangeBorder")]
@@ -149,7 +191,7 @@ public class Designer : MonoBehaviour {
     }
 
 
-    void CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
+    GameObject CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
     {
         GameObject slot= PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
@@ -166,7 +208,36 @@ public class Designer : MonoBehaviour {
             component.GetComponent<BaseComponent>().dir = dir;
             component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
+
+        if ( !slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier) //if corner or frontier
+            slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+
+        return slot;
     }
+
+    void CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, string data)
+    {
+        GameObject slot = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
+        slot.transform.SetParent(PlayGround.transform);
+        slot.transform.localPosition = Vector3.zero;
+        slot.transform.localScale = Vector3.one;
+        slot.transform.localRotation = Quaternion.identity;
+
+
+        GameObject component = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+        component.transform.SetParent(slot.transform);
+        component.transform.localPosition = Vector3.zero;
+        component.transform.localScale = Vector3.one;
+        component.GetComponent<BaseComponent>().dir = dir;
+        component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+
+
+        if (!slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier) //if corner or frontier
+            slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+
+        JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
+    }
+
 
     [ContextMenu("Reset field")]
     public void ResetField()
@@ -185,9 +256,9 @@ public class Designer : MonoBehaviour {
 
         Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
 
-        CreateSlot(Pg, "Field/SlotWall", "Frontiers/Corner", 1);
+        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 1);
         for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 0);
-        CreateSlot(Pg, "Field/SlotWall", "Frontiers/Corner", 0);
+        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 0);
 
         for (int j = 1; j < M - 1; j++)
         {
@@ -196,11 +267,13 @@ public class Designer : MonoBehaviour {
             CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 3);
         }
 
-        CreateSlot(Pg, "Field/SlotWall", "Frontiers/Corner", 2);
+        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 2);
 
         for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 2);
 
-        CreateSlot(Pg, "Field/SlotWall", "Frontiers/Corner", 3);
+        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 3);
+
+        GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
 
         ResizePlayGround();
     }
@@ -220,7 +293,6 @@ public class Designer : MonoBehaviour {
         Pg.transform.localScale = new Vector3(wc, wc, 1);
         Pg.transform.localPosition = Vector3.zero;
     }
-
 
     public int N,M;
     [ContextMenu("ChangeSize")]
@@ -255,6 +327,108 @@ public class Designer : MonoBehaviour {
         }
 
     }
+    [ContextMenu("Reduce Width")]
+    public void ReduceWidth()
+    {
+        if (N > MinSize)
+        {
+            int i = N - 2;
+            for (int j = M-1; j >= 0; j--)
+            {
+                DestroyImmediate(Pg.transform.GetChild(i + j * N).gameObject);
+            }
+            Pg.GetComponent<GridLayoutGroup>().constraintCount = N - 1;
+            Pg.GetComponent<PlaygroundParameters>().N = N - 1;
+            N = N - 1;
 
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+        }
+        else
+        {
+            Debug.Log("Impossible de réduire");
+        }
+    }
+
+    [ContextMenu("Increase Width")]
+    public void IncreaseWidth()
+    {
+        if (N < MaxSize)
+        {
+            int i = N - 1;
+
+            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 0);
+            Pg.transform.GetChild(Pg.transform.childCount-1).SetSiblingIndex(i); // remet le nouveau child au bon endroit
+
+            for (int j = 1; j < M-1; j++)
+            {
+                CreateSlot(Pg, "Field/SlotComponent", "", 0);
+                Pg.transform.GetChild(Pg.transform.childCount-1).SetSiblingIndex(i + j * (N + 1));
+            }
+
+            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 2);
+            Pg.transform.GetChild(Pg.transform.childCount-1).SetSiblingIndex(i + (M - 1) * (N + 1));
+
+            Pg.GetComponent<GridLayoutGroup>().constraintCount = N + 1;
+            Pg.GetComponent<PlaygroundParameters>().N = N + 1;
+            N = N + 1;
+
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+        }
+        else
+        {
+            Debug.Log("Impossible d'agrandir");
+        }
+    }
+
+    [ContextMenu("Reduce Height")]
+    public void ReduceHeight()
+    {
+        if (M > MinSize)
+        {
+            int j = M - 2;
+            for (int i = N - 1; i >= 0; i--)
+            {
+                DestroyImmediate(Pg.transform.GetChild(i + j * N).gameObject);
+            }
+            Pg.GetComponent<PlaygroundParameters>().M = M - 1;
+            M = M - 1;
+
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+        }
+        else
+        {
+            Debug.Log("Impossible de réduire");
+        }
+    }
+
+    [ContextMenu("Increase Height")]
+    public void IncreaseHeight()
+    {
+        if (M < MaxSize)
+        {
+            int j = M - 1;
+
+            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 1);
+            Pg.transform.GetChild(Pg.transform.childCount - 1).SetSiblingIndex(j * N); // remet le nouveau child au bon endroit
+
+            for (int i = 1; i < N - 1; i++)
+            {
+                CreateSlot(Pg, "Field/SlotComponent", "", 0);
+                Pg.transform.GetChild(Pg.transform.childCount - 1).SetSiblingIndex(i + j * N);
+            }
+
+            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 3);
+            Pg.transform.GetChild(Pg.transform.childCount - 1).SetSiblingIndex(N-1 + j * N);
+
+            Pg.GetComponent<PlaygroundParameters>().M = M + 1;
+            M = M + 1;
+
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+        }
+        else
+        {
+            Debug.Log("Impossible d'agrandir");
+        }
+    }
 
 }

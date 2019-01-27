@@ -13,6 +13,7 @@ public class gameController : MonoBehaviour {
 
     public BaseComponent[][] composants;
     public BaseComponent vide;
+    public BaseComponent videFrontier;
     public BaseFrontier[] borders;
     public int currentLevel;
     public Text levelText;
@@ -27,6 +28,7 @@ public class gameController : MonoBehaviour {
     GameObject Pg; //The "playground" from which are determined N and M 
 
     //public float alpha=0.001f;
+    bool firstPopulate = true;
 
     public void Pause(bool pause)
     {
@@ -43,21 +45,21 @@ public class gameController : MonoBehaviour {
         }
     }
 
-    private void Awake()
+    public void InitializePlayground()
     {
         ///////////// Array Initialization /////////////
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
         currentLevel = LVM.currentLevel;
 
-       
+
 
         if (currentLevel > 0) // 0 mean level design
         {
-            if (currentLevel == 1) 
-               prevButton.gameObject.SetActive(false);
-            if (currentLevel == LVM.levelMax || !LVM.LevelIsCompleted(currentLevel)) 
-               nextButton.gameObject.SetActive(false);
+            if (currentLevel == 1)
+                prevButton.gameObject.SetActive(false);
+            if (currentLevel == LVM.levelMax || !LVM.LevelIsCompleted(currentLevel))
+                nextButton.gameObject.SetActive(false);
 
             if (PgHolder.transform.childCount > 0)
             {
@@ -73,26 +75,34 @@ public class gameController : MonoBehaviour {
         {
             Pg = PgHolder.transform.GetChild(0).gameObject;
         }
-        if(LVM.language=="french")
+        if (LVM.language == "french")
             levelText.text = "Niveau " + currentLevel;
         else
-        levelText.text = "Level " + currentLevel;
+            levelText.text = "Level " + currentLevel;
 
         N = Pg.GetComponent<GridLayoutGroup>().constraintCount; // -2 for the frontier
-        M = Pg.transform.childCount/N; //itou
+        M = Pg.transform.childCount / N; //itou
 
 
         Engine.initialize_p_i(N, M); // create the array of currant and pressure
-      
+
 
         composants = new BaseComponent[N][];
 
-        for (int k = 0; k < N; k++) {
+        for (int k = 0; k < N; k++)
+        {
             composants[k] = new BaseComponent[M];
         }
+
+        firstPopulate = true;
         PopulateComposant();
 
         ResizePlayGround();
+    }
+
+    private void Awake()
+    {
+        InitializePlayground();
     }
 
     void ResizePlayGround()
@@ -124,7 +134,6 @@ public class gameController : MonoBehaviour {
     }
 
 
-    bool firstPopulate = true;
 
     public void PopulateComposant()
     {
@@ -149,7 +158,7 @@ public class gameController : MonoBehaviour {
                     else
                         bc.transform.localScale = new Vector3(1, 1, 1);
                     bc.x = i;bc.y = j;
-                    composants[i ][j] = bc;
+                    composants[i][j] = bc;
 
                     if (firstPopulate)
                     {
@@ -185,20 +194,41 @@ public class gameController : MonoBehaviour {
         }
 
 
-        if (firstPopulate)
+        //if (firstPopulate)
         {
-            for (int i = 0; i < N ; i++)
+            for (int i = 1; i < N-1 ; i++)
             {
                 int j = 0;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-                BaseComponent bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                BaseComponent bc;
+                if (go.transform.childCount > 0)
+                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                else
+                {
+                    bc = Instantiate(videFrontier);
+                    bc.transform.SetParent(go.transform);
+                    bc.transform.localScale = Vector3.one;
+                    bc.transform.localPosition = Vector3.zero;
+                }
+                bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
             }
-            for (int i = 0; i < N ; i++)
+
+            for (int i = 1; i < N-1 ; i++)
             {
                 int j = M-1;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-                BaseComponent bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                BaseComponent bc;
+                if (go.transform.childCount > 0)
+                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                else
+                {
+                    bc = Instantiate(videFrontier);
+                    bc.transform.SetParent(go.transform);
+                    bc.transform.localScale = Vector3.one;
+                    bc.transform.localPosition = Vector3.zero;
+                }
+                bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
             }
 
@@ -206,14 +236,35 @@ public class gameController : MonoBehaviour {
             {
                 int i = 0;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-                BaseComponent bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                BaseComponent bc;
+                if (go.transform.childCount > 0)
+                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                else
+                {
+                    bc = Instantiate(videFrontier);
+                    bc.transform.SetParent(go.transform);
+                    bc.transform.localScale = Vector3.one;
+                    bc.transform.localPosition = Vector3.zero;
+                }
+                bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
             }
+
             for (int j = 1; j < M - 1; j++)
             {
                 int i = N-1;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-                BaseComponent bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                BaseComponent bc;
+                if (go.transform.childCount > 0)
+                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                else
+                {
+                    bc = Instantiate(videFrontier);
+                    bc.transform.SetParent(go.transform);
+                    bc.transform.localScale = Vector3.one;
+                    bc.transform.localPosition = Vector3.zero;
+                }
+                bc.transform.localRotation = Quaternion.Euler(0, 0, -0);
                 composants[i][j] = bc;
             }
 

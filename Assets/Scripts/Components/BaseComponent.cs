@@ -24,11 +24,11 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     public bool locked = false;
     public bool dir_locked = false;
     public bool mirror = false;
-
+    public bool isFrontiers=false;
 
     public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
-    gameController gc; // le moteur du jeu à invoquer parfois
+    protected gameController gc; // le moteur du jeu à invoquer parfois
     protected AudioSource[] audios;
     PlaygroundParameters parameters;
 
@@ -166,7 +166,10 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     {
         if (itemBeingDragged != null) { eventData.pointerDrag = null; return; } // If one element already draged, cancel the drag
 
-        if (locked) { eventData.pointerDrag = null; return; } // If locked cancel the drag
+        if (locked && !GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>())
+        {// If locked and not in desgner mode cancel the drag
+            eventData.pointerDrag = null; return;
+        } 
 
         itemBeingDragged = gameObject;
         startParent = transform.parent;
@@ -241,8 +244,8 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
         }
 
         transform.localPosition = Vector3.zero;
+        transform.localScale = Vector3.one;
 
-       
         dragged = false;
         startParent = endParent = null;
 

@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class FlushManager : BaseFrontier {
 
     protected Animation Animation;
-    gameController gc; // le moteur du jeu à invoquer parfois
+    //gameController gc; // le moteur du jeu à invoquer parfois
 
     //public float timeOut = 4.0f;
 

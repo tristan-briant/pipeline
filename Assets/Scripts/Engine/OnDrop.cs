@@ -6,35 +6,16 @@ using UnityEngine.EventSystems;
 
 public class OnDrop : MonoBehaviour , IDropHandler {
 
+    public bool isSlotFrontier = false;
+
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
-        BaseComponent.endParent = transform;
-
-        //if (BaseComponent.itemBeingDragged != null) //Le Drop vient d'un composant
+        if (BaseComponent.itemBeingDragged)
         {
-
-           /* if (transform.childCount == 0)
-            {  // No child => empty // normally never happen
-                BaseComponent.itemBeingDragged.transform.SetParent(transform);
+            if (BaseComponent.itemBeingDragged.GetComponent<BaseComponent>().isFrontiers == isSlotFrontier)
+            { // component and slot of the same type
+                BaseComponent.endParent = transform;
             }
-            else
-            {*/
-
-            /*GameObject item = transform.GetChild(0).gameObject;
-            if (item.GetComponent<BaseComponent>().locked == false)
-            {
-                if (BaseComponent.startParent)
-                {
-                    item.transform.SetParent(BaseComponent.startParent);
-                    item.transform.localPosition = Vector3.zero;
-                }
-                else
-                    Destroy(item); // Nulpart où aller (vient du designer) on le vire
-
-                BaseComponent.itemBeingDragged.transform.SetParent(transform);
-            }*/
-            //}
-            //BaseComponent.itemBeingDragged.transform.localPosition = Vector3.zero;
         }
     }
 
