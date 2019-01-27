@@ -14,6 +14,6 @@ public class DragThresholdUtil : MonoBehaviour {
                      (int)(defaultValue * Screen.dpi / 80f));
 
         //EventSystem.current.pixelDragThreshold = 10;
-        Debug.Log(Screen.dpi);
+        Debug.Log("Screen DPI = " +  Screen.dpi);
     }
 }

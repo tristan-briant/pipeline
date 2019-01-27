@@ -11,7 +11,7 @@ public class InductorManager : BaseComponent
     GameObject water, water0, water2, bubble, propeller;
     public float x_bulle = 0;
     public float Lin = 10;
-    float r_bulle = 0.1f;
+    //float r_bulle = 0.1f;
     float angle;
     Animation anim;
 

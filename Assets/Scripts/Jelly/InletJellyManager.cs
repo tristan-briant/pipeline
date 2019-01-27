@@ -7,7 +7,7 @@ public class InletJellyManager : BaseFrontier {
 
     public float pset;
     public float imax = 1;
-    float pp = 0;
+    //float pp = 0;
     float ii = 0;
     GameObject jelly0, jelly2, arrow;
     public bool isSuccess = false;

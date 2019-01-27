@@ -9,7 +9,7 @@ public class PressostatTriggerManager : BaseComponent {
 
     GameObject water, water2, bubble, cadran2, cadran, arrow, shine;
     public float x_bulle = 0;
-    float r_bulle = 0.1f;
+    //float r_bulle = 0.1f;
     //public float setPointHigh, setPointLow, PMax, PMin;
     public float setPoint, tolerance, PMax,PMin=0;
     Vector3 arrowStartPosition, cadranStartPosition;

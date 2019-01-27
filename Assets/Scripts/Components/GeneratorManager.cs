@@ -91,8 +91,8 @@ public class GeneratorManager :  BaseComponent {
             bubble.SetActive(false);
         }
 
-        float angleH = Mathf.Clamp((setPointHigh) / iMax, -1, 1);
-        float angleL = Mathf.Clamp((setPointLow) / iMax, -1, 1);
+        //float angleH = Mathf.Clamp((setPointHigh) / iMax, -1, 1);
+        //float angleL = Mathf.Clamp((setPointLow) / iMax, -1, 1);
 
 
         float alpha;

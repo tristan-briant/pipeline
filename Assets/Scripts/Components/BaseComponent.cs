@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-
+    public string PrefabPath="";
     protected float q = 0, f = 0;
     public int dir=0;
     protected float R = 2f, L = 1f, C =1f, Rground = 50;
@@ -93,7 +93,7 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     public virtual void calcule_i_p_blocked(float[] p, float[] i, float dt,int index)
     {
-        float a = p[index];
+        //float a = p[index];
        /* p[index] = i[index] * Rground;
         i[index] = a / Rground;*/
 
@@ -107,7 +107,9 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     {
         success = 1;
         gc = (gameController)GameObject.Find("gameController").GetComponent(typeof(gameController)); //find the game engine
-        parameters = (PlaygroundParameters)transform.parent.transform.parent.GetComponent(typeof(PlaygroundParameters)); //find the game engine
+        //parameters = (PlaygroundParameters)transform.parent.transform.parent.GetComponent(typeof(PlaygroundParameters)); //find the game engine
+
+        parameters = transform.GetComponentInParent<PlaygroundParameters>();
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
 
         if (parameters != null)
@@ -152,9 +154,11 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     }
 
 
-    Vector3 startPos;
+    //Vector3 startPos;
     //float guiDepth;
     public static Transform startParent;
+    public static Transform endParent;
+
     Transform canvas;
     public static GameObject itemBeingDragged;
 
@@ -164,9 +168,10 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
         if (locked) { eventData.pointerDrag = null; return; } // If locked cancel the drag
 
-        startPos = transform.position;
         itemBeingDragged = gameObject;
         startParent = transform.parent;
+        endParent = null;
+
         GetComponent<CanvasGroup >().blocksRaycasts = false;
         canvas = GameObject.FindGameObjectWithTag("Playground").transform;
         transform.SetParent(canvas);
@@ -184,23 +189,62 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
         transform.position = Camera.main.ScreenToWorldPoint(vec);
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+
+    //public void OnEndDrag(PointerEventData eventData)
+    void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
-        
+        // Happens after OnDrop
+
+        Drop();
+    }
+
+    public void Drop()
+    {
         itemBeingDragged = null;
-        transform.localScale = transform.localScale / 1.2f;
-        DestroyImmediate (startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
-        /* Destroyimmediate et pas destroy simple sinon present jusqu'à la fin du frame et populatecomposant fail et le trouve toujours  */
+        transform.localScale = Vector3.one;//transform.localScale / 1.2f;
 
         GetComponent<CanvasGroup>().blocksRaycasts = true;
 
-        if(transform.parent == canvas)
+        if (endParent==null && startParent) //retour au point de départ 
         {
+            DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                                                                  /* Destroyimmediate et pas destroy simple sinon present jusqu'à la fin du frame et populatecomposant fail et le trouve toujours  */
             transform.SetParent(startParent);
         }
-        //transform.localPosition = new Vector3(0, 0, 1); // finalement pas besoin
 
+        if (endParent && startParent) { // on échange
+            if (endParent == startParent)
+            {
+                DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                transform.SetParent(endParent);
+            }
+            else
+            {
+                DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                Transform c = endParent.GetChild(0);
+                c.SetParent(startParent);
+                c.localPosition = Vector3.zero;
+                transform.SetParent(endParent);
+            }
+
+            transform.SetParent(endParent);
+        }
+
+        if (endParent && startParent == null) { //provient du designer on écrase
+            DestroyImmediate(endParent.GetChild(0).gameObject);
+            transform.SetParent(endParent);
+        }
+
+        if (endParent == null && startParent == null) { //Designer + coup dans l'eau
+            Destroy(this.gameObject);
+            return;
+        }
+
+        transform.localPosition = Vector3.zero;
+
+       
         dragged = false;
+        startParent = endParent = null;
 
         gc.PopulateComposant();
         audios[1].Play();

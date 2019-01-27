@@ -8,7 +8,7 @@ public class PressostatManager : BaseComponent {
 
     GameObject water, water2, bubble, cadranMin, cadranMax, arrow, shine;
     public float x_bulle = 0;
-    float r_bulle = 0.1f;
+    //float r_bulle = 0.1f;
     public float setPointHigh, setPointLow, PMax,PMin;
     Vector3 arrowStartPosition;
     float t_shine = 0;

@@ -9,7 +9,7 @@ public class PressostatDigitalManager : BaseComponent
 
     GameObject water, water2, bubble, red, green, arrow, shine;
     public float x_bulle = 0;
-    float r_bulle = 0.1f;
+    //float r_bulle = 0.1f;
     public float setPointHigh, setPointLow, PMax, PMin;
     Vector3 arrowStartPosition;
     float t_shine = 0;
@@ -20,7 +20,7 @@ public class PressostatDigitalManager : BaseComponent
 
     void calculateSetPoint()
     {
-        float mean, tolerance, t;
+        float mean, tolerance;
         switch (mode)
         {
             case 0:

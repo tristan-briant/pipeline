@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,10 +15,10 @@ public class TransistorManager : BaseComponent
     public float Gain = 10;
     float g, f2 = 0, f13 = 0;
     float threshold = 0.02f;
-    float fthreshold = 0.05f;
+    //float fthreshold = 0.05f;
     public bool NPN = true;
-    float Rin=100;
-    float q12 = 0, q13 = 0;
+    //float Rin=100;
+    //float q12 = 0;//, q13 = 0;
     //public bool mirror=false;
 
 

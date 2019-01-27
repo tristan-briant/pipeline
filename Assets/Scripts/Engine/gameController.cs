@@ -92,6 +92,11 @@ public class gameController : MonoBehaviour {
         }
         PopulateComposant();
 
+        ResizePlayGround();
+    }
+
+    void ResizePlayGround()
+    {
         Transform go = Pg.transform.parent;
         RectTransform objectRectTransform = go.GetComponent<RectTransform>();
         float width = objectRectTransform.rect.width;
@@ -99,17 +104,23 @@ public class gameController : MonoBehaviour {
         Debug.Log(" W :" + width + " H  " + height);
         Debug.Log(" N :" + N + " M  " + M);
 
-        float widthRef = 600;
-        float heightRef = 700;
+
+        /*float widthRef = 600;
+        float heightRef = 800;
         float ratio = height / width / heightRef * widthRef;
         float wc;
-        if ( ratio > 1)
-            wc = Mathf.Min(widthRef / (N - 1), ratio * heightRef / (M - 1));
+        if (ratio > 1)
+            wc = Mathf.Min(widthRef / 6 * N / (N - 1), ratio * heightRef / 8 * M / (M - 1));
         else
-            wc = Mathf.Min(widthRef /ratio/ (N - 1), heightRef / (M - 1));
+            wc = Mathf.Min(widthRef / 6 * N / ratio / (N - 1), heightRef / 8 * M / (M - 1));*/
 
-        Pg.transform.localScale=new Vector3( wc/100, wc / 100,1) ;
+        float wx = width / (100f * (N - 1));
+        float wy = height / (100f * M);
 
+        float wc = Mathf.Min(wx, wy);
+
+        Pg.transform.localScale = new Vector3(wc, wc, 1);
+        Pg.transform.localPosition = Vector3.zero;
     }
 
 
@@ -118,17 +129,18 @@ public class gameController : MonoBehaviour {
     public void PopulateComposant()
     {
         //Debug.Log("Populate!");
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Field/GrassAtlas");
 
         for (int i = 1; i < N-1; i++)
             for (int j = 1; j < M-1; j++)
             {
-                GameObject go = Pg.transform.GetChild((i) + (j)*(N)).gameObject; //the slot
+                GameObject slot = Pg.transform.GetChild((i) + (j)*(N)).gameObject; //the slot
       
 
-                if (go.transform.childCount > 0)
+                if (slot.transform.childCount > 0)
                 {
-                    if (go.transform.childCount > 1) Debug.Log("Populate error" + go.transform.childCount);
-                    BaseComponent bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                    if (slot.transform.childCount > 1) Debug.Log("Populate error" + slot.transform.childCount);
+                    BaseComponent bc = (BaseComponent)slot.transform.GetChild(0).GetComponent(typeof(BaseComponent));
                     Vector3 v = bc.transform.localPosition;
                     v.z = 0;
                     bc.transform.localPosition=v;
@@ -141,23 +153,31 @@ public class gameController : MonoBehaviour {
 
                     if (firstPopulate)
                     {
+                        
                         if (bc.GetComponent<BaseComponent>().locked)
                         {
-                            go.GetComponent<Image>().sprite = Resources.Load<Sprite>("concrete");
-                            go.GetComponent<Image>().color = new Color(1, 1, 1);
+                            slot.GetComponent<Image>().sprite = Resources.Load<Sprite>("concrete");
+                            slot.GetComponent<Image>().color = new Color(1, 1, 1);
                         }
                         else{
-                            go.GetComponent<Image>().sprite = Resources.Load<Sprite>("fond-composant");
-                            float c = 1.0f - Random.Range(0.0f, 0.3f);
-                            go.GetComponent<Image>().color = new Color(c, c, c);
+                            //go.GetComponent<Image>().sprite = Resources.Load<Sprite>("fond-composant");
+                            slot.GetComponent<Image>().sprite = sprites[((i + j) % 2) * 2+ (int)Random.Range(0, 1.999f)];
+                            //float c = 1.0f - Random.Range(0.0f, 0.3f);
+                            slot.GetComponent<Image>().color = Color.white;
                         }
                         //bc.transform.GetComponent<Image>().enabled=true;
                     }
                 }
                 else
                 {
+                    if (firstPopulate)
+                    {
+                        slot.GetComponent<Image>().sprite = sprites[( (i+j) %2)*2 + (int)Random.Range(0,1.999f) ];
+                        //float c = 1.0f - Random.Range(0.0f, 0.3f);
+                        slot.GetComponent<Image>().color = Color.white;
+                    }
                     BaseComponent bc = Instantiate(vide);
-                    bc.transform.SetParent(go.transform);
+                    bc.transform.SetParent(slot.transform);
                     bc.transform.localScale = new Vector3(1, 1, 1);
                     bc.x = i; bc.y = j;
                     composants[i][j] = bc;
