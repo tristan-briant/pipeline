@@ -21,7 +21,7 @@ public class FlushManager : BaseFrontier {
         //Animation["WatchAnimation"].speed = 4 / timeOut;
     }
 
-    public override void OnPointerClick(PointerEventData eventData)
+    public override void OnClick()
     {
 
         Animation.Play("FlushAnimation");

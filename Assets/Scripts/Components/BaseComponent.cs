@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
+    IEndDragHandler, IPointerUpHandler, IPointerDownHandler
 {
     public string PrefabPath="";
     protected float q = 0, f = 0;
@@ -135,7 +136,27 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 
     bool dragged;
 
-    public virtual void OnPointerClick(PointerEventData eventData)
+    float clickStart;
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        clickStart = Time.time;
+    }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (eventData.dragging) return;
+         
+        if ((Time.time - clickStart) > 0.5f)  // Long click
+        {
+            OnLongClick();
+        }
+        else
+        {
+            OnClick();
+        }
+
+
+    }
+    public virtual void OnClick()
     {
         if (!dragged && !locked && !dir_locked)
         {
@@ -144,15 +165,41 @@ public class BaseComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHand
             transform.rotation = Quaternion.identity;
             transform.Rotate(new Vector3(0, 0, dir * 90));
             //Debug.Log("Object " + Name + " clicked !" + dir);
-            
+
             audios[0].Play();
         }
 
-        if (!dragged && (locked || dir_locked)) {
+        if (!dragged && (locked || dir_locked))
+        {
             audios[1].Play();
         }
     }
 
+    public GameObject ConfigPanel;
+    public virtual void OnLongClick()
+    {
+        if (GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>())
+        {
+            //Launch Config Panel
+            foreach (ConfigPanel cp in GameObject.FindObjectsOfType<ConfigPanel>())
+                cp.Close();
+
+            if (ConfigPanel == null) return;
+
+
+
+            GameObject CP = Instantiate(ConfigPanel) ;
+            CP.GetComponent<ConfigPanel>().component = this;
+
+            CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
+            CP.transform.localScale = Vector3.one;
+           
+            RectTransform rect = CP.transform.GetComponent<RectTransform>();
+            rect.sizeDelta =new Vector2(0,300) ;
+            rect.anchoredPosition = new Vector2(0, 0);            
+
+        }
+    }
 
     //Vector3 startPos;
     //float guiDepth;

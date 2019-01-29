@@ -15,7 +15,7 @@ public class WatchManager : BaseComponent {
         Animation["WatchAnimation"].speed = 4 / timeOut;
     }
 
-    public override void OnPointerClick(PointerEventData eventData)
+    public override void OnClick()
     {
         audios[2].Play();
         Animation.Play("WatchAnimation");

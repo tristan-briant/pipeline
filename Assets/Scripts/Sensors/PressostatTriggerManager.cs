@@ -20,7 +20,7 @@ public class PressostatTriggerManager : BaseComponent {
     //public new float f;
 
 
-    public override void OnPointerClick(PointerEventData eventData)
+    public override void OnClick()
     {
         //Do not rotate
     }
