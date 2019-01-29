@@ -42,6 +42,8 @@ public class InletManager : BaseFrontier {
 
 
     float Rin = 0; //resistance interne
+
+
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
        
