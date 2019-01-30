@@ -21,8 +21,21 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public const float fMinBubble = 0.1f;
     //public bool empty = true;
 
-    public int x, y;
+    //public int x, y;
     public bool locked = false;
+    public bool Locked
+    {
+        get
+        {
+            return locked;
+        }
+
+        set
+        {
+            locked = value;
+        }
+    }
+
     public bool dir_locked = false;
     public bool mirror = false;
     public bool isFrontiers=false;
@@ -208,6 +221,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     Transform canvas;
     public static GameObject itemBeingDragged;
+
+    
 
     public void OnBeginDrag(PointerEventData eventData)
     {

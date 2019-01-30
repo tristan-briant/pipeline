@@ -157,7 +157,7 @@ public class gameController : MonoBehaviour {
                         bc.transform.localScale = new Vector3(-1, 1, 1);
                     else
                         bc.transform.localScale = new Vector3(1, 1, 1);
-                    bc.x = i;bc.y = j;
+                    //bc.x = i;bc.y = j;
                     composants[i][j] = bc;
 
                     if (firstPopulate)
@@ -188,7 +188,7 @@ public class gameController : MonoBehaviour {
                     BaseComponent bc = Instantiate(vide);
                     bc.transform.SetParent(slot.transform);
                     bc.transform.localScale = new Vector3(1, 1, 1);
-                    bc.x = i; bc.y = j;
+                    //bc.x = i; bc.y = j;
                     composants[i][j] = bc;
                 }
         }

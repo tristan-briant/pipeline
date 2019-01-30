@@ -7,11 +7,25 @@ public class capacitorManager : BaseComponent {
 
     GameObject waterIn0, waterIn2, water0, water2, bubble;
     GameObject spring1, spring2, spring3, spring4, piston;
-    public float x_bulle = 0;
-    //float r_bulle = 0.1f;
-    public float Cin;
+    float x_bulle = 0;
+
+    public float cin;
+
     float q0, q2;
-    public float xp;
+    float xp;
+
+    public float Cin
+    {
+        get
+        {
+            return cin;
+        }
+
+        set
+        {
+            cin = value;
+        }
+    }
 
     public override void Reset_i_p()
     {

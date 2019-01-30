@@ -37,7 +37,7 @@ public class ConfigPanel : MonoBehaviour {
         Destroy(selec);
     }
 
-    public void IncrementValue(int parameter)
+    /*public void IncrementValue(int parameter)
     {
         ChangeValue(parameter, +1.0f);
     }
@@ -65,16 +65,16 @@ public class ConfigPanel : MonoBehaviour {
     public void ToggleValue(int parameter)
     {
             ParameterToggler[parameter](true);    // true means a toggle occure 
-    }
+    }*/
 
 
-    void Update()
+    /*void Update()
     {
         for (int i = 0; i < ValueParameterText.Count; i++)
             ValueParameterText[i].text = ParameterIncrementer[i](0).ToString("F1");
 
         for (int i = 0; i < ValueParameterText.Count; i++)
             ValueParameterToggle[i].enabled = ParameterToggler[i](false);
-    }
+    }*/
 
 }
