@@ -33,6 +33,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         set
         {
             locked = value;
+            SetLocked();
         }
     }
 
@@ -136,14 +137,18 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         transform.rotation = Quaternion.identity;
         transform.Rotate(new Vector3(0, 0, dir * 90));
+        SetLocked();
+    }
+
+    void SetLocked()
+    {
+        Transform loc = transform.Find("Locked");
+        if (loc) loc.gameObject.SetActive(Locked);
     }
 
     private void Update()
     {
-        
-        //c += 0.01f;
-        //if (c > 1) c = 0.0f;
-        //water.GetComponent<Image>().color = new Color(1, c, 1);
+ 
     }
 
 
@@ -154,6 +159,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         clickStart = Time.time;
     }
+
     public void OnPointerUp(PointerEventData eventData)
     {
         if (eventData.dragging) return;
@@ -171,12 +177,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     }
     public virtual void OnClick()
     {
-        if (!dragged && !locked && !dir_locked)
+        if (!dragged && !dir_locked && (!locked || GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>()))
         {
-            dir++;
-            if (dir == 4) dir = 0;
-            transform.rotation = Quaternion.identity;
-            transform.Rotate(new Vector3(0, 0, dir * 90));
+            dir = (dir + 1) % 4;
+            //if (dir == 4) dir = 0;
+            
+            transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
             //Debug.Log("Object " + Name + " clicked !" + dir);
 
             audios[0].Play();
@@ -213,9 +219,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         }
     }
+    
 
-    //Vector3 startPos;
-    //float guiDepth;
     public static Transform startParent;
     public static Transform endParent;
 

@@ -6,8 +6,34 @@ using UnityEngine.UI;
 public class InletManager : BaseFrontier {
 
     public float pset;
+    public float Pset
+    {
+        get
+        {
+            return pset;
+        }
+
+        set
+        {
+            pset = value;
+        }
+    }
     float ppset;
-    public float imax=1;
+
+    public float imax = 1;
+    public float Imax
+    {
+        get
+        {
+            return imax;
+        }
+
+        set
+        {
+            imax = value;
+        }
+    }
+
     float pp = 0;
     float ii=0;
     GameObject water,water0, arrow;
@@ -43,7 +69,7 @@ public class InletManager : BaseFrontier {
 
     float Rin = 0; //resistance interne
 
-
+  
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {
        

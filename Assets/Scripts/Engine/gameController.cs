@@ -15,6 +15,7 @@ public class gameController : MonoBehaviour {
     public BaseComponent vide;
     public BaseComponent videFrontier;
     public BaseFrontier[] borders;
+    public Sprite concrete; // image for locked component
     public int currentLevel;
     public Text levelText;
     public Button nextButton;
@@ -162,18 +163,19 @@ public class gameController : MonoBehaviour {
 
                     if (firstPopulate)
                     {
-                        
-                        if (bc.GetComponent<BaseComponent>().locked)
+                        slot.GetComponent<Image>().sprite = sprites[((i + j) % 2) * 2 + +(int)Random.Range(0, 1.999f)];
+                        /*if (bc.GetComponent<BaseComponent>().locked)
                         {
-                            slot.GetComponent<Image>().sprite = Resources.Load<Sprite>("concrete");
-                            slot.GetComponent<Image>().color = new Color(1, 1, 1);
+                            //slot.GetComponent<Image>().sprite = Resources.Load<Sprite>("concrete");
+                            //slot.GetComponent<Image>().sprite = concrete;
+                            //slot.GetComponent<Image>().color = new Color(1, 1, 1);
                         }
                         else{
                             //go.GetComponent<Image>().sprite = Resources.Load<Sprite>("fond-composant");
-                            slot.GetComponent<Image>().sprite = sprites[((i + j) % 2) * 2+ (int)Random.Range(0, 1.999f)];
+                            slot.GetComponent<Image>().sprite = sprites[((i + j) % 2) * 2 + ((i + j) / 2) % 2];// + (int)Random.Range(0, 1.999f)];
                             //float c = 1.0f - Random.Range(0.0f, 0.3f);
                             slot.GetComponent<Image>().color = Color.white;
-                        }
+                        }*/
                         //bc.transform.GetComponent<Image>().enabled=true;
                     }
                 }

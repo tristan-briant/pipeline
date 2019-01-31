@@ -11,8 +11,8 @@ public class ConfigPanelInlet : ConfigPanel {
         base.Start();
         InletManager Inlet = component as InletManager;
 
-        ParameterIncrementer.Add(x => (Inlet.pset += x)); // lambda expression
-        ParameterIncrementer.Add(x => (Inlet.imax += x));
+        //ParameterIncrementer.Add(x => (Inlet.pset += x)); // lambda expression
+        //ParameterIncrementer.Add(x => (Inlet.imax += x));
     }
 
    
