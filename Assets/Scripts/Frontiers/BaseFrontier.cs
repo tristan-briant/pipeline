@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BaseFrontier : BaseComponent {
 
     protected override void Start() {
-        gc = (gameController)GameObject.Find("gameController").GetComponent(typeof(gameController)); //find the game engine
+        gc = (GameController)GameObject.Find("gameController").GetComponent(typeof(GameController)); //find the game engine
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
 
     }

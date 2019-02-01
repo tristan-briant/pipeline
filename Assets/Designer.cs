@@ -84,7 +84,7 @@ public class Designer : MonoBehaviour {
 
         CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
 
-        GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+        GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
 
         ResizePlayGround();
 
@@ -273,7 +273,7 @@ public class Designer : MonoBehaviour {
 
         CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 3);
 
-        GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+        GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
 
         ResizePlayGround();
     }
@@ -341,7 +341,7 @@ public class Designer : MonoBehaviour {
             Pg.GetComponent<PlaygroundParameters>().N = N - 1;
             N = N - 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
         }
         else
         {
@@ -372,7 +372,7 @@ public class Designer : MonoBehaviour {
             Pg.GetComponent<PlaygroundParameters>().N = N + 1;
             N = N + 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
         }
         else
         {
@@ -393,7 +393,7 @@ public class Designer : MonoBehaviour {
             Pg.GetComponent<PlaygroundParameters>().M = M - 1;
             M = M - 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
         }
         else
         {
@@ -423,7 +423,7 @@ public class Designer : MonoBehaviour {
             Pg.GetComponent<PlaygroundParameters>().M = M + 1;
             M = M + 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<gameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
         }
         else
         {

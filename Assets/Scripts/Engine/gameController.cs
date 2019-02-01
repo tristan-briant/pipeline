@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class gameController : MonoBehaviour {
+public class GameController : MonoBehaviour {
 
     public int N,M; // size of the playground
 
@@ -12,7 +12,7 @@ public class gameController : MonoBehaviour {
     float[][] deltap;
 
     public BaseComponent[][] composants;
-    public BaseComponent vide;
+    //public BaseComponent vide;
     public BaseComponent videFrontier;
     public BaseFrontier[] borders;
     public Sprite concrete; // image for locked component
@@ -28,7 +28,6 @@ public class gameController : MonoBehaviour {
     public GameObject PgHolder; //The "playground Holder" 
     GameObject Pg; //The "playground" from which are determined N and M 
 
-    //public float alpha=0.001f;
     bool firstPopulate = true;
 
     public void Pause(bool pause)
@@ -101,9 +100,11 @@ public class gameController : MonoBehaviour {
         ResizePlayGround();
     }
 
-    private void Awake()
+    private void Start()
     {
         InitializePlayground();
+        InvokeRepeating("Evolution", 0.0f, 0.01f);
+
     }
 
     void ResizePlayGround()
@@ -115,16 +116,6 @@ public class gameController : MonoBehaviour {
         Debug.Log(" W :" + width + " H  " + height);
         Debug.Log(" N :" + N + " M  " + M);
 
-
-        /*float widthRef = 600;
-        float heightRef = 800;
-        float ratio = height / width / heightRef * widthRef;
-        float wc;
-        if (ratio > 1)
-            wc = Mathf.Min(widthRef / 6 * N / (N - 1), ratio * heightRef / 8 * M / (M - 1));
-        else
-            wc = Mathf.Min(widthRef / 6 * N / ratio / (N - 1), heightRef / 8 * M / (M - 1));*/
-
         float wx = width / (100f * (N - 1));
         float wy = height / (100f * M);
 
@@ -133,9 +124,7 @@ public class gameController : MonoBehaviour {
         Pg.transform.localScale = new Vector3(wc, wc, 1);
         Pg.transform.localPosition = Vector3.zero;
     }
-
-
-
+    
     public void PopulateComposant()
     {
         //Debug.Log("Populate!");
@@ -158,25 +147,11 @@ public class gameController : MonoBehaviour {
                         bc.transform.localScale = new Vector3(-1, 1, 1);
                     else
                         bc.transform.localScale = new Vector3(1, 1, 1);
-                    //bc.x = i;bc.y = j;
                     composants[i][j] = bc;
 
                     if (firstPopulate)
                     {
                         slot.GetComponent<Image>().sprite = sprites[((i + j) % 2) * 2 + +(int)Random.Range(0, 1.999f)];
-                        /*if (bc.GetComponent<BaseComponent>().locked)
-                        {
-                            //slot.GetComponent<Image>().sprite = Resources.Load<Sprite>("concrete");
-                            //slot.GetComponent<Image>().sprite = concrete;
-                            //slot.GetComponent<Image>().color = new Color(1, 1, 1);
-                        }
-                        else{
-                            //go.GetComponent<Image>().sprite = Resources.Load<Sprite>("fond-composant");
-                            slot.GetComponent<Image>().sprite = sprites[((i + j) % 2) * 2 + ((i + j) / 2) % 2];// + (int)Random.Range(0, 1.999f)];
-                            //float c = 1.0f - Random.Range(0.0f, 0.3f);
-                            slot.GetComponent<Image>().color = Color.white;
-                        }*/
-                        //bc.transform.GetComponent<Image>().enabled=true;
                     }
                 }
                 else
@@ -187,11 +162,11 @@ public class gameController : MonoBehaviour {
                         //float c = 1.0f - Random.Range(0.0f, 0.3f);
                         slot.GetComponent<Image>().color = Color.white;
                     }
-                    BaseComponent bc = Instantiate(vide);
+                    GameObject bc = Instantiate(Resources.Load("Components/Empty", typeof(GameObject))) as GameObject;
                     bc.transform.SetParent(slot.transform);
                     bc.transform.localScale = new Vector3(1, 1, 1);
-                    //bc.x = i; bc.y = j;
-                    composants[i][j] = bc;
+                    bc.transform.localPosition = Vector3.zero;
+                    composants[i][j] = bc.GetComponent<BaseComponent>();
                 }
         }
 
@@ -273,20 +248,13 @@ public class gameController : MonoBehaviour {
         }
         firstPopulate = false;
     }
-
-
-
+    
 
     bool gameOver=false;
     bool fail=false;
     public GameObject winText;
     public GameObject loseText;
 
-
-    // Use this for initialization
-    void Start () {
-        InvokeRepeating("Evolution", 0.0f, 0.01f);
-    }
 
     void Evolution()
     {
@@ -313,17 +281,6 @@ public class gameController : MonoBehaviour {
 
     IEnumerator WinAnimation()
     {
-        //int levelCompleted = PlayerPrefs.GetInt("Level Completed");
-
-        //if (currantLevel > levelCompleted)
-       /* if (currantLevel > LVM.completedLevel)
-        {
-           PlayerPrefs.SetInt("Level Completed", currantLevel);
-
-            PlayerPrefs.Save();
-            
-            //LVM.completedLevel = currantLevel;
-        }*/
         LVM.LevelCompleted(currentLevel);
 
         winText.SetActive(true);                            //lance l'animation de victoire
@@ -365,20 +322,17 @@ public class gameController : MonoBehaviour {
 
     public void LoadNextLevel()
     {
-        //if (currantLevel < LVM.levelMax)
         LVM.currentLevel = currentLevel + 1;
         SceneManager.LoadScene("level");
     }
 
     public void LoadPrevLevel()
     {
-        //if (currantLevel > 1)
         LVM.currentLevel = currentLevel - 1;
         SceneManager.LoadScene("level");
     }
 
 
-    // Update is called once per frame
     void LateUpdate () {
 
         Engine.update_composant_p_i(composants);
@@ -386,9 +340,7 @@ public class gameController : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Home))
         {
-
-            //Home button pressed! write every thing you want to do
-
+            
         }
         if (Input.GetKey(KeyCode.Escape))
         {

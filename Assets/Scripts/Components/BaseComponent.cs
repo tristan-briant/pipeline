@@ -43,7 +43,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
-    protected gameController gc; // le moteur du jeu à invoquer parfois
+    protected GameController gc; // le moteur du jeu à invoquer parfois
     protected AudioSource[] audios;
     PlaygroundParameters parameters;
 
@@ -121,7 +121,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected virtual void Start()
     {
         success = 1;
-        gc = (gameController)GameObject.Find("gameController").GetComponent(typeof(gameController)); //find the game engine
+        gc = (GameController)GameObject.Find("gameController").GetComponent(typeof(GameController)); //find the game engine
         //parameters = (PlaygroundParameters)transform.parent.transform.parent.GetComponent(typeof(PlaygroundParameters)); //find the game engine
 
         parameters = transform.GetComponentInParent<PlaygroundParameters>();
@@ -231,10 +231,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (itemBeingDragged != null) { eventData.pointerDrag = null; return; } // If one element already draged, cancel the drag
+        if (itemBeingDragged != null) { eventData.pointerDrag = null; return; } // If one element already dragged, cancel the drag
 
         if (locked && !GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>())
-        {// If locked and not in desgner mode cancel the drag
+        {// If locked and not in designer mode cancel the drag
             eventData.pointerDrag = null; return;
         } 
 
