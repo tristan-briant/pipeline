@@ -161,9 +161,14 @@ public class InletManager : BaseFrontier {
             water.GetComponent<Image>().color = pressureColor(ppset);
             water0.GetComponent<Image>().color = pressureColor(pin[0]);
         }
-        
 
-        switch (mode)
+        if (ppset <= 0)
+            arrow.GetComponent<Animator>().SetBool("Negative", true);
+        else
+            arrow.GetComponent<Animator>().SetBool("Negative", false);
+
+
+        /*switch (mode)
         {
             case 0:  // Mode normal
                 if (ppset <= 0)
@@ -184,6 +189,7 @@ public class InletManager : BaseFrontier {
         }
         else
             arrow.transform.localPosition = new Vector3(25+ (0.025f - 0.05f * Mathf.Sqrt(Mathf.Abs(Mathf.Sin(Time.time / 0.5f)))) * 100 ,0,0);
+            */
     }
 
 

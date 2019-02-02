@@ -88,15 +88,6 @@ public class Designer : MonoBehaviour {
 
         ResizePlayGround();
 
-
-       /* int i = 0;
-        while(i < tokens.Length)
-        {
-            if(tokens[i]);
-            Debug.Log(s);
-            if()
-        }*/
-
     }
 
     [ContextMenu("ChangeBorder")]
@@ -191,6 +182,33 @@ public class Designer : MonoBehaviour {
     }
 
 
+    GameObject CreateSlotFrontier(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, int type)
+    {
+        GameObject slot = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
+        slot.transform.SetParent(PlayGround.transform);
+        slot.transform.localPosition = Vector3.zero;
+        slot.transform.localScale = Vector3.one;
+        if (dir == 3)
+        {
+            slot.transform.localScale = new Vector3(-1, 1, 1);
+            //slot.transform.localRotation = Quaternion.Euler(0, 0, -90f);
+
+        }
+        //else
+            slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir); // C'est le slot qui tourne
+
+        GameObject component = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+        component.transform.SetParent(slot.transform);
+        component.transform.localPosition = Vector3.zero;
+        component.transform.localScale = Vector3.one;
+        component.GetComponent<BaseComponent>().dir = dir;
+        component.GetComponent<BaseFrontier>().type = type;
+
+        component.GetComponent<BaseFrontier>().InitializeSlot();
+
+        return slot;
+    }
+
     GameObject CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
     {
         GameObject slot= PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
@@ -209,9 +227,11 @@ public class Designer : MonoBehaviour {
             component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
 
-        if ( !slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier) //if corner or frontier
+        /*if (!slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier)
+        { //if corner or frontier
             slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
-
+            component.GetComponent<BaseFrontier>().InitializeSlot();
+        }*/
         return slot;
     }
 
@@ -232,8 +252,11 @@ public class Designer : MonoBehaviour {
         component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
 
 
-        if (!slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier) //if corner or frontier
+        if (!slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier)
+        { //if corner or frontier
             slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+            component.GetComponent<BaseFrontier>().InitializeSlot();
+        }
 
         JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
     }
@@ -256,22 +279,23 @@ public class Designer : MonoBehaviour {
 
         Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
 
-        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 1);
-        for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 0);
-        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 0);
+        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 1,0);
+        for (int i = 1; i < N - 1; i++) CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 0,1);
+        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 0,0);
 
         for (int j = 1; j < M - 1; j++)
         {
-            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 1);
+            int type = Mathf.Min(j, 4);
+            CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 1, type);
             for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotComponent", "", 0); //empty component
-            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 3);
+            CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 3, type);
         }
 
-        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 2);
+        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 1,5);
 
-        for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 2);
+        for (int i = 1; i < N - 1; i++) CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 2,4);
 
-        CreateSlot(Pg, "Field/SlotCorner", "Frontiers/Corner", 3);
+        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 3,5);
 
         GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
 

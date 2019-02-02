@@ -26,4 +26,10 @@ public class ConfigPanel : MonoBehaviour {
         Destroy(selec);
     }
 
+    public void Update()
+    {
+        if (selec == null) // the component has been deleted
+            Destroy(this.gameObject);
+    }
+
 }
