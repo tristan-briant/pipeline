@@ -30,6 +30,25 @@ public class BaseFrontier : BaseComponent {
             case 5: index = 0; break;
         }
         slot.GetComponent<Image>().sprite = sprites[index];
+
+        if (dir == 3)
+        {
+            slot.transform.localScale = new Vector3(-1, 1, 1);
+            slot.transform.localRotation = Quaternion.Euler(0, 0, -90f);
+        }
+        else if (dir == 5)
+        {
+            slot.transform.localScale = new Vector3(-1, 1, 1);
+            slot.transform.localRotation = Quaternion.Euler(0, 0, 180f);
+        }
+        else if (dir == 6)
+        {
+            slot.transform.localScale = new Vector3(-1, 1, 1);
+            slot.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+            slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir); // C'est le slot qui tourne
+
     }
 
 

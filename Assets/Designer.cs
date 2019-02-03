@@ -8,9 +8,23 @@ using UnityEditor;
 public class Designer : MonoBehaviour {
 
     const int MaxSize = 8;
-    const int MinSize = 5;
+    const int MinSize = 3;
+    public int N, M;
 
     public GameObject Pg;
+
+
+    private void Start()
+    {
+        Pg = GameObject.Find("PlaygroundHolder").transform.GetChild(0).gameObject;
+        N = Pg.GetComponent<PlaygroundParameters>().N;
+        M = Pg.GetComponent<PlaygroundParameters>().M;
+    }
+
+    public void Close()
+    {
+        Destroy(gameObject);
+    }
 
     [ContextMenu("SaveToFile")]
     public void SaveToFile()
@@ -191,10 +205,14 @@ public class Designer : MonoBehaviour {
         if (dir == 3)
         {
             slot.transform.localScale = new Vector3(-1, 1, 1);
-            //slot.transform.localRotation = Quaternion.Euler(0, 0, -90f);
-
+            slot.transform.localRotation = Quaternion.Euler(0, 0, -90f);
         }
-        //else
+        else if (dir == 5)
+        {
+            slot.transform.localScale = new Vector3(-1, 1, 1);
+            slot.transform.localRotation = Quaternion.Euler(0, 0, 180f);
+        }
+        else
             slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir); // C'est le slot qui tourne
 
         GameObject component = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
@@ -209,7 +227,7 @@ public class Designer : MonoBehaviour {
         return slot;
     }
 
-    GameObject CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
+    GameObject CreateSlotComponent(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
     {
         GameObject slot= PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
@@ -227,11 +245,6 @@ public class Designer : MonoBehaviour {
             component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
 
-        /*if (!slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier)
-        { //if corner or frontier
-            slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
-            component.GetComponent<BaseFrontier>().InitializeSlot();
-        }*/
         return slot;
     }
 
@@ -251,14 +264,12 @@ public class Designer : MonoBehaviour {
         component.GetComponent<BaseComponent>().dir = dir;
         component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
 
+        JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
 
-        if (!slot.GetComponent<OnDrop>() || slot.GetComponent<OnDrop>().isSlotFrontier)
+        if (slot.GetComponentInChildren<BaseFrontier>()!=null)
         { //if corner or frontier
-            slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
             component.GetComponent<BaseFrontier>().InitializeSlot();
         }
-
-        JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
     }
 
 
@@ -279,7 +290,7 @@ public class Designer : MonoBehaviour {
 
         Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
 
-        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 1,0);
+        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 6,0);
         for (int i = 1; i < N - 1; i++) CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 0,1);
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 0,0);
 
@@ -287,15 +298,15 @@ public class Designer : MonoBehaviour {
         {
             int type = Mathf.Min(j, 4);
             CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 1, type);
-            for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotComponent", "", 0); //empty component
+            for (int i = 1; i < N - 1; i++) CreateSlotComponent(Pg, "Field/SlotComponent", "", 0); //empty component
             CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 3, type);
         }
 
-        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 1,5);
+        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 5,5);
 
         for (int i = 1; i < N - 1; i++) CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 2,4);
 
-        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 3,5);
+        CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 2,5);
 
         GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
 
@@ -315,10 +326,10 @@ public class Designer : MonoBehaviour {
         float wc = Mathf.Min(wx, wy);
 
         Pg.transform.localScale = new Vector3(wc, wc, 1);
-        Pg.transform.localPosition = Vector3.zero;
+        //Pg.transform.localPosition = Vector3.zero;
     }
 
-    public int N,M;
+ 
     [ContextMenu("ChangeSize")]
     public void ChangeSize() {
         PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
@@ -351,6 +362,7 @@ public class Designer : MonoBehaviour {
         }
 
     }
+
     [ContextMenu("Reduce Width")]
     public void ReduceWidth()
     {
@@ -380,16 +392,16 @@ public class Designer : MonoBehaviour {
         {
             int i = N - 1;
 
-            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 0);
+            CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 0,1);
             Pg.transform.GetChild(Pg.transform.childCount-1).SetSiblingIndex(i); // remet le nouveau child au bon endroit
 
             for (int j = 1; j < M-1; j++)
             {
-                CreateSlot(Pg, "Field/SlotComponent", "", 0);
+                CreateSlotComponent(Pg, "Field/SlotComponent", "", 0);
                 Pg.transform.GetChild(Pg.transform.childCount-1).SetSiblingIndex(i + j * (N + 1));
             }
 
-            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 2);
+            CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 2,4);
             Pg.transform.GetChild(Pg.transform.childCount-1).SetSiblingIndex(i + (M - 1) * (N + 1));
 
             Pg.GetComponent<GridLayoutGroup>().constraintCount = N + 1;
@@ -418,6 +430,38 @@ public class Designer : MonoBehaviour {
             M = M - 1;
 
             GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
+
+
+
+            /****   ***/
+
+            int type = Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type;
+
+            if (type <= 2) //Beach
+            {
+                Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 2;
+                Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 4;
+            }
+            else
+                Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 5;
+
+            type = Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type;
+
+            if (type <= 2) //Beach
+            {
+                Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 2;
+                Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 4;
+            }
+            else
+                Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 5;
+
+
+            Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+            Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+            Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+            Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+
+
         }
         else
         {
@@ -432,27 +476,122 @@ public class Designer : MonoBehaviour {
         {
             int j = M - 1;
 
-            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 1);
+            CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 1,0);
             Pg.transform.GetChild(Pg.transform.childCount - 1).SetSiblingIndex(j * N); // remet le nouveau child au bon endroit
 
             for (int i = 1; i < N - 1; i++)
             {
-                CreateSlot(Pg, "Field/SlotComponent", "", 0);
+                CreateSlotComponent(Pg, "Field/SlotComponent", "", 0);
                 Pg.transform.GetChild(Pg.transform.childCount - 1).SetSiblingIndex(i + j * N);
             }
 
-            CreateSlot(Pg, "Field/SlotWall", "Frontiers/Wall", 3);
+            CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 3,0);
             Pg.transform.GetChild(Pg.transform.childCount - 1).SetSiblingIndex(N-1 + j * N);
 
             Pg.GetComponent<PlaygroundParameters>().M = M + 1;
             M = M + 1;
 
             GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
+
+            j = M - 1;
+            int type = Pg.transform.GetChild((j - 2) * N).GetComponentInChildren<BaseFrontier>().type;
+
+            if (type <= 2) //Beach
+            {
+                Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 3;
+                Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 5;
+            }
+            else
+                Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 4;
+
+            type = Pg.transform.GetChild(N - 1 + (j - 2) * N).GetComponentInChildren<BaseFrontier>().type;
+
+            if (type <= 2) //Beach
+            {
+                Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 3;
+                Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 5;
+            }
+            else
+                Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 4;
+
+
+            Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+            Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+            Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+            Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+
+
+
         }
         else
         {
             Debug.Log("Impossible d'agrandir");
         }
     }
+
+    public void IncreaseBeach(bool left)
+    {
+        int j = 0;
+        int i = 0;
+        if (!left) i = N - 1;
+
+        for (j = 1; j < M - 1; j++)
+        {
+            int type = Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().type;
+            if (type >= 3) break; //ground detected
+        }
+
+        if (j == M - 1) return; //already full beach
+
+        if (j == 1)
+            Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 0;
+        else
+            Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 1;
+
+        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().type = 2;
+
+        if (j == M - 2)
+            Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 4;
+        else
+            Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 3;
+
+
+        Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+        Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+    }
+
+    public void DecreaseBeach(bool left)
+    {
+        int j = 0;
+        int i = 0;
+        if (!left) i = N - 1;
+
+        for (j = M - 1; j > 1; j--)
+        {
+            int type = Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().type;
+            if (type <= 2) break; //beach detected
+        }
+
+        if (j == 0) return; //already full ground
+
+        if (j == 1)
+            Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 1;
+        else
+            Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 2;
+
+
+        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().type = 3;
+
+        if (j == M - 2)
+            Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 5;
+        else
+            Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 4;
+
+        Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+        Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+    }
+
 
 }

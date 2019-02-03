@@ -83,7 +83,6 @@ public class GameController : MonoBehaviour {
         N = Pg.GetComponent<GridLayoutGroup>().constraintCount; // -2 for the frontier
         M = Pg.transform.childCount / N; //itou
 
-
         Engine.initialize_p_i(N, M); // create the array of currant and pressure
 
 
@@ -122,7 +121,8 @@ public class GameController : MonoBehaviour {
         float wc = Mathf.Min(wx, wy);
 
         Pg.transform.localScale = new Vector3(wc, wc, 1);
-        Pg.transform.localPosition = Vector3.zero;
+
+        //Pg.transform.localPosition = Vector3.zero;
     }
     
     public void PopulateComposant()

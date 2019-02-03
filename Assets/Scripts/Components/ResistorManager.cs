@@ -8,8 +8,9 @@ public class ResistorManager : BaseComponent {
     GameObject water,water0, water2, bubble;
     public float x_bulle = 0;
     float r_bulle = 0.1f;
-    public float Res;
+    public float res=10;
 
+    public float Res { get => res; set => res = value; }
 
     public override void calcule_i_p(float[] p, float[] i, float alpha)
     {

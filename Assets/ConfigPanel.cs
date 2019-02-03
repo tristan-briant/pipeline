@@ -16,6 +16,7 @@ public class ConfigPanel : MonoBehaviour {
     {
         selec=Instantiate(selection);
         selec.transform.SetParent(component.transform);
+        selec.transform.SetAsFirstSibling();
         selec.transform.localScale = Vector3.one;
         selec.transform.localPosition = Vector3.zero;
     }

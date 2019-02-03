@@ -194,20 +194,22 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
-    public GameObject ConfigPanel;
+    public GameObject configPanel;
     public virtual void OnLongClick()
     {
+        Debug.Log("LongClick");
         if (GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>())
         {
+            Debug.Log("Panel");
             //Launch Config Panel
             foreach (ConfigPanel cp in GameObject.FindObjectsOfType<ConfigPanel>())
                 cp.Close();
 
-            if (ConfigPanel == null) return;
+            if (configPanel == null) return;
 
 
 
-            GameObject CP = Instantiate(ConfigPanel) ;
+            GameObject CP = Instantiate(configPanel) ;
             CP.GetComponent<ConfigPanel>().component = this;
 
             CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
