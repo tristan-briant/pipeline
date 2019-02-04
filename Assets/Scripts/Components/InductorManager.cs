@@ -15,7 +15,7 @@ public class InductorManager : BaseComponent
     float angle;
     Animation anim;
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         R = 16f;//C = 2;
         float a = p[0], b = p[2];
@@ -53,9 +53,9 @@ public class InductorManager : BaseComponent
 
     private void Update()
     {
-        water.GetComponent<Image>().color = pressureColor(q/C);
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        water.GetComponent<Image>().color = PressureColor(q/C);
+        water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         
         propeller.transform.localEulerAngles = new Vector3(0, 0, angle*300);

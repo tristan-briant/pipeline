@@ -31,7 +31,7 @@ public class InletJellyManager : BaseFrontier {
         audios[7].Play();
     }
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         if (pset > 0)
             ii = 1;

@@ -23,7 +23,7 @@ public class TeManager : BaseComponent
         i1 = i2 = i3 = f1 = f2 = f3 = 0;
     }
 
-    public override void calcule_i_p(float[] p, float[] i,float alpha)
+    public override void Calcule_i_p(float[] p, float[] i,float alpha)
     {
 
         float a = p[0], b = p[2], c = p[3];
@@ -46,7 +46,7 @@ public class TeManager : BaseComponent
         i[2] = (f2 - f1 + (b - q / C) / R);
         i[3] = (f3 - f2 + (c - q / C) / R);
 
-        calcule_i_p_blocked(p, i, alpha, 1);
+        Calcule_i_p_blocked(p, i, alpha, 1);
        
 
     }
@@ -66,9 +66,9 @@ public class TeManager : BaseComponent
 
     private void Update()
     {
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
-        water3.GetComponent<Image>().color = pressureColor(pin[3]);
+        water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water3.GetComponent<Image>().color = PressureColor(pin[3]);
 
 
         //////////BUBBLE 0

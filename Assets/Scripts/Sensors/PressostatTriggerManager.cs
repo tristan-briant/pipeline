@@ -25,7 +25,7 @@ public class PressostatTriggerManager : BaseComponent {
         //Do not rotate
     }
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         C = 1;
         float b = p[2];
@@ -37,9 +37,9 @@ public class PressostatTriggerManager : BaseComponent {
 
         i[2] = (-f + (b - q / C) / R);
 
-        calcule_i_p_blocked(p, i, alpha, 0);
-        calcule_i_p_blocked(p, i, alpha, 1);
-        calcule_i_p_blocked(p, i, alpha, 3);
+        Calcule_i_p_blocked(p, i, alpha, 0);
+        Calcule_i_p_blocked(p, i, alpha, 1);
+        Calcule_i_p_blocked(p, i, alpha, 3);
         
 
         /*i[0] = p[0] / Rground;
@@ -98,7 +98,7 @@ public class PressostatTriggerManager : BaseComponent {
         }
 
 
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         if (activated)
             cadran2.GetComponent<Image>().color = new Color(0,255,0);

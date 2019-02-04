@@ -15,6 +15,7 @@ public class LevelManager : MonoBehaviour {
     public float scrollViewHight = 0;
     public bool FirstLaunch=true;
     public bool hacked = false;
+    public bool designer = false;
 
     public float Volume = 0.5f;
     public string language = "english";
@@ -31,8 +32,8 @@ public class LevelManager : MonoBehaviour {
     }
 
 
-    public string jsonFile;
-    public BaseComponent objectToExport;
+    //public string jsonFile;
+    //public BaseComponent objectToExport;
 
     List<string> playgroundName = new List<string>()
     {

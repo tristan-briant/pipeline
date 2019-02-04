@@ -13,7 +13,7 @@ public class PipelineJellyManager : BaseComponent {
     bool full = false;
     bool entered = false;
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
 
        

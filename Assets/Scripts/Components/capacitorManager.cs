@@ -33,7 +33,7 @@ public class capacitorManager : BaseComponent {
         q0 = q2 = 0;
     }
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[0], b = p[2];
 
@@ -75,10 +75,10 @@ public class capacitorManager : BaseComponent {
 
     private void Update()
     {
-        waterIn0.GetComponent<Image>().color = pressureColor(q0/Cin+q/C);
-        waterIn2.GetComponent<Image>().color = pressureColor(q2 / Cin + q / C);
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        waterIn0.GetComponent<Image>().color = PressureColor(q0/Cin+q/C);
+        waterIn2.GetComponent<Image>().color = PressureColor(q2 / Cin + q / C);
+        water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         float xMax = 32f;
         //xp = Mathf.Clamp((q2-q0)/Cin*xMax, -xMax,xMax);

@@ -22,7 +22,7 @@ public class TransistorManager : BaseComponent
     //public bool mirror=false;
 
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         /* C = 0.3f;
          R = 0.1f;*/
@@ -120,7 +120,7 @@ public class TransistorManager : BaseComponent
 
         }
            
-        calcule_i_p_blocked(p, i, alpha, 0);
+        Calcule_i_p_blocked(p, i, alpha, 0);
 
         const float r = 0.1f;
 
@@ -169,9 +169,9 @@ public class TransistorManager : BaseComponent
 
     private void Update()
     {
-        water1.GetComponent<Image>().color = pressureColor(pin[1]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
-        water3.GetComponent<Image>().color = pressureColor(pin[3]);
+        water1.GetComponent<Image>().color = PressureColor(pin[1]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water3.GetComponent<Image>().color = PressureColor(pin[3]);
 
         /*if (mirror)
             transform.localScale = new Vector3(-1, 1, 1);*/
@@ -183,7 +183,7 @@ public class TransistorManager : BaseComponent
 
         if (xp * 180 > 5) {
             water.SetActive(true);
-            water.GetComponent<Image>().color = pressureColor(0.5f * (pin[1] + pin[3]));
+            water.GetComponent<Image>().color = PressureColor(0.5f * (pin[1] + pin[3]));
         }
         else
         {

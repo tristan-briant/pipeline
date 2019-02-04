@@ -14,7 +14,7 @@ public class PressostatManager : BaseComponent {
     float t_shine = 0;
     //public new float f;
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         float b = p[2];
         C = 0.01f;
@@ -62,7 +62,7 @@ public class PressostatManager : BaseComponent {
 
     private void Update()
     {
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         float rate = Mathf.Clamp((q / C - PMin) / (PMax - PMin), 0, 1);
 

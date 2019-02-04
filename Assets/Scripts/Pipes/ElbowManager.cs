@@ -9,7 +9,7 @@ public class ElbowManager : BaseComponent {
     float x_bulle = 0;
 
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[2], b = p[3];
 
@@ -22,8 +22,8 @@ public class ElbowManager : BaseComponent {
         i[2] = (f + (a - q/C) / R);
         i[3] = (-f + (b - q/C) / R);
 
-        calcule_i_p_blocked(p, i, alpha, 1);
-        calcule_i_p_blocked(p, i, alpha, 0);
+        Calcule_i_p_blocked(p, i, alpha, 1);
+        Calcule_i_p_blocked(p, i, alpha, 0);
 
 
         x_bulle += 0.05f * f;
@@ -44,8 +44,8 @@ public class ElbowManager : BaseComponent {
 
     private void Update()
     {
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
-        water3.GetComponent<Image>().color = pressureColor(pin[3]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water3.GetComponent<Image>().color = PressureColor(pin[3]);
         //transform.rotation = Quaternion.identity;
         //transform.Rotate(new Vector3(0, 0, dir * 90));
 

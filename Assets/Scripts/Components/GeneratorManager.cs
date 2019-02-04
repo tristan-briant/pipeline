@@ -15,7 +15,7 @@ public class GeneratorManager :  BaseComponent {
     float t_shine = 0;
     //public new float f;
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         //C = 5.0f; L = 10f;
         float a = p[0], b = p[2];
@@ -68,8 +68,8 @@ public class GeneratorManager :  BaseComponent {
     private void Update()
     {
 
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         angle += 3.14f * velocity*3;
         helice.transform.localEulerAngles = new Vector3(0, 0, angle);

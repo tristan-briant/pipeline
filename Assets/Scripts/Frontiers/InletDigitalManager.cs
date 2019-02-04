@@ -43,7 +43,7 @@ public class InletDigitalManager : BaseFrontier
 
 
     //float Rin = 2; //resistance interne
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
 
         float a = p[0];
@@ -116,8 +116,8 @@ public class InletDigitalManager : BaseFrontier
 
         if (!jelly)
         {
-            water.GetComponent<Image>().color = pressureColor(ppset);
-            water0.GetComponent<Image>().color = pressureColor(pin[0]);
+            water.GetComponent<Image>().color = PressureColor(ppset);
+            water0.GetComponent<Image>().color = PressureColor(pin[0]);
         }
 
 

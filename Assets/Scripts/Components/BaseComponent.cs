@@ -20,6 +20,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public float fail = 0;
     public const float fMinBubble = 0.1f;
     //public bool empty = true;
+    public float pressure;
+
 
     //public int x, y;
     public bool locked = false;
@@ -47,7 +49,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected AudioSource[] audios;
     PlaygroundParameters parameters;
 
-    protected Color pressureColor(float p)
+    protected Color PressureColor(float p)
     { // donne la convention de pression
         float PMAX = 1.0f;
 
@@ -93,20 +95,15 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         q = f = 0;
     }
 
-    public virtual void calcule_i_p(float[] p, float[] i,float dt)
+    public virtual void Calcule_i_p(float[] p, float[] i,float dt)
     {
-        /*i[0] = p[0] / Rground;
-        i[1] = p[1] / Rground;
-        i[2] = p[2] / Rground;
-        i[3] = p[3] / Rground;*/
-
         for(int k = 0; k < 4; k++)
         {
-            calcule_i_p_blocked(p, i, dt, k);
+            Calcule_i_p_blocked(p, i, dt, k);
         }
     }
 
-    public virtual void calcule_i_p_blocked(float[] p, float[] i, float dt,int index)
+    public virtual void Calcule_i_p_blocked(float[] p, float[] i, float dt,int index)
     {
         //float a = p[index];
        /* p[index] = i[index] * Rground;
@@ -122,7 +119,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         success = 1;
         gc = (GameController)GameObject.Find("gameController").GetComponent(typeof(GameController)); //find the game engine
-        //parameters = (PlaygroundParameters)transform.parent.transform.parent.GetComponent(typeof(PlaygroundParameters)); //find the game engine
 
         parameters = transform.GetComponentInParent<PlaygroundParameters>();
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
@@ -143,21 +139,61 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     void SetLocked()
     {
         Transform loc = transform.Find("Locked");
-        if (loc) loc.gameObject.SetActive(Locked);
+        if (loc)
+            loc.gameObject.SetActive(Locked);
     }
-
-    private void Update()
-    {
- 
-    }
-
 
     bool dragged;
+
+    bool IsClickable()
+    { // Determine if the component is clickable
+        if (dragged) return false;
+
+        if (name.Contains("Empty")) return false;
+
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        if (locked && !designerMode) return false;
+
+        return true;
+    }
+
+    bool IsLongClickable()
+    {
+        if (dragged) return false;
+
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        return designerMode;
+    }
+
+    bool IsDraggable()
+    {
+        if (dragged) return false;
+        if (itemBeingDragged != null) return false;
+
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+
+        if (locked && !designerMode) return false;
+
+        if (name.Contains("Empty"))
+        {
+            if (locked && designerMode)
+                return true;
+            else
+                return false;
+        }
+
+        if (isFrontiers && !designerMode)
+            return false;
+
+        return true;
+    }
+
 
     float clickStart;
     public void OnPointerDown(PointerEventData eventData)
     {
         clickStart = Time.time;
+        Debug.Log(name);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -166,29 +202,31 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
          
         if ((Time.time - clickStart) > 0.5f)  // Long click
         {
-            OnLongClick();
+            if(IsLongClickable())
+                OnLongClick();
+            else
+                audios[1].Play();
         }
         else
         {
-            OnClick();
+            if(IsClickable())
+                OnClick();
+            else
+                audios[1].Play();
         }
-
-
     }
+
     public virtual void OnClick()
     {
-        if (!dragged && !dir_locked && (!locked || GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>()))
+        if (!dir_locked && !isFrontiers)
         {
             dir = (dir + 1) % 4;
-            //if (dir == 4) dir = 0;
             
             transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
-            //Debug.Log("Object " + Name + " clicked !" + dir);
 
             audios[0].Play();
         }
-
-        if (!dragged && (locked || dir_locked))
+        else
         {
             audios[1].Play();
         }
@@ -233,12 +271,11 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (itemBeingDragged != null) { eventData.pointerDrag = null; return; } // If one element already dragged, cancel the drag
-
-        if (locked && !GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>())
-        {// If locked and not in designer mode cancel the drag
-            eventData.pointerDrag = null; return;
-        } 
+        if (!IsDraggable())
+        {
+            eventData.pointerDrag = null;
+            return;
+        }
 
         itemBeingDragged = gameObject;
         startParent = transform.parent;

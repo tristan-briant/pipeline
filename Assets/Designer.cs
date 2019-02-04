@@ -555,10 +555,9 @@ public class Designer : MonoBehaviour {
         else
             Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 3;
 
-
-        Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
-        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
-        Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+        Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
+        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
+        Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
     }
 
     public void DecreaseBeach(bool left)
@@ -588,9 +587,9 @@ public class Designer : MonoBehaviour {
         else
             Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 4;
 
-        Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
-        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
-        Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
+        Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
+        Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
+        Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
     }
 
 

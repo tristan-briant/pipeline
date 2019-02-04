@@ -173,7 +173,7 @@ public class GameController : MonoBehaviour {
 
         //if (firstPopulate)
         {
-            for (int i = 1; i < N-1 ; i++)
+            for (int i = 0; i < N ; i++)
             {
                 int j = 0;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
@@ -189,9 +189,10 @@ public class GameController : MonoBehaviour {
                 }
                 bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
+                (bc as BaseFrontier).GetValueFromSlot();
             }
 
-            for (int i = 1; i < N-1 ; i++)
+            for (int i = 0; i < N ; i++)
             {
                 int j = M-1;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
@@ -207,6 +208,7 @@ public class GameController : MonoBehaviour {
                 }
                 bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
+                (bc as BaseFrontier).GetValueFromSlot();
             }
 
             for (int j = 1; j < M - 1; j++)
@@ -225,6 +227,7 @@ public class GameController : MonoBehaviour {
                 }
                 bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
+                (bc as BaseFrontier).GetValueFromSlot();
             }
 
             for (int j = 1; j < M - 1; j++)
@@ -243,6 +246,7 @@ public class GameController : MonoBehaviour {
                 }
                 bc.transform.localRotation = Quaternion.Euler(0, 0, -0);
                 composants[i][j] = bc;
+                (bc as BaseFrontier).GetValueFromSlot();
             }
 
         }

@@ -55,7 +55,7 @@ public class DebitmeterManager : BaseComponent {
         return x;
     }
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         //C = 5.0f;
         //L = 3f;
@@ -70,8 +70,8 @@ public class DebitmeterManager : BaseComponent {
         i[0] = (f + (a - q / C) / R);
         i[2] = (-f + (b - q / C) / R);
 
-        calcule_i_p_blocked(p, i, alpha, 1);
-        calcule_i_p_blocked(p, i, alpha, 3);
+        Calcule_i_p_blocked(p, i, alpha, 1);
+        Calcule_i_p_blocked(p, i, alpha, 3);
 
         x_bulle -= 0.05f * f;
 
@@ -105,8 +105,8 @@ public class DebitmeterManager : BaseComponent {
     private void Update()
     {
 
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         if (Mathf.Abs(f) > fMinBubble)
         {

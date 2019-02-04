@@ -18,7 +18,7 @@ public class diodeManager : BaseComponent {
         q0 = q2 = 0;
     }
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[0], b = p[2];
 
@@ -46,8 +46,8 @@ public class diodeManager : BaseComponent {
         i[0] =  (f + (a - q0) / R);
         i[2] =  (-f + (b - q2) / R);
 
-        calcule_i_p_blocked(p, i, alpha, 1);
-        calcule_i_p_blocked(p, i, alpha, 3);
+        Calcule_i_p_blocked(p, i, alpha, 1);
+        Calcule_i_p_blocked(p, i, alpha, 3);
 
         x_bulle -= 0.05f * f;
 
@@ -64,8 +64,8 @@ public class diodeManager : BaseComponent {
 
     private void Update()
     {
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         xp = 0.9f * xp + 0.1f * Mathf.Clamp(-f, 0, 0.1f);
 

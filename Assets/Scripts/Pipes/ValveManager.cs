@@ -19,7 +19,7 @@ public class ValveManager : BaseComponent {
         q1 = q2 = 0;
     }
 
-    public override void calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
 
         float a = p[0], b = p[2];
@@ -50,8 +50,8 @@ public class ValveManager : BaseComponent {
         i[0] = (f + (a - q1 / C) / R);
         i[2] = (-f + (b - q2 / C) / R);
 
-        calcule_i_p_blocked(p, i, alpha, 1);
-        calcule_i_p_blocked(p, i, alpha, 3);
+        Calcule_i_p_blocked(p, i, alpha, 1);
+        Calcule_i_p_blocked(p, i, alpha, 3);
 
 
         x_bulle -= 0.05f * f;
@@ -83,8 +83,8 @@ public class ValveManager : BaseComponent {
             StartCoroutine(countDown());
         }
 
-        water0.GetComponent<Image>().color = pressureColor(pin[0]);
-        water2.GetComponent<Image>().color = pressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
         if (!open) {
             tubeOpen.SetActive(false);
