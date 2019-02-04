@@ -28,7 +28,7 @@ public class ElbowManager : BaseComponent {
 
         x_bulle += 0.05f * f;
 
-
+        pressure = Mathf.Clamp(0.25f * (p[2] + p[3]), -1f, 1f);  ;
     }
 
     protected override void Start()

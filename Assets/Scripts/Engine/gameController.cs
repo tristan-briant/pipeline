@@ -266,7 +266,7 @@ public class GameController : MonoBehaviour {
         float success=0; 
 
         for(int n=0;n<1;n++)
-            success= Engine.oneStep(composants);
+            success= Engine.oneStep2(composants);
 
         if (success >= 1 && BaseComponent.itemBeingDragged == null && !gameOver)
         {

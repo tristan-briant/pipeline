@@ -9,7 +9,7 @@ using System;
 public class Pipeline : BaseComponent { 
 
     GameObject water0,water2,bubble;
-    public float x_bulle = 0;
+    float x_bulle = 0;
     float r_bulle=0.1f;
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
@@ -31,7 +31,7 @@ public class Pipeline : BaseComponent {
 
 
         x_bulle -= 0.05f * f;
-        pressure = 0.5f * (p[0] + p[2]);
+        pressure = Mathf.Clamp(0.25f * (p[0] + p[2]), -1f, 1f); ;
     }
 
     protected override void Start()

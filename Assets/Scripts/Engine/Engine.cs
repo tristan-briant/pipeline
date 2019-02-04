@@ -8,7 +8,7 @@ public class Engine  {
     static float[][] pression;
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
-    const float dt = 0.2f;
+    const float dt = 0.1f;
     const float alpha = dt; //0.1f;
 
 
@@ -291,7 +291,8 @@ public class Engine  {
                 pression[k][l] += Dintensite[k][l] * alpha;
                 intensite[k][l] += Dpression[k][l] * alpha;
            }
-        
+
+        Clamp_p_i(composants);
 
                 if (fail > 0) return -1;
 
@@ -356,5 +357,24 @@ public class Engine  {
                 composants[k][l].Reset_i_p();
             }
         }
+    }
+
+    const float MaxIValue=2;
+    const float MaxPValue=2;
+
+    public static void Clamp_p_i(BaseComponent[][] composants)
+    {
+        int N = composants.Length;
+        int M = composants[0].Length;
+
+        for (int k = 0; k < N - 1; k++)
+        {
+            for (int l = 0; l < 2 * (M - 2) + 1; l++)
+            {
+                intensite[k][l] = Mathf.Clamp(intensite[k][l], -MaxIValue, MaxIValue);
+                pression[k][l] = Mathf.Clamp(pression[k][l], -MaxPValue, MaxPValue); ;
+            }
+        }
+
     }
 }

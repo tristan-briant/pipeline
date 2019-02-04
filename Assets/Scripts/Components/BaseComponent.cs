@@ -85,6 +85,17 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
+    public void Clamp_i_p(float[] p, float[] i)
+    {
+        for (int k = 0; k < 4; k++)
+        {
+            p[k] = Mathf.Clamp(p[k], -10, 10);
+            i[k] = Mathf.Clamp(i[k], -10, 10);
+
+        }
+    }
+
+
     public virtual void Reset_i_p()
     {
         for (int k = 0; k < 4; k++)
