@@ -261,14 +261,20 @@ public class Designer : MonoBehaviour {
         component.transform.SetParent(slot.transform);
         component.transform.localPosition = Vector3.zero;
         component.transform.localScale = Vector3.one;
-        component.GetComponent<BaseComponent>().dir = dir;
-        component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+        
 
         JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
 
         if (slot.GetComponentInChildren<BaseFrontier>()!=null)
         { //if corner or frontier
             component.GetComponent<BaseFrontier>().InitializeSlot();
+            component.GetComponent<BaseComponent>().dir = dir;  //override frontier direction in case it is in the wrong way
+            component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+        }
+        else
+        {
+            dir = component.GetComponent<BaseComponent>().dir;
+            component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
     }
 

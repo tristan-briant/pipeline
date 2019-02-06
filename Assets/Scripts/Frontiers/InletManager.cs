@@ -34,6 +34,8 @@ public class InletManager : BaseFrontier {
         }
     }
 
+
+
     float pp = 0;
     float ii=0;
     GameObject water,water0, arrow;
@@ -67,7 +69,7 @@ public class InletManager : BaseFrontier {
     }
 
 
-    float Rin = 0; //resistance interne
+    public float Rin = 0; //resistance interne
 
   
     public override void Calcule_i_p(float[] p, float[] i, float alpha)

@@ -10,6 +10,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 {
     public string PrefabPath="";
     protected float q = 0, f = 0;
+    protected float[] qq = { 0, 0, 0, 0 };
+    protected float[] ff = { 0, 0, 0, 0 };
+
     public int dir=0;
     protected float R = 2f, L = 1f, C =1f, Rground = 50;
     protected float fluxMinSound =0.01f;
@@ -18,7 +21,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected float[] iin = new float[4];
     public float success = 1;
     public float fail = 0;
-    public const float fMinBubble = 0.1f;
+    public const float fMinBubble = 0.05f;
     //public bool empty = true;
     public float pressure;
 
@@ -114,15 +117,21 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
-    public virtual void Calcule_i_p_blocked(float[] p, float[] i, float dt,int index)
+    public virtual void Calcule_i_p_blocked(float[] p, float[] i, float dt, int index)
     {
-        //float a = p[index];
-       /* p[index] = i[index] * Rground;
-        i[index] = a / Rground;*/
+        float a = p[index];
+        /* p[index] = i[index] * Rground;
+         i[index] = a / Rground;*/
 
         //p[index] *= 0.99f;
+        //i[index] = 0;
 
-        i[index] = 0;
+        qq[index] += i[index]*dt;
+        //ff[index] += p[index]-
+        p[index] = qq[index] / C;
+
+        i[index] = (+(a  - qq[index] / C) / R); 
+        //i[index] = 0;
     }
 
 

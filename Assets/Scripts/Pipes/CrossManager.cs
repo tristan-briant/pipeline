@@ -12,9 +12,9 @@ public class CrossManager : BaseComponent
     float f0, f1, f2, f3;
     float i0 = 0, i1 = 0, i2 = 0, i3 = 0;
 
-    new public float R = 2;
+    /*new public float R = 2;
     new public float L = 2;
-    new public float C = 2;
+    new public float C = 2;*/
 
     float r_bulle = 0.1f;
  
@@ -60,6 +60,7 @@ public class CrossManager : BaseComponent
     protected override void Start()
     {
         base.Start();
+        water = this.transform.Find("Water").gameObject;
         water0 = this.transform.Find("Water0").gameObject;
         water1 = this.transform.Find("Water1").gameObject;
         water2 = this.transform.Find("Water2").gameObject;
@@ -74,23 +75,24 @@ public class CrossManager : BaseComponent
 
     private void Update()
     {
+        water.GetComponent<Image>().color = PressureColor(q);
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water1.GetComponent<Image>().color = PressureColor(pin[1]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
         water3.GetComponent<Image>().color = PressureColor(pin[3]);
 
-
+        float xmax = 0.5f - r_bulle;
         //////////BUBBLE 0
         if (Mathf.Abs(i0) > fMinBubble)
         {
-            float xmax = 0.5f - r_bulle;
+           
             if (x_bulle0 > xmax) x_bulle0 = -xmax;
             if (x_bulle0 < -xmax) x_bulle0 = xmax;
 
 
             if (x_bulle0 > 0)
             {
-                bubble0.transform.localPosition = new Vector3( x_bulle0 * 100, 0, 0)*0;
+                bubble0.transform.localPosition = new Vector3( x_bulle0 * 100, 0, 0);
                 bubble0.SetActive(true);
             }
             else bubble0.SetActive(false);
@@ -103,12 +105,11 @@ public class CrossManager : BaseComponent
         //////////BUBBLE 1
         if (Mathf.Abs(i1) > fMinBubble)
         {
-            float xmax = 0.5f - r_bulle;
             if (x_bulle1 > xmax) x_bulle1 = -xmax;
             if (x_bulle1 < -xmax) x_bulle1 = xmax;
 
 
-            if (x_bulle1 > 0)
+            if (x_bulle1 < 0)
             {
                 bubble1.transform.localPosition = new Vector3(0, -x_bulle1 * 100, 0);
                 bubble1.SetActive(true);
@@ -123,7 +124,6 @@ public class CrossManager : BaseComponent
         //////////BUBBLE 2
         if (Mathf.Abs(i2) > fMinBubble)
         {
-            float xmax = 0.5f - r_bulle;
             if (x_bulle2 > xmax) x_bulle2 = -xmax;
             if (x_bulle2 < -xmax) x_bulle2 = xmax;
 
@@ -143,7 +143,6 @@ public class CrossManager : BaseComponent
         //////////BUBBLE 3
         if (Mathf.Abs(i3) > fMinBubble)
         {
-            float xmax = 0.5f - r_bulle;
             if (x_bulle3 > xmax) x_bulle3 = -xmax;
             if (x_bulle3 < -xmax) x_bulle3 = xmax;
 
@@ -159,7 +158,7 @@ public class CrossManager : BaseComponent
         {
             bubble3.SetActive(false);
         }
-
+        
     }
 
 }

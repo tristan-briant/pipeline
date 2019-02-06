@@ -52,8 +52,11 @@ public class capacitorManager : BaseComponent {
         i[2] = (+(b - q/C - q2/Cin) / R);
 
         //i[1]=i[3]=0;
-        i[1] = p[1] / Rground;
-        i[3] = p[3] / Rground;
+        //i[1] = p[1] / Rground;
+        //i[3] = p[3] / Rground;
+
+        Calcule_i_p_blocked(p,i,alpha,1);
+        Calcule_i_p_blocked(p,i,alpha,3);
 
         x_bulle -= 0.05f * f;
 

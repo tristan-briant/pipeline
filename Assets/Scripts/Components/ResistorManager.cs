@@ -52,12 +52,12 @@ public class ResistorManager : BaseComponent {
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        if (Mathf.Abs(f) > 0.01f)
-        {
-            //if (x_bulle < -0.5f + d_bulle * 0.5f) { x_bulle = 0.5f - d_bulle * 0.5f; }
-            //if (x_bulle > 0.5f - d_bulle * 0.5f) { x_bulle = -0.5f + d_bulle * 0.5f; }
 
-            float x_max = 0.5f - r_bulle;
+
+        if (Mathf.Abs(f) > fMinBubble)
+        {
+
+            /*float x_max = 0.5f - r_bulle;
 
             if (x_bulle > x_max) x_bulle = -x_max;
             if (x_bulle < -x_max) x_bulle = x_max;
@@ -65,7 +65,10 @@ public class ResistorManager : BaseComponent {
 
             bubble.transform.localPosition = new Vector3(x_bulle * 100, 0, 0);
             float scale = Mathf.Max(Mathf.Abs(2 * x_bulle), 0.5f);
-            bubble.transform.localScale = new Vector3(scale, scale, 1);
+            bubble.transform.localScale = new Vector3(scale, scale, 1);*/
+
+
+            bubble.GetComponent<Animator>().SetFloat("speed",-5*f);
             bubble.SetActive(true);
         }
         else

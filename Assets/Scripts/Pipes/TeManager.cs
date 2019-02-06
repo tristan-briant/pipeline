@@ -47,7 +47,8 @@ public class TeManager : BaseComponent
         i[3] = (f3 - f2 + (c - q / C) / R);
 
         Calcule_i_p_blocked(p, i, alpha, 1);
-       
+
+        pressure = Mathf.Clamp(0.5f * q, -1f, 1f); ;
 
     }
 
