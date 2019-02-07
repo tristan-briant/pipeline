@@ -126,12 +126,13 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         //p[index] *= 0.99f;
         //i[index] = 0;
 
-        qq[index] += i[index]*dt;
-        //ff[index] += p[index]-
+        /*
+        qq[index] += i[index]*dt; 
         p[index] = qq[index] / C;
-
         i[index] = (+(a  - qq[index] / C) / R); 
-        //i[index] = 0;
+        */
+
+        i[index] = 0;
     }
 
 

@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class capacitorManager : BaseComponent {
 
-    GameObject waterIn0, waterIn2, water0, water2, bubble;
+    GameObject waterIn0, waterIn2, water0, water2, bubble0, bubble2;
     GameObject spring1, spring2, spring3, spring4, piston;
-    float x_bulle = 0;
+    //float x_bulle = 0;
 
+    float f0, f2;
     public float cin;
 
     float q0, q2;
@@ -58,7 +59,9 @@ public class capacitorManager : BaseComponent {
         Calcule_i_p_blocked(p,i,alpha,1);
         Calcule_i_p_blocked(p,i,alpha,3);
 
-        x_bulle -= 0.05f * f;
+        f0 = i[0];
+        f2 = i[2];
+        //x_bulle -= 0.05f * f;
 
     }
 
@@ -74,6 +77,11 @@ public class capacitorManager : BaseComponent {
         spring3 = transform.Find("Spring3").gameObject;
         spring4 = transform.Find("Spring4").gameObject;
         piston = transform.Find("Piston").gameObject;
+        bubble0 = transform.Find("Mirror/Bubble0").gameObject;
+        bubble2 = transform.Find("Bubble2").gameObject;
+        f0 = f2 = 0;
+        bubble0.GetComponent<Animator>().SetFloat("speed", f0 / fMinBubble);
+        bubble2.GetComponent<Animator>().SetFloat("speed", f2 / fMinBubble);
     }
 
     private void Update()
@@ -93,6 +101,10 @@ public class capacitorManager : BaseComponent {
         spring2.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
         spring3.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
         spring4.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
+
+
+        bubble0.GetComponent<Animator>().SetFloat("speed", f0 / fMinBubble);
+        bubble2.GetComponent<Animator>().SetFloat("speed", f2 / fMinBubble);
 
     }
 }

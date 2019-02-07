@@ -43,6 +43,8 @@ public class ResistorManager : BaseComponent {
         water2 = this.transform.Find("Water2").gameObject;
 
         bubble = this.transform.Find("Bubble").gameObject;
+        f = 0;
+        bubble.GetComponent<Animator>().SetFloat("speed", -f / fMinBubble);
 
     }
 
@@ -52,10 +54,10 @@ public class ResistorManager : BaseComponent {
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
+        bubble.GetComponent<Animator>().SetFloat("speed", - f/fMinBubble);
 
-
-        if (Mathf.Abs(f) > fMinBubble)
-        {
+        //if (Mathf.Abs(f) > fMinBubble)
+        //{
 
             /*float x_max = 0.5f - r_bulle;
 
@@ -68,13 +70,13 @@ public class ResistorManager : BaseComponent {
             bubble.transform.localScale = new Vector3(scale, scale, 1);*/
 
 
-            bubble.GetComponent<Animator>().SetFloat("speed",-5*f);
+       /*     bubble.GetComponent<Animator>().SetFloat("speed",-5*f);
             bubble.SetActive(true);
         }
         else
         {
             bubble.SetActive(false);
-        }
+        }*/
 
     }
 }

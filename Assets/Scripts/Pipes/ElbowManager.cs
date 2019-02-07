@@ -37,20 +37,19 @@ public class ElbowManager : BaseComponent {
         water2 = this.transform.Find("Water2").gameObject;
         water3 = this.transform.Find("Water3").gameObject;
         bubble = this.transform.Find("Bubble").gameObject;
-
-
-
+        f = 0;
+        bubble.GetComponent<Animator>().SetFloat("speed", f / fMinBubble);
     }
 
     private void Update()
     {
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
         water3.GetComponent<Image>().color = PressureColor(pin[3]);
-        //transform.rotation = Quaternion.identity;
-        //transform.Rotate(new Vector3(0, 0, dir * 90));
+ 
+        bubble.GetComponent<Animator>().SetFloat("speed", f / fMinBubble);
 
 
-        if (Mathf.Abs(f) > fMinBubble)
+        /*if (Mathf.Abs(f) > fMinBubble)
         {
             float x_max = 0.5f - r_bulle/2f;
 
@@ -72,7 +71,7 @@ public class ElbowManager : BaseComponent {
         else
         {
             bubble.SetActive(false);
-        }
+        }*/
     }
 
 }
