@@ -37,7 +37,7 @@ public class OuletManager : BaseFrontier
 
 
 
-    float pp = 0;
+    //float pp = 0;
     float ii = 0;
     GameObject water, water0, arrow;
     public bool isSuccess = false;

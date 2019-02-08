@@ -7,7 +7,7 @@ public class ResistorManager : BaseComponent {
 
     GameObject water,water0, water2, bubble;
     public float x_bulle = 0;
-    float r_bulle = 0.1f;
+    //float r_bulle = 0.1f;
     public float res=10;
 
     public float Res { get => res; set => res = value; }

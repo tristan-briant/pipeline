@@ -14,7 +14,7 @@ public class DebitmeterManager : BaseComponent {
     public float periode = 2,phase = 0;
     float t_shine = 0;
     //public new float f;
-    float ff=0;
+    new float ff=0;
     const float beta=0.1f;
 
     void calculateSetPoint()

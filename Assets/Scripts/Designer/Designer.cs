@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
-
+using System.IO;
 
 public class Designer : MonoBehaviour
 {
@@ -58,30 +58,18 @@ public class Designer : MonoBehaviour
     [ContextMenu("SaveToFile")]
     public void SaveToFile()
     {
-        /*string data = "";
-        PlaygroundParameters parameters = GameObject.FindObjectOfType<PlaygroundParameters>();
-        data = JsonUtility.ToJson(parameters) + "\n";
-
-        foreach (Transform slot in Pg.transform)
-        {
-            BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
-            if (component != null && component.name!="")
-            {
-                string path = component.PrefabPath;
-                data += path + "\n";
-                data += JsonUtility.ToJson(component) + "\n";
-            }
-            else
-            {
-                data += "empty\n";
-            }
-            
-        }
-
-        Debug.Log(data);*/
+        string file = Path.Combine(Application.persistentDataPath,
+            "CharacterData" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
+            + System.DateTime.Now.ToLongTimeString().Replace(":", "-") + ".txt");
+        Debug.Log(file);
         SaveToString();
-        PlayerPrefs.SetString("SavedPlaygroud", PGdata);
+        //PlayerPrefs.SetString("SavedPlaygroud", PGdata);
+        using (StreamWriter streamWriter = File.CreateText(file))
+        {
+            streamWriter.Write(PGdata);
+        }
     }
+
 
     public void LoadFromString()
     {
@@ -134,9 +122,12 @@ public class Designer : MonoBehaviour
 
 
     [ContextMenu("LoadFromFile")]
-    public void LoadFromFile()
+    public void LoadFromFile(string filename)
     {
-        PGdata = PlayerPrefs.GetString("SavedPlaygroud");
+        //PGdata = PlayerPrefs.GetString("SavedPlaygroud");
+
+        PGdata = File.ReadAllText(filename);
+
         LoadFromString();
         /*if (data == null) return;
 

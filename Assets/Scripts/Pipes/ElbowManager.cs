@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ElbowManager : BaseComponent {
     GameObject water2, water3, bubble;
-    float r_bulle = 0.2f;
+    //float r_bulle = 0.2f;
     float x_bulle = 0;
 
 
