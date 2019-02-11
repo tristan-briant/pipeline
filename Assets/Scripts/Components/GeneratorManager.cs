@@ -51,6 +51,13 @@ public class GeneratorManager :  BaseComponent {
 
     }
 
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 1);
+        Calcule_i_p_blocked(p, i, dt, 3);
+    }
+
+
     protected override void Start()
     {
         base.Start();

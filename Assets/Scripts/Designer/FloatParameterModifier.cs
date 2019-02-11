@@ -12,12 +12,16 @@ public class FloatParameterModifier : MonoBehaviour {
     public float Min = -100;
     public Text ValueText;
     object ob;
+    string format;
 
     private void Start()
     {
         ob = transform.GetComponentInParent<ConfigPanel>().component;
 
-        ValueText.text = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null)).ToString("F1");
+        if (increment < 0.1f) format = "F2";
+        else format = "F1";
+
+        ValueText.text = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null)).ToString(format);
     }
 
     public void IncrementValue(float multiplier) {
@@ -28,7 +32,7 @@ public class FloatParameterModifier : MonoBehaviour {
 
         ob.GetType().GetProperty(ParameterName).SetValue(ob, a, null);
   
-        ValueText.text = ((float) ob.GetType().GetProperty(ParameterName).GetValue(ob, null)).ToString("F1");
+        ValueText.text = ((float) ob.GetType().GetProperty(ParameterName).GetValue(ob, null)).ToString(format);
     }
 
 

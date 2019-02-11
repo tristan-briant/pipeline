@@ -57,6 +57,10 @@ public class CrossManager : BaseComponent
 
     }
 
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+    }
+
     protected override void Start()
     {
         base.Start();

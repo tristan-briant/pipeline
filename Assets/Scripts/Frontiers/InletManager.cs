@@ -130,6 +130,11 @@ public class InletManager : BaseFrontier {
         
     }
 
+    public override void Calcule_i_p_blocked(float[] p, float[] i, float dt, int index)
+    {
+        
+    }
+
     protected override void Start()
     {
         base.Start();

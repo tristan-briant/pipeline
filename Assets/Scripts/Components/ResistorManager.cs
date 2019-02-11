@@ -27,12 +27,15 @@ public class ResistorManager : BaseComponent {
         i[0] = (+(a - q / C) / Res * 2);
         i[2] = (+(b - q / C) / Res * 2);
 
-        Calcule_i_p_blocked(p, i, alpha, 1);
-        Calcule_i_p_blocked(p, i, alpha, 3);
-
-
         x_bulle -= 0.05f * f;
 
+    }
+
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 1);
+        Calcule_i_p_blocked(p, i, dt, 3);
     }
 
     protected override void Start()

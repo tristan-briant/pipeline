@@ -98,6 +98,14 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
+    public virtual void Constraint(float[] p, float[] i, float dt)
+    {
+        // Put constraint here as i blocked or p imposed
+        for (int k = 0; k < 4; k++)
+        {
+            Calcule_i_p_blocked(p, i, dt, k);
+        }
+    }
 
     public virtual void Reset_i_p()
     {
@@ -119,7 +127,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public virtual void Calcule_i_p_blocked(float[] p, float[] i, float dt, int index)
     {
-        float a = p[index];
+        //float a = p[index];
         /* p[index] = i[index] * Rground;
          i[index] = a / Rground;*/
 
@@ -152,8 +160,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             Rground = parameters.Rground;
         }
 
-        transform.rotation = Quaternion.identity;
-        transform.Rotate(new Vector3(0, 0, dir * 90));
+        //transform.rotation = Quaternion.identity;
+        //transform.Rotate(new Vector3(0, 0, dir * 90));
+        Rotate();
         SetLocked();
     }
 
@@ -210,6 +219,11 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     }
 
 
+    public virtual void Rotate() 
+    {
+        transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
+    }
+
     float clickStart;
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -242,8 +256,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (!dir_locked && !isFrontiers)
         {
             dir = (dir + 1) % 4;
-            
-            transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
+
+            Rotate();
 
             audios[0].Play();
         }

@@ -53,14 +53,77 @@ public class Designer : MonoBehaviour
         Debug.Log(PGdata);
     }
 
+    [ContextMenu("Make Thumbnail")]
+    public void MakeThumb(string filename)
+    {
+        GameObject canvas = GameObject.Find("CanvasThumbnail");
+        Pg.transform.SetParent(canvas.transform);
+        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        gc.ResizePlayGround();
+        
+        Texture2D texture = new Texture2D(256, 256, TextureFormat.RGB24, false);
+        Camera cam = GameObject.Find("CameraThumbnail").GetComponent<Camera>();
+        cam.Render();
+        RenderTexture.active = cam.targetTexture;
+        texture.ReadPixels(new Rect(0, 0, cam.targetTexture.width, cam.targetTexture.height), 0, 0);
+
+        texture.Apply();
+
+        byte[] bytes = texture.EncodeToPNG();
+
+        // save the image
+       
+        File.WriteAllBytes(filename, bytes);
+
+        canvas = GameObject.Find("PlaygroundHolder");
+        Pg.transform.SetParent(canvas.transform);
+        gc.ResizePlayGround();
+
+    }
+
+    //[ContextMenu("Make Thumbnail")]
+    IEnumerator RenderThumbnail()
+    {
+
+        Texture2D texture = new Texture2D(256, 256, TextureFormat.RGB24, false);
+
+        Camera cam = GameObject.Find("CameraThumbnail").GetComponent<Camera>(); 
+        // Initialize and render
+        
+        cam.Render();
+        RenderTexture.active = cam.targetTexture;
+
+        // put buffer into texture
+        texture.ReadPixels(new Rect(0, 0, cam.targetTexture.width, cam.targetTexture.height), 0, 0);
+
+        yield return 0;
+
+        texture.Apply();
+
+        yield return 0;
+
+        byte[] bytes = texture.EncodeToPNG();
+
+        // save the image
+        string imagePath = "amazingPath.png";
+        File.WriteAllBytes(Application.persistentDataPath + Path.DirectorySeparatorChar + imagePath, bytes);
+
+        Debug.Log("done");
+
+        //Tell unity to delete the texture, by default it seems to keep hold of it and memory crashes will occur after too many screenshots.
+        //DestroyObject(texture);
 
 
-    [ContextMenu("SaveToFile")]
+    }
+
+    //[ContextMenu("SaveToFile")]
     public void SaveToFile()
     {
-        string file = Path.Combine(Application.persistentDataPath,
-            "CharacterData" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
-            + System.DateTime.Now.ToLongTimeString().Replace(":", "-") + ".txt");
+        string filename = "CharacterData" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
+            + System.DateTime.Now.ToLongTimeString().Replace(":", "-") ;
+
+        string file = Path.Combine(Application.persistentDataPath, filename + ".txt");
+
         Debug.Log(file);
         SaveToString();
         //PlayerPrefs.SetString("SavedPlaygroud", PGdata);
@@ -68,6 +131,7 @@ public class Designer : MonoBehaviour
         {
             streamWriter.Write(PGdata);
         }
+        MakeThumb(Path.Combine(Application.persistentDataPath, filename + ".png"));
     }
 
 
@@ -120,60 +184,23 @@ public class Designer : MonoBehaviour
 
     }
 
-
-    [ContextMenu("LoadFromFile")]
     public void LoadFromFile(string filename)
     {
-        //PGdata = PlayerPrefs.GetString("SavedPlaygroud");
-
         PGdata = File.ReadAllText(filename);
-
         LoadFromString();
-        /*if (data == null) return;
+    }
 
-        int count = Pg.transform.childCount;
-        for (int i = 0; i < count; i++)        // On retire tout
+    [ContextMenu("LoadFromLastFile")]
+    public void LoadFromLastFile()
+    {
+        string filename;
+        string[] fileNames = System.IO.Directory.GetFiles(Application.persistentDataPath, "*.txt");
+        if (fileNames.Length > 0)
         {
-            Transform child = Pg.transform.GetChild(0);
-            DestroyImmediate(child.gameObject);
+            filename = fileNames[fileNames.Length - 1];
+            PGdata = File.ReadAllText(filename);
+            LoadFromString();
         }
-
-        string[] tokens = data.Split('\n');
-  
-        int k = 0;
-        JsonUtility.FromJsonOverwrite(tokens[k++], Pg.GetComponent<PlaygroundParameters>()); //k=0 puis 1  
-
-        N = Pg.GetComponent<PlaygroundParameters>().N;
-        M = Pg.GetComponent<PlaygroundParameters>().M;
-
-        Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
-
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 1, tokens[k++]);
-
-        for (int i = 1; i < N - 1; i++)
-        {
-            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 0, tokens[k++]);
-        }
-
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 0, tokens[k++]);
-
-        for (int j = 1; j < M - 1; j++)
-        {
-            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 1, tokens[k++]);
-            for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotComponent", tokens[k++], 0, tokens[k++]); //empty component
-            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 3, tokens[k++]);
-        }
-
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 2, tokens[k++]);
-
-        for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", tokens[k++], 2, tokens[k++]);
-
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
-
-        GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
-
-        ResizePlayGround();*/
-
     }
 
     [ContextMenu("ChangeBorder")]
@@ -315,7 +342,8 @@ public class Designer : MonoBehaviour
             component.transform.localPosition = Vector3.zero;
             component.transform.localScale = Vector3.one;
             component.GetComponent<BaseComponent>().dir = dir;
-            component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+            //component.GetComponent<BaseComponent>().Rotate();
+            //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
 
         return slot;
@@ -342,17 +370,21 @@ public class Designer : MonoBehaviour
         { //if corner or frontier
             component.GetComponent<BaseFrontier>().InitializeSlot();
             component.GetComponent<BaseComponent>().dir = dir;  //override frontier direction in case it is in the wrong way
-            component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+            //component.GetComponent<BaseComponent>().Rotate();
+
+            //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
         else
         {
             dir = component.GetComponent<BaseComponent>().dir;
-            component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+            //component.GetComponent<BaseComponent>().Rotate();
+
+            //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
     }
 
 
-    [ContextMenu("Reset field")]
+    //[ContextMenu("Reset field")]
     public void ResetField()
     {
         PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
@@ -409,7 +441,7 @@ public class Designer : MonoBehaviour
     }
 
 
-    [ContextMenu("ChangeSize")]
+    //[ContextMenu("ChangeSize")]
     public void ChangeSize()
     {
         PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
@@ -443,7 +475,7 @@ public class Designer : MonoBehaviour
 
     }
 
-    [ContextMenu("Reduce Width")]
+    //[ContextMenu("Reduce Width")]
     public void ReduceWidth()
     {
         if (N > MinSize)
@@ -465,7 +497,7 @@ public class Designer : MonoBehaviour
         }
     }
 
-    [ContextMenu("Increase Width")]
+    //[ContextMenu("Increase Width")]
     public void IncreaseWidth()
     {
         if (N < MaxSize)
@@ -496,7 +528,7 @@ public class Designer : MonoBehaviour
         }
     }
 
-    [ContextMenu("Reduce Height")]
+    //[ContextMenu("Reduce Height")]
     public void ReduceHeight()
     {
         if (M > MinSize)
@@ -549,7 +581,7 @@ public class Designer : MonoBehaviour
         }
     }
 
-    [ContextMenu("Increase Height")]
+    //[ContextMenu("Increase Height")]
     public void IncreaseHeight()
     {
         if (M < MaxSize)

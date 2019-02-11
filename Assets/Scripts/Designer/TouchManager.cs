@@ -11,7 +11,9 @@ public class TouchManager : MonoBehaviour , IPointerDownHandler, IPointerUpHandl
     float longPressDuration = 0.5f;
     bool pressing = false;
     public UnityEvent OnClick;
+    public UnityEvent OnShortClick;
     public UnityEvent OnLongPress;
+    public UnityEvent OnLongClick;
 
     //public FloatParameterModifier fpm;
    
@@ -31,10 +33,19 @@ public class TouchManager : MonoBehaviour , IPointerDownHandler, IPointerUpHandl
         pressing = true;
         startPressTime = Time.time;
         OnClick.Invoke();
+
+        if (Time.time <= startPressTime + longPressDuration) //Long click
+        {
+            OnShortClick.Invoke();
+        }
     }
 
    public void OnPointerUp(PointerEventData eventData)
     {
+        if (Time.time > startPressTime + longPressDuration) //Long click
+        {
+            OnLongClick.Invoke();
+        }
         pressing = false;
     }
 

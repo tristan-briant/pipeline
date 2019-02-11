@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ConfigFile : MonoBehaviour
 {
     string[] fileNames;
+    public GameObject fileButton;
 
     void Start()
     {
@@ -16,26 +18,55 @@ public class ConfigFile : MonoBehaviour
     public void ListFile()
     {
         GameObject fileList = GameObject.Find("FileList");
-        GameObject fileButton = fileList.transform.GetChild(0).gameObject;
+        //GameObject fileButton = fileList.transform.GetChild(0).gameObject;
+
+        foreach(Transform go in fileList.transform)
+        {
+            Destroy(go.gameObject);
+        }
+
 
         int index = 0;
 
-        fileNames = System.IO.Directory.GetFiles(Application.persistentDataPath);
+        fileNames = System.IO.Directory.GetFiles(Application.persistentDataPath, "*.txt");
         foreach (string file in fileNames)
         {
             Debug.Log(file);
             GameObject go = Instantiate(fileButton);
             go.transform.SetParent(fileList.transform);
             go.transform.localScale = Vector3.one;
-            go.GetComponent<Button>().onClick.RemoveAllListeners();
+            //go.GetComponent<Button>().onClick.RemoveAllListeners();
             int i = index;
-            go.GetComponent<Button>().onClick.AddListener(() => LoadFile(i));
+            //go.GetComponent<Button>().onClick.AddListener(() => LoadFile(i));
+            go.GetComponentInChildren<TouchManager>().OnClick.AddListener(() => LoadFile(i));
+            go.GetComponentInChildren<TouchManager>().OnLongClick.AddListener(() => DeleteFile(i));
+
             index++;
+
+            Texture2D t = LoadPNG(file.Replace(".txt", ".png") ) ;
+
+            go.GetComponentInChildren<RawImage>().texture = t;
+
         }
-
-        Destroy(fileButton.gameObject); // Détruit le modèle 
-
     }
+
+
+
+    public static Texture2D LoadPNG(string filePath)
+    {
+
+        Texture2D tex = null;
+        byte[] fileData;
+
+        if (File.Exists(filePath))
+        {
+            fileData = File.ReadAllBytes(filePath);
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+        }
+        return tex;
+    }
+
 
     public void LoadFile(int i)
     {
@@ -43,6 +74,14 @@ public class ConfigFile : MonoBehaviour
         GetComponent<Designer>().LoadFromFile(fileNames[i]);
     }
 
+    public void DeleteFile(int i)
+    {
+        Debug.Log("Delete File:" + fileNames[i]);
+        File.Delete(fileNames[i]);
+        File.Delete(fileNames[i].Replace(".txt",".png"));
+
+        ListFile();
+    }
 
     public void Close()
     {

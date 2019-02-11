@@ -46,11 +46,14 @@ public class diodeManager : BaseComponent {
         i[0] =  (f + (a - q0) / R);
         i[2] =  (-f + (b - q2) / R);
 
-        Calcule_i_p_blocked(p, i, alpha, 1);
-        Calcule_i_p_blocked(p, i, alpha, 3);
-
         x_bulle -= 0.05f * f;
 
+    }
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 1);
+        Calcule_i_p_blocked(p, i, dt, 3);
     }
 
     protected override void Start()

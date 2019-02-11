@@ -56,13 +56,19 @@ public class capacitorManager : BaseComponent {
         //i[1] = p[1] / Rground;
         //i[3] = p[3] / Rground;
 
-        Calcule_i_p_blocked(p,i,alpha,1);
-        Calcule_i_p_blocked(p,i,alpha,3);
+        //Calcule_i_p_blocked(p,i,alpha,1);
+        //Calcule_i_p_blocked(p,i,alpha,3);
 
         f0 = i[0];
         f2 = i[2];
         //x_bulle -= 0.05f * f;
 
+    }
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 1);
+        Calcule_i_p_blocked(p, i, dt, 3);
     }
 
     protected override void Start()

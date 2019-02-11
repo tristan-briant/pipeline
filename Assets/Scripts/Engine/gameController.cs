@@ -106,7 +106,8 @@ public class GameController : MonoBehaviour {
 
     }
 
-    void ResizePlayGround()
+    [ContextMenu("Resize Playground")]
+    public void ResizePlayGround()
     {
         Transform go = Pg.transform.parent;
         RectTransform objectRectTransform = go.GetComponent<RectTransform>();
@@ -122,6 +123,7 @@ public class GameController : MonoBehaviour {
 
         Pg.transform.localScale = new Vector3(wc, wc, 1);
 
+        Pg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         //Pg.transform.localPosition = Vector3.zero;
     }
     

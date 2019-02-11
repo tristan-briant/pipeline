@@ -26,12 +26,16 @@ public class Pipeline : BaseComponent {
         i[0] = (f + (a - q / C) / R);
         i[2] = (-f + (b - q / C) / R);
 
-        Calcule_i_p_blocked(p, i, alpha, 1);
-        Calcule_i_p_blocked(p, i, alpha, 3);
 
 
         x_bulle -= 0.05f * f;
         pressure = Mathf.Clamp(0.25f * (p[0] + p[2]), -1f, 1f); ;
+    }
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 1);
+        Calcule_i_p_blocked(p, i, dt, 3);
     }
 
     protected override void Start()

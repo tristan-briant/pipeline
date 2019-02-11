@@ -9,7 +9,7 @@ public class Engine  {
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
     const float dt = 0.1f;
-    const float alpha = dt; //0.1f;
+    const float alpha = 0.2f;
 
 
     public static void initialize_p_i(int N,int M)
@@ -103,6 +103,24 @@ public class Engine  {
 
     }
 
+    public static void currant_update3(int x, int y, float[][] p, float[][] i, float[] pc, float[] ic, float alpha)
+    {
+        // used for constraint, set i and p rather than increment them
+
+        p[x + 1][2 * y + 1] = pc[0];  //à droite
+        i[x + 1][2 * y + 1] = -ic[0];
+
+        p[x][2 * y] = pc[1];  //en haut
+        i[x][2 * y] = ic[1];
+
+        p[x][2 * y + 1] = pc[2];  //à gauche
+        i[x][2 * y + 1] = ic[2];
+
+        p[x][2 * y + 2] = pc[3];  //en bas
+        i[x][2 * y + 2] = -ic[3];
+
+    }
+
 
     public static void currant_in(int x, int y, float[][] p, float[][] i, float[] pc, float[] ic)
     { //selectionne les 4 courants en x et y entrant et 4 pressions avec la convention "in" pour les courants
@@ -188,12 +206,12 @@ public class Engine  {
         {
             for (int l = 1; l < M - 1; l++)
             {
-                Engine.currant_in(k - 1, l - 1, pression, intensite, pp, ii);
-                Engine.rotate_currant(composants[k][l].dir, pp, ii);
+                currant_in(k - 1, l - 1, pression, intensite, pp, ii);
+                rotate_currant(composants[k][l].dir, pp, ii);
                 //composants[k][l].set_i_p(pp, ii);
                 composants[k][l].Calcule_i_p(pp, ii, dt);
-                Engine.rotate_currant((4 - composants[k][l].dir) % 4, pp, ii);
-                Engine.currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
+                rotate_currant((4 - composants[k][l].dir) % 4, pp, ii);
+                currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
 
                 success = success * composants[k][l].success;
                 fail += composants[k][l].fail;
@@ -201,6 +219,8 @@ public class Engine  {
         }
 
         if (fail > 0) return -1;
+
+        Constraint(composants);
 
         return success;
         
@@ -293,12 +313,72 @@ public class Engine  {
            }
 
         Clamp_p_i(composants);
+        Constraint(composants);
 
                 if (fail > 0) return -1;
 
         return success;
 
 
+    }
+
+    public static void Constraint(BaseComponent[][] composants)
+    {
+        int N = composants.Length;
+        int M = composants[0].Length;
+
+        /*for (int k = 1; k < N - 1; k++) //Border UP condition
+        {
+
+            pp[0] = pression[k - 1][0];
+            ii[0] = (-intensite[k - 1][0]);
+            composants[k][0].Constraint(pp, ii, dt);
+            pression[k - 1][0] = pp[0];
+            intensite[k - 1][0] = -ii[0];
+        }
+
+        for (int k = 1; k < N - 1; k++) //Border DOWN condition
+        {
+            pp[0] = pression[k - 1][2 * M - 4];
+            ii[0] = intensite[k - 1][2 * M - 4];
+            composants[k][M - 1].Constraint(pp, ii, dt);
+
+            pression[k - 1][2 * M - 4] = pp[0];
+            intensite[k - 1][2 * M - 4] = ii[0];
+        }
+
+        for (int k = 1; k < M - 1; k++) //Border RIGHT condition
+        {
+
+            pp[0] = pression[N - 2][2 * (k - 1) + 1];
+            ii[0] = intensite[N - 2][2 * (k - 1) + 1];
+            composants[N - 1][k].Constraint(pp, ii, dt);
+            pression[N - 2][2 * (k - 1) + 1] = pp[0];
+            intensite[N - 2][2 * (k - 1) + 1] = ii[0];
+        }*/
+
+        for (int k = 1; k < M - 1; k++) //Border LEFT condition
+        {
+            pp[0] = pression[0][2 * (k - 1) + 1];
+            ii[0] = -intensite[0][2 * (k - 1) + 1];
+            composants[0][k].Constraint(pp, ii, dt);
+            pression[0][2 * (k - 1) + 1] = pp[0];
+            intensite[0][2 * (k - 1) + 1] = -ii[0];
+        }
+
+
+        for (int k = 1; k < N - 1; k++)
+        {
+            for (int l = 1; l < M - 1; l++)
+            {
+                currant_in(k - 1, l - 1, pression, intensite, pp, ii);
+                rotate_currant(composants[k][l].dir, pp, ii);
+                composants[k][l].Constraint(pp, ii, dt);
+                rotate_currant((4 - composants[k][l].dir) % 4, pp, ii);
+                currant_update3(k - 1, l - 1, pression, intensite, pp, ii, alpha);
+            }
+        }
+        
     }
 
 

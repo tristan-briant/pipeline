@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ElbowManager : BaseComponent {
     GameObject water2, water3, bubble;
-    //float r_bulle = 0.2f;
     float x_bulle = 0;
 
 
@@ -22,13 +21,25 @@ public class ElbowManager : BaseComponent {
         i[2] = (f + (a - q/C) / R);
         i[3] = (-f + (b - q/C) / R);
 
-        Calcule_i_p_blocked(p, i, alpha, 1);
-        Calcule_i_p_blocked(p, i, alpha, 0);
+        //Calcule_i_p_blocked(p, i, alpha, 1);
+        //Calcule_i_p_blocked(p, i, alpha, 0);
 
 
         x_bulle += 0.05f * f;
 
-        pressure = Mathf.Clamp(0.25f * (p[2] + p[3]), -1f, 1f);  ;
+        pressure = Mathf.Clamp(0.25f * (p[2] + p[3]), -1f, 1f);
+
+        if (float.IsNaN(pressure))
+            pressure = 0;
+        if (float.IsNaN(f))
+            f = 0;
+    }
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 1);
+        Calcule_i_p_blocked(p, i, dt, 0);
+
     }
 
     protected override void Start()
