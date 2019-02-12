@@ -47,47 +47,20 @@ public class OuletManager : BaseFrontier
     public int mode = 0;
     public float periode = 2;
 
-
-
-    IEnumerator generateRandom()
-    {
-        int s = 1;
-
-        while (true)
-        {
-            ppset = pset * s;
-            float time = Random.Range(0, periode);
-            yield return new WaitForSeconds(time);
-
-            const float N = 10;
-            for (int i = 0; i < N; i++)
-            {
-                ppset = pset * (1 - 2 * i / N) * s;
-                yield return new WaitForSeconds(0.02f);  // retournement en douceur
-            }
-            s = -s;
-        }
-    }
-
+    
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
-
-      
-
         float a = p[0];
 
         q += (i[0] + ii) * alpha;
-        //f += (p[0] - pset) / L * alpha;
         f = 0;
 
-        p[0] = (q / C + (i[0] - f) * rin);
+        p[0] = (q / C + (i[0] - f) * rin * 0.5f);
         //p[2] = (q / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q / C) / rin);
-        ii = (-f + (pset - q / C) / rin);
-
-        
+        i[0] = (f + (a - q / C) / (rin * 0.5f));
+        ii = (-f + (pset - q / C) / (rin * 0.5f));
 
         if (isSuccess)
         {
@@ -101,6 +74,7 @@ public class OuletManager : BaseFrontier
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
+       
     }
 
     protected override void Start()
@@ -111,21 +85,6 @@ public class OuletManager : BaseFrontier
 
         arrow = this.transform.Find("Arrow").gameObject;
 
-        if (jelly)
-        {
-            if (pset > 0)
-            {
-                water.GetComponent<Image>().color = jellyColor;
-                water0.GetComponent<Image>().color = jellyColor;
-            }
-            else
-            {
-                water.GetComponent<Image>().color = jellyColorBg;
-                water0.GetComponent<Image>().color = jellyColorBg;
-            }
-        }
-
-        if (mode == 2) StartCoroutine(generateRandom());
     }
 
 
@@ -144,27 +103,6 @@ public class OuletManager : BaseFrontier
             arrow.GetComponent<Animator>().SetBool("Negative", false);
 
 
-        /*switch (mode)
-        {
-            case 0:  // Mode normal
-                if (ppset <= 0)
-                    arrow.transform.localScale = new Vector3(-1, 1, 1);
-                else
-                    arrow.transform.localScale = new Vector3(1, 1, 1);
-                break;
-            case 1: //mode périodique
-            case 2:
-                arrow.transform.localScale = new Vector3(Mathf.Clamp(ppset,-1,1), 1, 1);
-                break;
-        }
-
-        if (ppset <= 0)
-        {
-            arrow.transform.localPosition = new Vector3(25 - (0.025f - 0.05f * Mathf.Sqrt(Mathf.Abs(Mathf.Sin(Time.time / 0.5f)))) * 100, 0, 0);
-
-        }
-        else
-            arrow.transform.localPosition = new Vector3(25+ (0.025f - 0.05f * Mathf.Sqrt(Mathf.Abs(Mathf.Sin(Time.time / 0.5f)))) * 100 ,0,0);
-            */
+        
     }
 }

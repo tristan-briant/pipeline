@@ -9,12 +9,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     IEndDragHandler, IPointerUpHandler, IPointerDownHandler
 {
     public string PrefabPath="";
-    protected float q = 0, f = 0;
+    public float q = 0, f = 0;
     protected float[] qq = { 0, 0, 0, 0 };
     protected float[] ff = { 0, 0, 0, 0 };
 
     public int dir=0;
-    protected float R = 2f, L = 1f, C =1f, Rground = 50;
+    protected float R = 1f, L = 1f, C =1f, Rground = 50;
     protected float fluxMinSound =0.01f;
     //protected string Name;
     protected float[] pin = new float[4];

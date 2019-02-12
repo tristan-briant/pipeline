@@ -46,10 +46,16 @@ public class TeManager : BaseComponent
         i[2] = (f2 - f1 + (b - q / C) / R);
         i[3] = (f3 - f2 + (c - q / C) / R);
 
-        Calcule_i_p_blocked(p, i, alpha, 1);
+       
 
         pressure = Mathf.Clamp(0.5f * q, -1f, 1f); ;
 
+    }
+
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 1);
     }
 
     protected override void Start()

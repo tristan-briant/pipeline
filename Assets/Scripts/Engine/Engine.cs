@@ -8,7 +8,7 @@ public class Engine  {
     static float[][] pression;
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
-    const float dt = 0.1f;
+    const float dt = 0.05f;
     const float alpha = 0.2f;
 
 
@@ -327,7 +327,7 @@ public class Engine  {
         int N = composants.Length;
         int M = composants[0].Length;
 
-        /*for (int k = 1; k < N - 1; k++) //Border UP condition
+        for (int k = 1; k < N - 1; k++) //Border UP condition
         {
 
             pp[0] = pression[k - 1][0];
@@ -355,7 +355,7 @@ public class Engine  {
             composants[N - 1][k].Constraint(pp, ii, dt);
             pression[N - 2][2 * (k - 1) + 1] = pp[0];
             intensite[N - 2][2 * (k - 1) + 1] = ii[0];
-        }*/
+        }
 
         for (int k = 1; k < M - 1; k++) //Border LEFT condition
         {

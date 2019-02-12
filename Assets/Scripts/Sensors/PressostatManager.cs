@@ -25,18 +25,18 @@ public class PressostatManager : BaseComponent {
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         float b = p[2];
-        C = 0.01f;
-        R = 10;
+        C = 0.05f;
+        R = 1;
         q += (i[2])  * alpha;
-        q *=0.98f;
+        q *=0.99f;
         //f += (p[0] - p[2]) / L * 0;
-        f = 0;
+        //f = 0;
 
         //p[0] = (1-alpha)*p[0] + alpha*( q + (i[0]-f)*R);
-        p[2] = (q / C + (i[2] + f) * R);
+        p[2] = q / C + i[2]  * R;
 
         //i[0] = (1-alpha)*i[0] + alpha*( f + (a-q)/R);
-        i[2] = (-f + (b - q / C) / R);
+        i[2] =  (b - q / C) / R;
 
 
 
@@ -114,7 +114,7 @@ public class PressostatManager : BaseComponent {
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
         water.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        float rate = Mathf.Clamp((q / C - PMin) / (PMax - PMin), 0, 1);
+        float rate = Mathf.Clamp((q / C - PMin) / (PMax - PMin), 0, 0.99f);
 
         float rateH = Mathf.Clamp((setPointHigh - PMin) / (PMax-PMin) , 0, 1);
         float rateL = Mathf.Clamp((setPointLow - PMin) / (PMax - PMin) , 0, 1);

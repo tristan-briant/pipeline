@@ -12,13 +12,13 @@ public class Pipeline : BaseComponent {
     float x_bulle = 0;
     float r_bulle=0.1f;
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
 
         float a = p[0], b = p[2];
 
-        q += (i[0] + i[2]) * alpha; 
-        f += (p[0] - p[2]) / L * alpha;
+        q += (i[0] + i[2]) * dt; 
+        f += (p[0] - p[2]) / L * dt;
 
         p[0] = (q / C + (i[0] - f) * R);
         p[2] = (q / C + (i[2] + f) * R);
