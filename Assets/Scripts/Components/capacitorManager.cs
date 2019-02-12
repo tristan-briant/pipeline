@@ -34,6 +34,11 @@ public class capacitorManager : BaseComponent {
         q0 = q2 = 0;
     }
 
+    public override void BlockCurrant()
+    {
+        f = f0 = f2 = 0;
+    }
+
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
         float a = p[0], b = p[2];

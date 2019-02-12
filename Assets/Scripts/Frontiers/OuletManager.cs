@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class OuletManager : BaseFrontier
 {
 
-    public float pset;
+    public float pset = 1;
     public float Pset
     {
         get
@@ -21,17 +21,17 @@ public class OuletManager : BaseFrontier
     }
     float ppset;
 
-    public float rin = 0.1f;
-    public float Rin
+    public float imax = 1f;
+    public float Imax
     {
         get
         {
-            return rin;
+            return imax;
         }
 
         set
         {
-            rin = value;
+            imax = value;
         }
     }
 
@@ -51,7 +51,7 @@ public class OuletManager : BaseFrontier
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
-        float a = p[0];
+       /* float a = p[0];
 
         q += (i[0] + ii) * alpha;
         f = 0;
@@ -61,6 +61,7 @@ public class OuletManager : BaseFrontier
 
         i[0] = (f + (a - q / C) / (rin * 0.5f));
         ii = (-f + (pset - q / C) / (rin * 0.5f));
+        */
 
         if (isSuccess)
         {
@@ -72,9 +73,22 @@ public class OuletManager : BaseFrontier
 
     }
 
+    float pp = 0;
     public override void Constraint(float[] p, float[] i, float dt)
     {
-       
+        if (Mathf.Abs(i[0]) < Imax)
+        {
+            pp = 0.01f * pset + 0.99f * pp;
+            p[0] = pp;
+            //ii = 0.01f * i[0] + 0.99f * ii;
+        }
+        else
+        {
+            pp = 0.01f * p[0] + 0.99f * pp;
+            //ii = 0.01f * 0 + 0.99f * ii;
+            //i[0] = ii;
+            i[0] = Mathf.Clamp(i[0], -Imax, Imax);
+        }
     }
 
     protected override void Start()

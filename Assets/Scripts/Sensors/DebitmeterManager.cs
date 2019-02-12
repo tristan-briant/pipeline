@@ -8,14 +8,23 @@ public class DebitmeterManager : BaseComponent
 
     GameObject water, water0, water2, bubble, cadranMin, cadranMax, arrow, shine;
     //public float x_bulle = 0;
-    float r_bulle = 0.1f;
-    public float setPointHigh, setPointLow, iMax;
+    //float r_bulle = 0.1f;
+    public float iMax;
+    public float setPointHigh;
+    public float setPointLow;
+   
+    public float SetPointHigh { get => setPointHigh; set => setPointHigh = value; }
+    public float SetPointLow { get => setPointLow; set => setPointLow = value; }
+    public float IMax { get => iMax; set => iMax = value; }
+
     float SPH, SPL, successSpeed;
     public int mode = 0;
     public float periode = 2, phase = 0;
     float t_shine = 0;
-    //public new float f;
-    new float ff = 0;
+
+    float flux = 0;
+
+
     const float beta = 0.1f;
 
     void calculateSetPoint()
@@ -73,10 +82,10 @@ public class DebitmeterManager : BaseComponent
 
         //x_bulle -= 0.05f * f;
 
-        ff = (1 - beta) * ff + beta * f;
+        flux = (1 - beta) * flux + beta * f;
 
         calculateSetPoint();
-        if (SPL < -ff && -ff < SPH && itemBeingDragged == null)
+        if (SPL < -flux && -flux < SPH && itemBeingDragged == null)
             success = Mathf.Clamp(success + successSpeed, 0, 1);
         else
             success = Mathf.Clamp(success - 0.05f, 0, 1);
@@ -104,6 +113,9 @@ public class DebitmeterManager : BaseComponent
         arrow = this.transform.Find("Arrow").gameObject;
         shine = this.transform.Find("Shine").gameObject;
 
+        f = 0;
+        bubble.GetComponent<Animator>().SetFloat("speed", 0);
+
     }
 
 
@@ -114,24 +126,19 @@ public class DebitmeterManager : BaseComponent
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        if (Mathf.Abs(f) > fMinBubble)
-        {
-            float x_max = 0.5f - r_bulle;
-
-            /*if (x_bulle > x_max) x_bulle = -x_max;
-            if (x_bulle < -x_max) x_bulle = x_max;
-
-
-            bubble.transform.localPosition = new Vector3(x_bulle * 100, 0, 0);
-            bubble.SetActive(true);*/
-        }
+        float speed = Mathf.Atan(f )/ fMinBubble;
+        /*if (f >= 0)
+            speed = Mathf.Sqrt(f / fMinBubble);
         else
-        {
-            bubble.SetActive(false);
-        }
+            speed = -Mathf.Sqrt(-f / fMinBubble);*/
+
+        bubble.GetComponent<Animator>().SetFloat("speed", -speed);
+
+
+       
 
         const float ANGLEMAX = 180 / 4.8f;
-        float angle = Mathf.Clamp(ff / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
+        float angle = Mathf.Clamp(flux / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
 
         //float angleH, angleL;
         float angleH = Mathf.Clamp((SPH) / iMax, -1, 1);

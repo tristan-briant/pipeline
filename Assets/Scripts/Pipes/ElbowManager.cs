@@ -49,16 +49,21 @@ public class ElbowManager : BaseComponent {
         water3 = this.transform.Find("Water3").gameObject;
         bubble = this.transform.Find("Bubble").gameObject;
         f = 0;
-        bubble.GetComponent<Animator>().SetFloat("speed", f / fMinBubble);
+        bubble.GetComponent<Animator>().SetFloat("speed", 0);
     }
 
     private void Update()
     {
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
         water3.GetComponent<Image>().color = PressureColor(pin[3]);
- 
-        bubble.GetComponent<Animator>().SetFloat("speed", f / fMinBubble);
 
+        float speed;
+        if (f >= 0)
+            speed = Mathf.Sqrt(f / fMinBubble);
+        else
+            speed = -Mathf.Sqrt(-f / fMinBubble);
+
+        bubble.GetComponent<Animator>().SetFloat("speed", speed);
 
         /*if (Mathf.Abs(f) > fMinBubble)
         {

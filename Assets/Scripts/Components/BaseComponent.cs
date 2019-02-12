@@ -302,7 +302,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     Transform canvas;
     public static GameObject itemBeingDragged;
 
-    
+    public virtual void BlockCurrant()
+    {
+        f = 0;
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -323,6 +326,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         gc.PopulateComposant();
 
         transform.localScale = transform.localScale * 1.2f;
+
+        BlockCurrant();
     }
 
     public void OnDrag(PointerEventData eventData)

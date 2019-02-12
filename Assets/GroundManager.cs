@@ -20,17 +20,17 @@ public class GroundManager : BaseFrontier
     }
     float ppset;
 
-    public float rin = 0.1f;
-    public float Rin
+    public float imax = 0.1f;
+    public float Imax
     {
         get
         {
-            return rin;
+            return imax;
         }
 
         set
         {
-            rin = value;
+            imax = value;
         }
     }
 
@@ -54,7 +54,7 @@ public class GroundManager : BaseFrontier
     float pp = 0;
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        if (Mathf.Abs(i[0]) < rin)
+        if (Mathf.Abs(i[0]) < imax)
         {
             pp = 0.01f * pset + 0.99f * pp;
             p[0] = pp;
@@ -65,7 +65,7 @@ public class GroundManager : BaseFrontier
             pp= 0.01f * p[0] + 0.99f * pp;
             //ii = 0.01f * 0 + 0.99f * ii;
             //i[0] = ii;
-            i[0] = Mathf.Clamp(i[0], -rin, rin);
+            i[0] = Mathf.Clamp(i[0], -imax, imax);
         }
     }
 
