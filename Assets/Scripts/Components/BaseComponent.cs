@@ -9,7 +9,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     IEndDragHandler, IPointerUpHandler, IPointerDownHandler
 {
     public string PrefabPath="";
-    public float q = 0, f = 0;
+    protected float q = 0, f = 0;
     protected float[] qq = { 0, 0, 0, 0 };
     protected float[] ff = { 0, 0, 0, 0 };
 
@@ -23,7 +23,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public float fail = 0;
     public const float fMinBubble = 0.05f;
     //public bool empty = true;
-    public float pressure;
+    private float pressure;
 
 
     //public int x, y;
@@ -41,6 +41,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             SetLocked();
         }
     }
+
+    public virtual void Awake()
+    {
+    }
+
+    public float Pressure { get => pressure; set => pressure = value; }
 
     public bool dir_locked = false;
     public bool mirror = false;
@@ -369,10 +375,19 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
             else
             {
-                DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+
                 Transform c = endParent.GetChild(0);
-                c.SetParent(startParent);
-                c.localPosition = Vector3.zero;
+                if (c.name.Contains("Empty"))
+                {
+                    DestroyImmediate(c.gameObject);
+                }
+                else
+                {
+                    c.SetParent(startParent);
+                    c.localPosition = Vector3.zero;
+                    DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                }
+
                 transform.SetParent(endParent);
             }
 
@@ -396,6 +411,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         startParent = endParent = null;
 
         gc.PopulateComposant();
+        //GameObject.Find("gameController").GetComponent<GameController>().PopulateComposant();
+
+
         audios[1].Play();
+        //GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>()[1].Play();
     }
 }

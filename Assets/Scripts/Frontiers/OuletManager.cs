@@ -19,7 +19,6 @@ public class OuletManager : BaseFrontier
             pset = value;
         }
     }
-    float ppset;
 
     public float imax = 1f;
     public float Imax
@@ -105,18 +104,17 @@ public class OuletManager : BaseFrontier
     private void Update()
     {
 
-        if (!jelly)
-        {
+ 
             water.GetComponent<Image>().color = PressureColor(pset);
             water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        }
+        
 
-        if (ppset <= 0)
+        /*if (ppset <= 0)
             arrow.GetComponent<Animator>().SetBool("Negative", true);
         else
             arrow.GetComponent<Animator>().SetBool("Negative", false);
 
-
+    */
         
     }
 }

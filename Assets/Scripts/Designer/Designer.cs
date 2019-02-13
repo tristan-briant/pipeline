@@ -60,7 +60,7 @@ public class Designer : MonoBehaviour
         Pg.transform.SetParent(canvas.transform);
         GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
         gc.ResizePlayGround();
-        
+
         Texture2D texture = new Texture2D(256, 256, TextureFormat.RGB24, false);
         Camera cam = GameObject.Find("CameraThumbnail").GetComponent<Camera>();
         cam.Render();
@@ -72,7 +72,7 @@ public class Designer : MonoBehaviour
         byte[] bytes = texture.EncodeToPNG();
 
         // save the image
-       
+
         File.WriteAllBytes(filename, bytes);
 
         canvas = GameObject.Find("PlaygroundHolder");
@@ -87,9 +87,9 @@ public class Designer : MonoBehaviour
 
         Texture2D texture = new Texture2D(256, 256, TextureFormat.RGB24, false);
 
-        Camera cam = GameObject.Find("CameraThumbnail").GetComponent<Camera>(); 
+        Camera cam = GameObject.Find("CameraThumbnail").GetComponent<Camera>();
         // Initialize and render
-        
+
         cam.Render();
         RenderTexture.active = cam.targetTexture;
 
@@ -120,7 +120,7 @@ public class Designer : MonoBehaviour
     public void SaveToFile()
     {
         string filename = "CharacterData" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
-            + System.DateTime.Now.ToLongTimeString().Replace(":", "-") ;
+            + System.DateTime.Now.ToLongTimeString().Replace(":", "-");
 
         string file = Path.Combine(Application.persistentDataPath, filename + ".txt");
 
@@ -704,13 +704,15 @@ public class Designer : MonoBehaviour
         Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
     }
 
+
+
     static bool playMode = false;
     GameObject[] designerElements;
     public void TogglePlayMode()
     {
         playMode = !playMode;
 
-        if (playMode)
+        if(playMode)
             designerElements = GameObject.FindGameObjectsWithTag("DesignerUI");
 
         foreach (GameObject gc in designerElements)
@@ -720,7 +722,7 @@ public class Designer : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designer = !playMode;
 
-
+        GameObject.Find("Deck").GetComponent<DeckManager>().TogglePlayMode();
 
         if (playMode)
         { //Go in playMode

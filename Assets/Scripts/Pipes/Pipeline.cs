@@ -29,7 +29,7 @@ public class Pipeline : BaseComponent {
 
 
         x_bulle -= 0.05f * f;
-        pressure = Mathf.Clamp(0.25f * (p[0] + p[2]), -1f, 1f); ;
+        Pressure = Mathf.Clamp(0.25f * (p[0] + p[2]), -1f, 1f); ;
     }
 
     public override void Constraint(float[] p, float[] i, float dt)

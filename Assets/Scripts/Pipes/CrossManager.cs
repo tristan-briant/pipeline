@@ -53,7 +53,7 @@ public class CrossManager : BaseComponent
         i[2] = (f2  + (p2 - q / C) / R);
         i[3] = (f3  + (p3 - q / C) / R);
 
-        pressure = Mathf.Clamp(0.125f * (p[0] + p[1] + p[2] + p[3]), -1f, 1f); ;
+        Pressure = Mathf.Clamp(0.125f * (p[0] + p[1] + p[2] + p[3]), -1f, 1f); ;
 
     }
 

@@ -48,7 +48,7 @@ public class TeManager : BaseComponent
 
        
 
-        pressure = Mathf.Clamp(0.5f * q, -1f, 1f); ;
+        Pressure = Mathf.Clamp(0.5f * q, -1f, 1f); ;
 
     }
 

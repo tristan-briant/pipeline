@@ -19,6 +19,6 @@ public class Dilation : MonoBehaviour
 
     private void Update()
     {
-       material.SetFloat("_DilationCoefficent", bc.pressure);
+       material.SetFloat("_DilationCoefficent", bc.Pressure);
     }
 }

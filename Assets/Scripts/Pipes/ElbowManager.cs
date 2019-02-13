@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ElbowManager : BaseComponent {
     GameObject water2, water3, bubble;
-    float x_bulle = 0;
+    //float x_bulle = 0;
 
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
@@ -21,16 +21,12 @@ public class ElbowManager : BaseComponent {
         i[2] = (f + (a - q/C) / R);
         i[3] = (-f + (b - q/C) / R);
 
-        //Calcule_i_p_blocked(p, i, alpha, 1);
-        //Calcule_i_p_blocked(p, i, alpha, 0);
+        //x_bulle += 0.05f * f;
 
+        Pressure = Mathf.Clamp(0.25f * (p[2] + p[3]), -1f, 1f);
 
-        x_bulle += 0.05f * f;
-
-        pressure = Mathf.Clamp(0.25f * (p[2] + p[3]), -1f, 1f);
-
-        if (float.IsNaN(pressure))
-            pressure = 0;
+        if (float.IsNaN(Pressure))
+            Pressure = 0;
         if (float.IsNaN(f))
             f = 0;
     }
@@ -48,7 +44,8 @@ public class ElbowManager : BaseComponent {
         water2 = this.transform.Find("Water2").gameObject;
         water3 = this.transform.Find("Water3").gameObject;
         bubble = this.transform.Find("Bubble").gameObject;
-        f = 0;
+        //f = 0;
+        bubble.gameObject.SetActive(true);
         bubble.GetComponent<Animator>().SetFloat("speed", 0);
     }
 

@@ -91,6 +91,8 @@ public class capacitorManager : BaseComponent {
         bubble0 = transform.Find("Mirror/Bubble0").gameObject;
         bubble2 = transform.Find("Bubble2").gameObject;
         f0 = f2 = 0;
+        bubble0.gameObject.SetActive(true);
+        bubble2.gameObject.SetActive(true);
         bubble0.GetComponent<Animator>().SetFloat("speed", f0 / fMinBubble);
         bubble2.GetComponent<Animator>().SetFloat("speed", f2 / fMinBubble);
     }

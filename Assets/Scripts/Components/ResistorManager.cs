@@ -10,7 +10,7 @@ public class ResistorManager : BaseComponent {
     //float r_bulle = 0.1f;
     public float res=10;
 
-    public float Res { get => res; set => res = value; }
+    public float Res { get => res; set{ res = Mathf.Round( value*100)/100; UpdateValue(); } }
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
@@ -31,6 +31,23 @@ public class ResistorManager : BaseComponent {
 
     }
 
+    override public void Awake()
+    {
+        UpdateValue();
+    }
+
+    public override void Rotate()
+    {
+        base.Rotate();
+        //transform.Find("Value").rotation = Quaternion.identity;
+        transform.Find("Value").localRotation = Quaternion.Euler(0,0,-90*dir);
+
+    }
+
+    protected void UpdateValue()
+    {
+        GetComponentInChildren<Text>().text = res.ToString();
+    }
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
@@ -47,8 +64,8 @@ public class ResistorManager : BaseComponent {
 
         bubble = this.transform.Find("Bubble").gameObject;
         f = 0;
+        bubble.gameObject.SetActive(true); //May be deactivated if from designer
         bubble.GetComponent<Animator>().SetFloat("speed", -f / fMinBubble);
-
     }
 
     private void Update()

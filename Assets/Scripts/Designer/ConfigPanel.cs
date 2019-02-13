@@ -23,14 +23,14 @@ public class ConfigPanel : MonoBehaviour {
 
     public void Close()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
         Destroy(selec);
     }
 
     public void Update()
     {
         if (selec == null) // the component has been deleted
-            Destroy(this.gameObject);
+            Destroy(gameObject);
     }
 
 }
