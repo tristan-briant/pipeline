@@ -21,11 +21,13 @@ public class GameController : MonoBehaviour {
     public Button nextButton;
     public Button prevButton;
 
+
     public bool composantChanged;
     protected bool paused = false;
 
     public LevelManager LVM;
     public GameObject PgHolder; //The "playground Holder" 
+    public GameObject DeckHolder; // The Deck
     GameObject Pg; //The "playground" from which are determined N and M 
 
     bool firstPopulate = true;
@@ -351,7 +353,8 @@ public class GameController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.Escape))
         {
-            SceneManager.LoadScene(0);
+            // SceneManager.LoadScene(0);
+            Application.Quit();
         }
         if (Input.GetKey(KeyCode.Menu))
         {

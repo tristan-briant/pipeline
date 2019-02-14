@@ -14,11 +14,16 @@ public class ConfigPanel : MonoBehaviour {
 
     public virtual void Start()
     {
-        selec=Instantiate(selection);
+        selec = Instantiate(selection);
         selec.transform.SetParent(component.transform);
         selec.transform.SetAsFirstSibling();
         selec.transform.localScale = Vector3.one;
         selec.transform.localPosition = Vector3.zero;
+
+        Canvas canvas = gameObject.AddComponent<Canvas>();
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = 3;
+        gameObject.AddComponent<GraphicRaycaster>();
     }
 
     public void Close()

@@ -14,17 +14,19 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
     public void Start()
     {
-        //PrefabComponentPath = transform.GetComponentInChildren<BaseComponent>().PrefabPath;
-        //Destroy(transform.GetChild(0).GetComponent<BaseComponent>());
-        //transform.GetChild(0).GetComponent<BaseComponent>().StartCoroutine("Awake");
-        if(transform.childCount>0)
-            transform.GetChild(0).GetComponent<BaseComponent>().enabled=false ;
+        if (transform.childCount > 0)
+        {
+            transform.GetChild(0).GetComponent<BaseComponent>().Awake();
+            transform.GetChild(0).GetComponent<BaseComponent>().enabled = false;
+            transform.GetChild(0).localPosition = Vector3.zero;
+            transform.GetChild(0).localScale = 0.8f * Vector3.one;
+        }
     }
+
 
     public void OnBeginDrag(PointerEventData eventData)
     {
 
-        //NewComponent = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
         if (transform.childCount == 0)
         {
             eventData.pointerDrag = null;
@@ -78,7 +80,9 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
             GameObject c = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
 
-            EditorUtility.CopySerialized(BaseComponent.itemBeingDragged.GetComponent<BaseComponent>(), c.GetComponent<BaseComponent>());
+            string data = JsonUtility.ToJson(BaseComponent.itemBeingDragged.GetComponent<BaseComponent>());
+            JsonUtility.FromJsonOverwrite(data, c.GetComponent<BaseComponent>());
+            //EditorUtility.CopySerialized(BaseComponent.itemBeingDragged.GetComponent<BaseComponent>(), c.GetComponent<BaseComponent>());
 
             c.transform.SetParent(transform);
             c.transform.localPosition = Vector3.zero;

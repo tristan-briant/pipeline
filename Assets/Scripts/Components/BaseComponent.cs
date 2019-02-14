@@ -172,6 +172,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         SetLocked();
     }
 
+    void ToggleLocked()
+    {
+        Locked = !Locked;
+        SetLocked();
+    }
+
     void SetLocked()
     {
         Transform loc = transform.Find("Locked");
@@ -395,8 +401,16 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
 
         if (endParent && startParent == null) { //provient du designer on écrase
-            DestroyImmediate(endParent.GetChild(0).gameObject);
-            transform.SetParent(endParent);
+            if (name.Contains("Rock"))
+            {
+                endParent.GetChild(0).GetComponent<BaseComponent>().ToggleLocked();
+                Destroy(gameObject);
+            }
+            else
+            {
+                DestroyImmediate(endParent.GetChild(0).gameObject);
+                transform.SetParent(endParent);
+            }
         }
 
         if (endParent == null && startParent == null) { //Designer + coup dans l'eau

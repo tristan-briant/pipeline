@@ -28,30 +28,6 @@ public class Designer : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void SaveToString()
-    {
-        PGdata = "";
-        PlaygroundParameters parameters = GameObject.FindObjectOfType<PlaygroundParameters>();
-        PGdata = JsonUtility.ToJson(parameters) + "\n";
-
-        foreach (Transform slot in Pg.transform)
-        {
-            BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
-            if (component != null && component.name != "")
-            {
-                string path = component.PrefabPath;
-                PGdata += path + "\n";
-                PGdata += JsonUtility.ToJson(component) + "\n";
-            }
-            else
-            {
-                PGdata += "empty\n";
-            }
-
-        }
-
-        Debug.Log(PGdata);
-    }
 
     [ContextMenu("Make Thumbnail")]
     public void MakeThumb(string filename)
@@ -81,7 +57,6 @@ public class Designer : MonoBehaviour
 
     }
 
-    //[ContextMenu("Make Thumbnail")]
     IEnumerator RenderThumbnail()
     {
 
@@ -119,21 +94,68 @@ public class Designer : MonoBehaviour
     //[ContextMenu("SaveToFile")]
     public void SaveToFile()
     {
-        string filename = "CharacterData" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
+        //GameObject.Find("Message").GetComponent<Text>().text +="saving...\n";
+
+        string filename = "PlayGround" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
             + System.DateTime.Now.ToLongTimeString().Replace(":", "-");
 
-        string file = Path.Combine(Application.persistentDataPath, filename + ".txt");
+        string file = Path.Combine(Application.persistentDataPath,filename + ".txt");
 
         Debug.Log(file);
+        //GameObject.Find("Message").GetComponent<Text>().text += file + "\n";
+
         SaveToString();
         //PlayerPrefs.SetString("SavedPlaygroud", PGdata);
-        using (StreamWriter streamWriter = File.CreateText(file))
+        /*using (StreamWriter streamWriter = File.CreateText(file))
         {
             streamWriter.Write(PGdata);
-        }
-        MakeThumb(Path.Combine(Application.persistentDataPath, filename + ".png"));
+        }*/
+        File.WriteAllText(file, PGdata);
+
+        MakeThumb(Path.Combine(Application.persistentDataPath,  filename + ".png"));
     }
 
+    public void SaveToString()
+    {
+        PGdata = "";
+        PlaygroundParameters parameters = FindObjectOfType<PlaygroundParameters>();
+        PGdata = JsonUtility.ToJson(parameters) + "\n";
+
+        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
+        foreach (Transform slot in deck.transform)
+        {
+            BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
+            if (component != null && component.name != "")
+            {
+                string path = component.PrefabPath;
+                PGdata += path + "\n";
+                PGdata += JsonUtility.ToJson(component) + "\n";
+            }
+            else
+            {
+                PGdata += "empty\n";
+            }
+        }
+
+        foreach (Transform slot in Pg.transform)
+        {
+            BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
+            if (component != null && component.name != "")
+            {
+                string path = component.PrefabPath;
+                PGdata += path + "\n";
+                PGdata += JsonUtility.ToJson(component) + "\n";
+            }
+            else
+            {
+                PGdata += "empty\n";
+            }
+
+        }
+
+        Debug.Log(PGdata);
+    }
 
     public void LoadFromString()
     {
@@ -146,10 +168,37 @@ public class Designer : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
+        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
+
+        foreach (Transform slot in deck.transform)
+        {
+            if (slot.transform.childCount > 0)
+            {
+                Transform child = slot.transform.GetChild(0);
+                DestroyImmediate(child.gameObject);
+            }
+        }
+
         string[] tokens = PGdata.Split('\n');
 
         int k = 0;
         JsonUtility.FromJsonOverwrite(tokens[k++], Pg.GetComponent<PlaygroundParameters>()); //k=0 puis 1  
+
+        foreach (Transform slot in deck.transform)
+        {
+            string prefab = tokens[k++];
+            if (prefab != "empty")
+            {
+                GameObject component = Instantiate(Resources.Load(prefab, typeof(GameObject))) as GameObject;
+                component.transform.SetParent(slot.transform);
+ 
+                JsonUtility.FromJsonOverwrite(tokens[k++], slot.transform.GetComponentInChildren<BaseComponent>());
+                slot.GetComponent<CreateComponent>().Start();
+
+            }
+        }
+
 
         N = Pg.GetComponent<PlaygroundParameters>().N;
         M = Pg.GetComponent<PlaygroundParameters>().M;
@@ -224,7 +273,7 @@ public class Designer : MonoBehaviour
             if (bc.name.Contains("Wall"))
             {
 
-                GameObject c = PrefabUtility.InstantiatePrefab(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
+                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
                 c.transform.SetParent(go.transform);
                 c.transform.localScale = Vector3.one;
                 c.transform.localPosition = Vector3.zero;
@@ -242,7 +291,7 @@ public class Designer : MonoBehaviour
             if (bc.name.Contains("Wall"))
             {
 
-                GameObject c = PrefabUtility.InstantiatePrefab(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
+                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
                 c.transform.SetParent(go.transform);
                 c.transform.localScale = Vector3.one;
                 c.GetComponent<BaseComponent>().dir = 2;
@@ -262,7 +311,7 @@ public class Designer : MonoBehaviour
             if (bc.name.Contains("Wall"))
             {
 
-                GameObject c = PrefabUtility.InstantiatePrefab(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
+                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
                 c.transform.SetParent(go.transform);
                 c.transform.localScale = Vector3.one;
                 c.GetComponent<BaseComponent>().dir = 1;
@@ -281,7 +330,7 @@ public class Designer : MonoBehaviour
             if (bc.name.Contains("Wall"))
             {
 
-                GameObject c = PrefabUtility.InstantiatePrefab(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
+                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
                 c.transform.SetParent(go.transform);
                 c.transform.localScale = Vector3.one;
                 c.GetComponent<BaseComponent>().dir = 3;
@@ -298,7 +347,7 @@ public class Designer : MonoBehaviour
 
     GameObject CreateSlotFrontier(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, int type)
     {
-        GameObject slot = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
+        GameObject slot = Instantiate(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
         slot.transform.localPosition = Vector3.zero;
         slot.transform.localScale = Vector3.one;
@@ -315,7 +364,7 @@ public class Designer : MonoBehaviour
         else
             slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir); // C'est le slot qui tourne
 
-        GameObject component = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+        GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
         component.transform.SetParent(slot.transform);
         component.transform.localPosition = Vector3.zero;
         component.transform.localScale = Vector3.one;
@@ -329,7 +378,7 @@ public class Designer : MonoBehaviour
 
     GameObject CreateSlotComponent(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
     {
-        GameObject slot = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
+        GameObject slot = Instantiate(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
         slot.transform.localPosition = Vector3.zero;
         slot.transform.localScale = Vector3.one;
@@ -337,7 +386,7 @@ public class Designer : MonoBehaviour
 
         if (PrefabComponentPath != "")
         {
-            GameObject component = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+            GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
             component.transform.SetParent(slot.transform);
             component.transform.localPosition = Vector3.zero;
             component.transform.localScale = Vector3.one;
@@ -348,23 +397,25 @@ public class Designer : MonoBehaviour
 
         return slot;
     }
+    
 
     void CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, string data)
     {
-        GameObject slot = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
+        GameObject slot = Instantiate(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
         slot.transform.localPosition = Vector3.zero;
         slot.transform.localScale = Vector3.one;
         slot.transform.localRotation = Quaternion.identity;
 
 
-        GameObject component = PrefabUtility.InstantiatePrefab(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+        GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
         component.transform.SetParent(slot.transform);
         component.transform.localPosition = Vector3.zero;
         component.transform.localScale = Vector3.one;
 
 
         JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
+        slot.transform.GetComponentInChildren<BaseComponent>().Awake();
 
         if (slot.GetComponentInChildren<BaseFrontier>() != null)
         { //if corner or frontier
@@ -384,7 +435,6 @@ public class Designer : MonoBehaviour
     }
 
 
-    //[ContextMenu("Reset field")]
     public void ResetField()
     {
         PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
@@ -440,8 +490,6 @@ public class Designer : MonoBehaviour
         //Pg.transform.localPosition = Vector3.zero;
     }
 
-
-    //[ContextMenu("ChangeSize")]
     public void ChangeSize()
     {
         PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
@@ -475,7 +523,6 @@ public class Designer : MonoBehaviour
 
     }
 
-    //[ContextMenu("Reduce Width")]
     public void ReduceWidth()
     {
         if (N > MinSize)
@@ -497,7 +544,6 @@ public class Designer : MonoBehaviour
         }
     }
 
-    //[ContextMenu("Increase Width")]
     public void IncreaseWidth()
     {
         if (N < MaxSize)
@@ -528,7 +574,6 @@ public class Designer : MonoBehaviour
         }
     }
 
-    //[ContextMenu("Reduce Height")]
     public void ReduceHeight()
     {
         if (M > MinSize)
@@ -581,7 +626,6 @@ public class Designer : MonoBehaviour
         }
     }
 
-    //[ContextMenu("Increase Height")]
     public void IncreaseHeight()
     {
         if (M < MaxSize)
@@ -715,24 +759,29 @@ public class Designer : MonoBehaviour
         if(playMode)
             designerElements = GameObject.FindGameObjectsWithTag("DesignerUI");
 
-        foreach (GameObject gc in designerElements)
+        foreach (GameObject go in designerElements)
         {
-            gc.SetActive(!playMode);
+            go.SetActive(!playMode);
         }
 
         GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designer = !playMode;
 
-        GameObject.Find("Deck").GetComponent<DeckManager>().TogglePlayMode();
+        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
+
+        deck.GetComponent<DeckManager>().TogglePlayMode();
 
         if (playMode)
         { //Go in playMode
             SaveToString();
             GetComponentInChildren<Text>().text = "Designer Mode";
+            deck.parent.gameObject.SetActive(true);
         }
         else
         { //Go in designer mode
             LoadFromString();
             GetComponentInChildren<Text>().text = "Play Mode";
+            deck.parent.gameObject.SetActive(false);
         }
 
     }
