@@ -24,7 +24,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public const float fMinBubble = 0.05f;
     //public bool empty = true;
     private float pressure;
-
+    public bool destroyable=true;
 
     //public int x, y;
     public bool locked = false;
@@ -230,6 +230,37 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         return true;
     }
 
+    bool IsDestroyable()
+    {
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+
+        if (designerMode) return true;
+
+        if (locked) return false;
+
+        if (name.Contains("Empty")) return true;
+       
+        return destroyable;
+    }
+
+    bool IsEmpty()
+    {
+        if (name.Contains("Empty") && locked == false)
+            return true;
+
+        return false;
+    }
+
+    bool IsMovable()
+    {
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+
+        if (designerMode)
+            return true;
+        else
+            return !locked;
+
+    }
 
     public virtual void Rotate() 
     {
@@ -373,7 +404,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             transform.SetParent(startParent);
         }
 
-        if (endParent && startParent) { // on échange
+        if (endParent && startParent)
+        { // on échange
             if (endParent == startParent)
             {
                 DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
@@ -381,26 +413,32 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
             else
             {
-
                 Transform c = endParent.GetChild(0);
-                if (c.name.Contains("Empty"))
+                if (c.GetComponent<BaseComponent>().IsEmpty())
                 {
                     DestroyImmediate(c.gameObject);
+                    transform.SetParent(endParent);
                 }
                 else
                 {
-                    c.SetParent(startParent);
-                    c.localPosition = Vector3.zero;
-                    DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                    if (c.GetComponent<BaseComponent>().IsMovable())
+                    {
+                        c.SetParent(startParent);
+                        c.localPosition = Vector3.zero;
+                        DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                        transform.SetParent(endParent);
+                    }
+                    else // retour à la case départ
+                    {
+                        DestroyImmediate(startParent.GetChild(0).gameObject);//On enlève le composant vide qui a été placé au début du drag
+                        transform.SetParent(startParent);
+                    }
                 }
 
-                transform.SetParent(endParent);
             }
-
-            transform.SetParent(endParent);
         }
 
-        if (endParent && startParent == null) { //provient du designer on écrase
+        if (endParent && startParent == null) { //provient du designer
             if (name.Contains("Rock"))
             {
                 endParent.GetChild(0).GetComponent<BaseComponent>().ToggleLocked();
@@ -408,8 +446,15 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
             else
             {
-                DestroyImmediate(endParent.GetChild(0).gameObject);
-                transform.SetParent(endParent);
+                if (endParent.GetChild(0).GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
+                {
+                    DestroyImmediate(endParent.GetChild(0).gameObject);
+                    transform.SetParent(endParent);
+                }
+                else
+                {
+                    Destroy(gameObject); // if not delete self
+                }
             }
         }
 

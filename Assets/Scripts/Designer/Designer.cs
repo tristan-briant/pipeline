@@ -432,6 +432,11 @@ public class Designer : MonoBehaviour
 
             //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
+
+        bool designerMode = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designer;
+
+        component.GetComponent<BaseComponent>().destroyable = designerMode;
+
     }
 
 
@@ -776,6 +781,7 @@ public class Designer : MonoBehaviour
             SaveToString();
             GetComponentInChildren<Text>().text = "Designer Mode";
             deck.parent.gameObject.SetActive(true);
+            LoadFromString();
         }
         else
         { //Go in designer mode

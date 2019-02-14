@@ -109,12 +109,12 @@ public class OuletManager : BaseFrontier
             water0.GetComponent<Image>().color = PressureColor(pin[0]);
         
 
-        /*if (ppset <= 0)
+        if (pset <= 0)
             arrow.GetComponent<Animator>().SetBool("Negative", true);
         else
             arrow.GetComponent<Animator>().SetBool("Negative", false);
 
-    */
+    
         
     }
 }

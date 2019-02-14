@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PressostatManager : BaseComponent {
 
 
-    GameObject water, water2, bubble, cadranMin, cadranMax, arrow, shine, tubeH,tubeV;
+    GameObject water, water2, bubble, cadranMin, cadranMax, arrow, shine, tubeH, tubeV, value;
    
     //Vector3 arrowStartPosition;
     float t_shine = 0;
@@ -68,6 +68,7 @@ public class PressostatManager : BaseComponent {
         cadranMax = transform.Find("Cadran Max").gameObject;
 
         shine = transform.Find("Shine").gameObject;
+        value = transform.Find("Value").gameObject;
 
 
         animator = GetComponent<Animator>();
@@ -126,6 +127,11 @@ public class PressostatManager : BaseComponent {
 
         cadranMax.GetComponent<Image>().fillAmount = rateH;
         cadranMin.GetComponent<Image>().fillAmount = rateL;
+
+
+        float v = Mathf.Round(20 * q/C) / 20;
+        value.GetComponent<Text>().text = v.ToString();
+
 
         float alpha;
 

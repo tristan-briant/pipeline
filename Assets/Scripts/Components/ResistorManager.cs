@@ -10,6 +10,9 @@ public class ResistorManager : BaseComponent {
     //float r_bulle = 0.1f;
     public float res=10;
 
+    public Sprite[] TubeVariant;
+    public Sprite[] WaterVariant;
+
     public float Res { get => res; set{ res = Mathf.Round( value*100)/100; UpdateValue(); } }
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
@@ -47,6 +50,26 @@ public class ResistorManager : BaseComponent {
     protected void UpdateValue()
     {
         GetComponentInChildren<Text>().text = res.ToString();
+
+        //Sprite[] sprites = Resources.LoadAll<Sprite>("Field/BorderAtlas");
+
+
+        if (res > 3.0f)
+        {
+            transform.Find("Tube").GetComponent<Image>().sprite = TubeVariant[0];
+            transform.Find("Water").GetComponent<Image>().sprite = WaterVariant[0];
+        }
+        else if(res > 1.5f)
+        {
+            transform.Find("Tube").GetComponent<Image>().sprite = TubeVariant[1];
+            transform.Find("Water").GetComponent<Image>().sprite = WaterVariant[1];
+        }
+        else
+        {
+            transform.Find("Tube").GetComponent<Image>().sprite = TubeVariant[2];
+            transform.Find("Water").GetComponent<Image>().sprite = WaterVariant[2];
+        }
+            
     }
 
     public override void Constraint(float[] p, float[] i, float dt)

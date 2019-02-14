@@ -9,7 +9,8 @@ public class ToTrash : MonoBehaviour, IDropHandler
 
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
-        Destroy(BaseComponent.itemBeingDragged.gameObject);
+        if(BaseComponent.itemBeingDragged.GetComponent<BaseComponent>().destroyable)
+            Destroy(BaseComponent.itemBeingDragged.gameObject);
 
     }
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DebitmeterManager : BaseComponent
 {
 
-    GameObject water, water0, water2, bubble, cadranMin, cadranMax, arrow, shine;
+    GameObject water, water0, water2, bubble, cadranMin, cadranMax, arrow, shine, value;
     //public float x_bulle = 0;
     //float r_bulle = 0.1f;
     public float iMax;
@@ -60,6 +60,15 @@ public class DebitmeterManager : BaseComponent
     }
 
 
+    public override void Rotate()
+    {
+        base.Rotate();
+        foreach(Text t in GetComponentsInChildren<Text>())
+        {
+            t.transform.rotation = Quaternion.identity;
+        }
+    }
+
     float theta(float x)
     {
         if (x < 0) return 0;
@@ -102,16 +111,17 @@ public class DebitmeterManager : BaseComponent
     {
         base.Start();
         success = 0;
-        water = this.transform.Find("Water").gameObject;
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        water = transform.Find("Water").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
 
-        bubble = this.transform.Find("Bubble").gameObject;
-        cadranMin = this.transform.Find("Cadran Min").gameObject;
-        cadranMax = this.transform.Find("Cadran Max").gameObject;
+        bubble = transform.Find("Bubble").gameObject;
+        cadranMin = transform.Find("Cadran Min").gameObject;
+        cadranMax = transform.Find("Cadran Max").gameObject;
 
-        arrow = this.transform.Find("Arrow").gameObject;
-        shine = this.transform.Find("Shine").gameObject;
+        arrow = transform.Find("Arrow").gameObject;
+        shine = transform.Find("Shine").gameObject;
+        value= transform.Find("Value").gameObject;
 
         f = 0;
         bubble.GetComponent<Animator>().SetFloat("speed", 0);
@@ -138,7 +148,7 @@ public class DebitmeterManager : BaseComponent
        
 
         const float ANGLEMAX = 180 / 4.8f;
-        float angle = Mathf.Clamp(flux / iMax * ANGLEMAX, -ANGLEMAX, ANGLEMAX);
+        float angle = Mathf.Clamp(flux / iMax * ANGLEMAX, -ANGLEMAX * 1.2f, ANGLEMAX * 1.2f);
 
         //float angleH, angleL;
         float angleH = Mathf.Clamp((SPH) / iMax, -1, 1);
@@ -147,6 +157,9 @@ public class DebitmeterManager : BaseComponent
         arrow.transform.localEulerAngles = new Vector3(0, 0, angle);
         cadranMax.GetComponent<Image>().fillAmount = 0.5f - angleH * 0.32f;
         cadranMin.GetComponent<Image>().fillAmount = 0.5f - angleL * 0.32f;
+
+        float v = Mathf.Round(20 * -f)/20;
+        value.GetComponent<Text>().text = v.ToString();
 
         float alpha;
 

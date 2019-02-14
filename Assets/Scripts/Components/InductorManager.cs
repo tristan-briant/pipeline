@@ -10,28 +10,32 @@ public class InductorManager : BaseComponent
 
     GameObject water, water0, water2, bubble, propeller;
     public float x_bulle = 0;
-    public float Lin = 10;
+    public float lin = 10;
+    private float rin = 30;
     //float r_bulle = 0.1f;
     float angle;
     Animation anim;
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public float Lin { get => lin; set => lin = value; }
+    public float Rin { get => rin; set => rin = value; }
+
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        R = 16f;//C = 2;
+        //R = 16f;//C = 2;
         float a = p[0], b = p[2];
 
-        q += (i[0] + i[2]) * alpha;
-        f += (p[0] - p[2]) / Lin * alpha;
+        q += (i[0] + i[2]) * dt;
+        f += (p[0] - p[2]) / lin * dt;
 
-        p[0] = (q / C + (i[0] - f) * R);
-        p[2] = (q / C + (i[2] + f) * R);
+        p[0] = (q / C + (i[0] - f) * rin);
+        p[2] = (q / C + (i[2] + f) * rin);
 
-        i[0] = (f + (a - q / C) / R);
-        i[2] = (-f + (b - q / C) / R);
+        i[0] = (f + (a - q / C) / rin);
+        i[2] = (-f + (b - q / C) / rin);
 
         //i[1]=i[3]=0;
-        i[1] = p[1] / Rground;
-        i[3] = p[3] / Rground;
+        //i[1] = p[1] / Rground;
+        //i[3] = p[3] / Rground;
 
         angle -= 0.05f * f;
 
