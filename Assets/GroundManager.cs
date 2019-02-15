@@ -34,7 +34,7 @@ public class GroundManager : BaseFrontier
     }
 
     
-    float ii = 0;
+    //float ii = 0;
     GameObject water, water0, arrow;
     public bool isSuccess = false;
     public bool jelly = false;

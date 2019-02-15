@@ -59,6 +59,7 @@ public class InductorManager : BaseComponent
         bubble = this.transform.Find("Bubble").gameObject;
         anim=bubble.GetComponent<Animation>();
 
+        GetComponent<Animator>().SetFloat("speed", 0);
 
     }
 
@@ -71,25 +72,27 @@ public class InductorManager : BaseComponent
         
         propeller.transform.localEulerAngles = new Vector3(0, 0, angle*300);
 
+        //float speed = Mathf.Atan(f) / fMinBubble;
+        GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
 
-        if (Mathf.Abs(f) > fMinBubble)
+        /*if (Mathf.Abs(f) > fMinBubble)
         {
 
             anim["bubble-inductor"].speed = -3*f;
             
             bubble.SetActive(true);
-            /*if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
+            if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
             {
                 int r = UnityEngine.Random.Range(0, 3);
                 audios[3 + r].Play();
             }
-            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;*/
+            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
 
         }
         else
         {
             bubble.SetActive(false);
-        }
+        }*/
 
 
     }

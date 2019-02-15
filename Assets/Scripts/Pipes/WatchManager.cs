@@ -9,7 +9,7 @@ public class WatchManager : BaseComponent {
     protected Animation Animation;
     public float timeOut=4.0f;
 
-    protected void Awake()
+    override public void Awake()
     {
         Animation = GetComponent<Animation>();
         Animation["WatchAnimation"].speed = 4 / timeOut;

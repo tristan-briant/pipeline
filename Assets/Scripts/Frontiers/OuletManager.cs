@@ -37,8 +37,8 @@ public class OuletManager : BaseFrontier
 
 
     //float pp = 0;
-    float ii = 0;
-    GameObject water, water0, arrow;
+    //float ii = 0;
+    GameObject water=null, water0=null, arrow=null, bubble=null;
     public bool isSuccess = false;
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
@@ -46,21 +46,22 @@ public class OuletManager : BaseFrontier
     public int mode = 0;
     public float periode = 2;
 
-    
+
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
-       /* float a = p[0];
+        /* float a = p[0];
 
-        q += (i[0] + ii) * alpha;
-        f = 0;
+         q += (i[0] + ii) * alpha;
+         f = 0;
 
-        p[0] = (q / C + (i[0] - f) * rin * 0.5f);
-        //p[2] = (q / C + (i[2] + f) * R);
+         p[0] = (q / C + (i[0] - f) * rin * 0.5f);
+         //p[2] = (q / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q / C) / (rin * 0.5f));
-        ii = (-f + (pset - q / C) / (rin * 0.5f));
-        */
+         i[0] = (f + (a - q / C) / (rin * 0.5f));
+         ii = (-f + (pset - q / C) / (rin * 0.5f));
+         */
+        f = i[0]; //for speed animation
 
         if (isSuccess)
         {
@@ -93,28 +94,36 @@ public class OuletManager : BaseFrontier
     protected override void Start()
     {
         base.Start();
-        water = this.transform.Find("Water").gameObject;
-        water0 = this.transform.Find("Water0").gameObject;
+        if (transform.Find("Water"))
+            water = transform.Find("Water").gameObject;
+        if (transform.Find("Water0"))
+            water0 = transform.Find("Water0").gameObject;
 
-        arrow = this.transform.Find("Arrow").gameObject;
-
+        if (transform.Find("Arrow"))
+            arrow = transform.Find("Arrow").gameObject;
+        if (transform.Find("Bubble"))
+            bubble = transform.Find("Bubble").gameObject;
+           
     }
 
 
     private void Update()
     {
-
- 
+        if (water)
             water.GetComponent<Image>().color = PressureColor(pset);
+        if (water0)
             water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        
 
-        if (pset <= 0)
-            arrow.GetComponent<Animator>().SetBool("Negative", true);
-        else
-            arrow.GetComponent<Animator>().SetBool("Negative", false);
+        if (arrow)
+        {
+            if (pset <= 0)
+                arrow.GetComponent<Animator>().SetBool("Negative", true);
+            else
+                arrow.GetComponent<Animator>().SetBool("Negative", false);
+        }
 
-    
-        
+        if (bubble)
+            bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
+
     }
 }

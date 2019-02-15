@@ -97,7 +97,7 @@ public class ResistorManager : BaseComponent {
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        bubble.GetComponent<Animator>().SetFloat("speed", - f/fMinBubble);
+        bubble.GetComponent<Animator>().SetFloat("speed", - SpeedAnim());
 
         //if (Mathf.Abs(f) > fMinBubble)
         //{

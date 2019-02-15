@@ -54,37 +54,15 @@ public class ElbowManager : BaseComponent {
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
         water3.GetComponent<Image>().color = PressureColor(pin[3]);
 
-        float speed;
-        if (f >= 0)
+        //float speed = Mathf.Atan(f) / fMinBubble;
+        /*if (f >= 0)
             speed = Mathf.Sqrt(f / fMinBubble);
         else
-            speed = -Mathf.Sqrt(-f / fMinBubble);
+            speed = -Mathf.Sqrt(-f / fMinBubble);*/
 
-        bubble.GetComponent<Animator>().SetFloat("speed", speed);
+        bubble.GetComponent<Animator>().SetFloat("speed", SpeedAnim());
 
-        /*if (Mathf.Abs(f) > fMinBubble)
-        {
-            float x_max = 0.5f - r_bulle/2f;
-
-            if (x_bulle >x_max) x_bulle = -x_max; /// 3 for PI
-            if (x_bulle < -x_max) x_bulle = x_max;
-
- 
-            bubble.transform.localPosition = new Vector3((Mathf.Cos((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, (-Mathf.Sin((x_bulle - 0.5f) * Mathf.PI / 2) * 0.5f - 0.5f) * 100, 0);
-            bubble.SetActive(true);
-
-            if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
-            {
-                int r = UnityEngine.Random.Range(0, 3);
-                audios[3 + r].Play();
-            }
-            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
-
-        }
-        else
-        {
-            bubble.SetActive(false);
-        }*/
+      
     }
 
 }

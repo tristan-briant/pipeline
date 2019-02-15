@@ -470,10 +470,11 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         startParent = endParent = null;
 
         gc.PopulateComposant();
-        //GameObject.Find("gameController").GetComponent<GameController>().PopulateComposant();
-
-
         audios[1].Play();
-        //GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>()[1].Play();
+    }
+
+    protected float SpeedAnim()
+    {
+        return Mathf.Atan(f) / fMinBubble;
     }
 }

@@ -14,7 +14,7 @@ public class FlushManager : BaseFrontier {
 
 
 
-    protected void Awake()
+    override public void Awake()
     {
         Animation = GetComponent<Animation>();
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();

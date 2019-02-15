@@ -10,7 +10,7 @@ public class Pipeline : BaseComponent {
 
     GameObject water0,water2,bubble;
     float x_bulle = 0;
-    float r_bulle=0.1f;
+    //float r_bulle=0.1f;
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
@@ -41,10 +41,10 @@ public class Pipeline : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
 
-        bubble = this.transform.Find("Bubble").gameObject;
+        bubble = transform.Find("Bubble").gameObject;
 
     }
 
@@ -53,7 +53,24 @@ public class Pipeline : BaseComponent {
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
+
+        bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
+
+
+
         if (Mathf.Abs(f) > fMinBubble)
+        {
+          
+            if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
+            {
+                int r = UnityEngine.Random.Range(0, 3);
+                audios[3 + r].Play();
+            }
+            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
+
+        }
+
+        /*if (Mathf.Abs(f) > fMinBubble)
         {
             //if (x_bulle < -0.5f + d_bulle * 0.5f) { x_bulle = 0.5f - d_bulle * 0.5f; }
             //if (x_bulle > 0.5f - d_bulle * 0.5f) { x_bulle = -0.5f + d_bulle * 0.5f; }
@@ -78,7 +95,7 @@ public class Pipeline : BaseComponent {
         else
         {
             bubble.SetActive(false);
-        }
+        }*/
 
     }
 

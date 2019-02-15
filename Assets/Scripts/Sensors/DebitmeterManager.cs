@@ -136,13 +136,13 @@ public class DebitmeterManager : BaseComponent
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        float speed = Mathf.Atan(f )/ fMinBubble;
+        //float speed = Mathf.Atan(f )/ fMinBubble;
         /*if (f >= 0)
             speed = Mathf.Sqrt(f / fMinBubble);
         else
             speed = -Mathf.Sqrt(-f / fMinBubble);*/
 
-        bubble.GetComponent<Animator>().SetFloat("speed", -speed);
+        bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
 
 
        
