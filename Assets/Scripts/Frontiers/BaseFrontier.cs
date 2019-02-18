@@ -8,7 +8,7 @@ public class BaseFrontier : BaseComponent {
     public int type = 0; //0 = corner beach, 1 = beach,  2 = beach corner>ground, 3 = beach>corner ground, 4 = ground, 5= corner ground...
 
     protected override void Start() {
-        gc = (GameController)GameObject.Find("gameController").GetComponent(typeof(GameController)); //find the game engine
+        gc = (GameController)GameObject.Find("GameController").GetComponent(typeof(GameController)); //find the game engine
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
     }
 

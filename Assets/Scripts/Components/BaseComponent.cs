@@ -153,7 +153,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected virtual void Start()
     {
         success = 1;
-        gc = (GameController)GameObject.Find("gameController").GetComponent(typeof(GameController)); //find the game engine
+        gc = (GameController)GameObject.Find("GameController").GetComponent(typeof(GameController)); //find the game engine
 
         parameters = transform.GetComponentInParent<PlaygroundParameters>();
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
@@ -165,9 +165,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             L = parameters.L;
             Rground = parameters.Rground;
         }
-
-        //transform.rotation = Quaternion.identity;
-        //transform.Rotate(new Vector3(0, 0, dir * 90));
         Rotate();
         SetLocked();
     }
@@ -313,29 +310,22 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public GameObject configPanel;
     public virtual void OnLongClick()
     {
-        Debug.Log("LongClick");
-        if (GameObject.FindGameObjectWithTag("LevelManager").GetComponent<Designer>())
-        {
-            Debug.Log("Panel");
-            //Launch Config Panel
-            foreach (ConfigPanel cp in GameObject.FindObjectsOfType<ConfigPanel>())
-                cp.Close();
+        //Launch Config Panel
+        foreach (ConfigPanel cp in GameObject.FindObjectsOfType<ConfigPanel>())
+            cp.Close();
 
-            if (configPanel == null) return;
+        if (configPanel == null) return;
 
+        GameObject CP = Instantiate(configPanel);
+        CP.GetComponent<ConfigPanel>().component = this;
 
+        CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
+        CP.transform.localScale = Vector3.one;
 
-            GameObject CP = Instantiate(configPanel) ;
-            CP.GetComponent<ConfigPanel>().component = this;
+        RectTransform rect = CP.transform.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(0, 300);
+        rect.anchoredPosition = new Vector2(0, 0);
 
-            CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
-            CP.transform.localScale = Vector3.one;
-           
-            RectTransform rect = CP.transform.GetComponent<RectTransform>();
-            rect.sizeDelta =new Vector2(0,300) ;
-            rect.anchoredPosition = new Vector2(0, 0);            
-
-        }
     }
     
 

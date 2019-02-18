@@ -38,11 +38,13 @@ public class MenuManager : MonoBehaviour{
 
         if (LVM.FirstLaunch)
         {
-            StartCoroutine("IntroScreen");
+            //StartCoroutine("IntroScreen");
             LVM.FirstLaunch = false;
         }
         else {
-            removeIntro();
+            //removeIntro();
+            GameObject.Find("MainCanvas").GetComponent<Animator>().Play("Level");
+
         }
         levelMax = LVM.getLevelMax();
         LVM.completedLevel = levelCompleted = PlayerPrefs.GetInt("Level Completed");
@@ -142,6 +144,7 @@ public class MenuManager : MonoBehaviour{
 
     public void LoadDesigner()
     {
+        GameObject.Find("LevelManager").GetComponent<LevelManager>().designer=true;
         SceneManager.LoadScene("LevelDesigner");
     }
   
