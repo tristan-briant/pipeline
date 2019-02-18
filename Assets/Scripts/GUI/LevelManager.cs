@@ -31,11 +31,10 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-
-    //public string jsonFile;
-    //public BaseComponent objectToExport;
-
     List<string> playgroundName = new List<string>()
+    { };
+
+    /*List<string> playgroundName = new List<string>()
     {
         "Pg 0",
         "Pg 0b",
@@ -106,7 +105,7 @@ public class LevelManager : MonoBehaviour {
         "PG Transistor1",
         "PG TransistorNot",
         "PG TransistorNot PNP"
-    };
+    };*/
 
     public bool LevelIsCompleted(int i) {
         if (i < 1) return true; // level 0 alway completed
@@ -117,7 +116,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void ResetGame() {
-        for (int i = 0; i < getLevelMax(); i++) {
+        for (int i = 0; i < GetLevelMax(); i++) {
             PlayerPrefs.SetString("Level-" + playgroundName[i],"");
         }
     }
@@ -136,16 +135,16 @@ public class LevelManager : MonoBehaviour {
         {
             DontDestroyOnLoad(gameObject);
             instanceRef = this;
-            levelMax = getLevelMax();
+            levelMax = GetLevelMax();
             // for legacy purpose
             
             int lvc=PlayerPrefs.GetInt("Level Completed");
 
 
-            for(int i = 0; i < lvc; i++)
+            /*for(int i = 0; i < lvc; i++)
             {
                 PlayerPrefs.SetString("Level-" + playgroundNameLegacy[i], "completed");
-            }
+            }*/
             //PlayerPrefs.DeleteKey("Level Completed");
 
             //AudioListener.volume = Volume;
@@ -156,7 +155,7 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    public int getLevelMax() {
+    public int GetLevelMax() {
         return playgroundName.Count;
     }
 

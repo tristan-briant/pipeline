@@ -46,16 +46,16 @@ public class MenuManager : MonoBehaviour{
             GameObject.Find("MainCanvas").GetComponent<Animator>().Play("Level");
 
         }
-        levelMax = LVM.getLevelMax();
+        levelMax = LVM.GetLevelMax();
         LVM.completedLevel = levelCompleted = PlayerPrefs.GetInt("Level Completed");
 
-        generateMenu();
+        GenerateMenu();
 
         levelList.transform.localPosition =new Vector3(levelList.transform.localPosition.x, LVM.scrollViewHight,0);
 
     }
 
-    public GameObject introScreen;
+    /*public GameObject introScreen;
     public void removeIntro()
     {
         introScreen.SetActive(false);
@@ -69,39 +69,52 @@ public class MenuManager : MonoBehaviour{
         yield return new WaitForSeconds(5f);
         if(introScreen!=null)
             removeIntro();
-    }
+    }*/
 
-    public void generateMenu()
+    public void GenerateMenu()
     {
 
-        foreach (Transform child in levelList.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
-
-
-        int heigh = (120 + 50) * (Mathf.CeilToInt( (levelMax+2) / 3)  ) + 50;
-      
-        levelList.GetComponent<RectTransform>().sizeDelta = new Vector2(0, heigh);
+        foreach (Transform child in levelList.transform) // Clean up levelList
+            Destroy(child.gameObject);
+        
  
         for (int i =1; i<= LVM.levelMax; i++)
         {
-            //Debug.Log(" menu " + i);
             GameObject go;
 
-            if (LVM.getPlaygroundName(i).Contains("jelly"))
-                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonJelly"));
+            if (LVM.LevelIsCompleted(i))
+            {
+                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonCompleted"), levelList.transform);
+                go.GetComponentInChildren<Text>().text = i.ToString();
+                int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
+                go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
+            }
+            else if (!LVM.LevelIsCompleted(i - 1))
+            {
+                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonUnlocked"), levelList.transform);
+                go.GetComponentInChildren<Text>().text = i.ToString();
+                int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
+                go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
+            }
             else
-                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonUnlock"));
+            {
+                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonLocked"), levelList.transform);
+            }
 
-           
+/*
+                if (LVM.getPlaygroundName(i).Contains("jelly"))
+                    go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonLocked"));
+                else
+                    go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonUnlocked"));
 
-            go.transform.SetParent(levelList.transform);
+           */
+
+            /*go.transform.SetParent(levelList.transform);
             go.transform.localScale = new Vector3(1, 1, 1);
-            go.transform.localPosition = new Vector3(0, 0, 0);
+            go.transform.localPosition = new Vector3(0, 0, 0);*/
 
             //if (i > levelCompleted && !LVM.hacked)
-            if (!LVM.LevelIsCompleted(i-1) && !LVM.LevelIsCompleted(i))
+            /*if (!LVM.LevelIsCompleted(i-1) && !LVM.LevelIsCompleted(i))
             {
                 go.GetComponentInChildren<Image>().sprite = Locked;
                 go.GetComponentInChildren<Text>().text = "";
@@ -137,7 +150,7 @@ public class MenuManager : MonoBehaviour{
 
                 int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
                 go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
-            }
+            }*/
 
         }
     }
@@ -151,8 +164,7 @@ public class MenuManager : MonoBehaviour{
 
     void LateUpdate()
     {
-
-
+        
         if (Input.GetKey(KeyCode.Home))
         {
             Application.Quit();
