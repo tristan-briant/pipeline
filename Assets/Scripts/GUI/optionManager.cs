@@ -8,7 +8,7 @@ public class optionManager : MonoBehaviour {
     LevelManager LVM;
 
 	void Awake () {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
     }

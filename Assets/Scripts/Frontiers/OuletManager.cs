@@ -34,22 +34,32 @@ public class OuletManager : BaseFrontier
         }
     }
 
+ 
 
 
     //float pp = 0;
     //float ii = 0;
-    GameObject water=null, water0=null, arrow=null, bubble=null;
+    GameObject water=null, water0=null, arrow=null, bubble=null, moulin;
     public bool isSuccess = false;
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
     Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
-    public int mode = 0;
-    public float periode = 2;
+    //private int mode = 0;
+    private bool periodic = false;
+    private float periode = 2;
+    public float Periode { get => periode; set => periode = value; }
+    //public int Mode { get => mode; set => mode = value; }
+    public bool Periodic { get => periodic; set => periodic = value; }
 
-
-
+ 
+    float ppset;
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
+        if (periodic)
+            ppset = pset * Mathf.Sin(2 * Mathf.PI * Time.time / periode);
+        else
+            ppset = pset;
+
         /* float a = p[0];
 
          q += (i[0] + ii) * alpha;
@@ -61,7 +71,7 @@ public class OuletManager : BaseFrontier
          i[0] = (f + (a - q / C) / (rin * 0.5f));
          ii = (-f + (pset - q / C) / (rin * 0.5f));
          */
-        f = i[0]; //for speed animation
+        f = i[0]; //for bubble animation
 
         if (isSuccess)
         {
@@ -78,7 +88,7 @@ public class OuletManager : BaseFrontier
     {
         if (Mathf.Abs(i[0]) < Imax)
         {
-            pp = 0.01f * pset + 0.99f * pp;
+            pp = 0.01f * ppset + 0.99f * pp;
             p[0] = pp;
             //ii = 0.01f * i[0] + 0.99f * ii;
         }
@@ -103,7 +113,9 @@ public class OuletManager : BaseFrontier
             arrow = transform.Find("Arrow").gameObject;
         if (transform.Find("Bubble"))
             bubble = transform.Find("Bubble").gameObject;
-           
+        if (transform.Find("Moulin"))
+            moulin = transform.Find("Moulin").gameObject;
+
     }
 
 
@@ -113,17 +125,24 @@ public class OuletManager : BaseFrontier
             water.GetComponent<Image>().color = PressureColor(pset);
         if (water0)
             water0.GetComponent<Image>().color = PressureColor(pin[0]);
+        
+
+        if (bubble)
+            bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
+
 
         if (arrow)
         {
-            if (pset <= 0)
+            if (ppset <= 0)
                 arrow.GetComponent<Animator>().SetBool("Negative", true);
             else
                 arrow.GetComponent<Animator>().SetBool("Negative", false);
         }
 
-        if (bubble)
-            bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
-
+        if (moulin)
+        {
+            moulin.GetComponent<Animator>().SetFloat("speed", Mathf.Clamp(ppset,-3f,3f));
+        }
     }
+
 }

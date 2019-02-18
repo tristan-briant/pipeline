@@ -140,7 +140,10 @@ public class MenuManager : MonoBehaviour{
         }
     }
 
-
+    public void LoadDesigner()
+    {
+        SceneManager.LoadScene("LevelDesigner");
+    }
   
 
     void LateUpdate()
