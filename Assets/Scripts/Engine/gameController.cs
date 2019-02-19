@@ -75,7 +75,8 @@ public class GameController : MonoBehaviour {
         }
         else
         {
-            Pg = PgHolder.transform.GetChild(0).gameObject;
+            //Pg = PgHolder.transform.GetChild(0).gameObject;
+            Pg = GameObject.Find("Playground");
         }
         if (LVM.language == "french")
             levelText.text = "Niveau " + currentLevel;
@@ -118,7 +119,8 @@ public class GameController : MonoBehaviour {
         Debug.Log(" W :" + width + " H  " + height);
         Debug.Log(" N :" + N + " M  " + M);
 
-        float wx = width / (100f * (N - 1));
+        //float wx = width / (100f * (N - 1));
+        float wx = width / (100f * (N ));
         float wy = height / (100f * M);
 
         float wc = Mathf.Min(wx, wy);

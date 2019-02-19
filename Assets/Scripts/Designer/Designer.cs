@@ -18,7 +18,8 @@ public class Designer : MonoBehaviour
 
     private void Start()
     {
-        Pg = GameObject.Find("PlaygroundHolder").transform.GetChild(0).gameObject;
+        //Pg = GameObject.Find("PlaygroundHolder").transform.GetChild(0).gameObject;
+        Pg = GameObject.Find("Playground");
         N = Pg.GetComponent<PlaygroundParameters>().N;
         M = Pg.GetComponent<PlaygroundParameters>().M;
     }

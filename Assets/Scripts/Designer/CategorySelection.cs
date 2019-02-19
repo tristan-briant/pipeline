@@ -31,9 +31,10 @@ public class CategorySelection : MonoBehaviour {
     {
         GameObject CP = Instantiate(configPanel);
 
-        //CP.transform.localPosition = Vector3.zero;
+       
         CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
         CP.transform.localScale = Vector3.one;
+        CP.transform.localPosition = Vector3.zero;
 
         RectTransform rect = CP.transform.GetComponent<RectTransform>();
         rect.sizeDelta = new Vector2(0, 300);
