@@ -18,20 +18,28 @@ public class optionManager : MonoBehaviour {
         GameObject.Find("SliderVolume").GetComponent<Slider>().normalizedValue = LVM.Volume;
     }
 
-    public void setLanguage(string language)
+    public void SetLanguage(string language)
     {
         LVM.Language=language;
         PlayerPrefs.SetString("Language",language);
+
+        // updte text already present in scene
+        foreach (Text t in FindObjectsOfType<Text>()) {
+            if (t.transform.GetComponent<languageManager>())
+            {
+                t.transform.GetComponent<languageManager>().SwitchLanguage();
+            }
+        }
     }
 
-    public void resetGame()
+    public void ResetGame()
     {
         PlayerPrefs.SetInt("Level Completed",0);
         LVM.completedLevel = 0;
         LVM.ResetGame();
     }
 
-    public void setVolume() {
+    public void SetVolume() {
         float vol = GameObject.Find("SliderVolume").GetComponent<Slider>().normalizedValue;
         PlayerPrefs.SetFloat("Volume", vol);
         LVM.Volume = vol;

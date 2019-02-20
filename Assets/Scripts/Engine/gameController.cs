@@ -51,16 +51,9 @@ public class GameController : MonoBehaviour {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
                 go.SetActive(false);
             LVM.designerMode = false;
-            //DeckHolder.transform.GetChild(0).GetComponent<DeckManager>().TogglePlayMode();
             DeckHolder.SetActive(true);
 
-            if (currentLevel == 1)
-                prevButton.gameObject.SetActive(false);
-            if (currentLevel == LVM.levelMax || !LVM.LevelIsCompleted(currentLevel))
-                nextButton.gameObject.SetActive(false);
-
-            string filename = LVM.getPlaygroundName(currentLevel);
-            GetComponent<Designer>().LoadFromRessources(filename);
+            LoadLevel();
         }
         else
         {
@@ -68,14 +61,19 @@ public class GameController : MonoBehaviour {
             GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(false);
             GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(true);
             Pg = GameObject.Find("Playground");
+            LVM.designerMode = true;
+
             InitializePlayground();
         }
+
+
+
         if (LVM.language == "french")
             levelText.text = "Niveau " + currentLevel;
         else
             levelText.text = "Level " + currentLevel;
 
-        InvokeRepeating("Evolution", 0.0f, 0.01f);
+        InvokeRepeating("Evolution", 0.0f, 0.005f);
 
     }
 
@@ -141,11 +139,15 @@ public class GameController : MonoBehaviour {
 
         Pg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
-    
+
+
+    bool HasSuccessComponent;
+
     public void PopulateComposant()
     {
         //Debug.Log("Populate!");
         Sprite[] sprites = Resources.LoadAll<Sprite>("Field/GrassAtlas");
+        HasSuccessComponent = false;
 
         for (int i = 1; i < N-1; i++)
             for (int j = 1; j < M-1; j++)
@@ -165,6 +167,8 @@ public class GameController : MonoBehaviour {
                     else
                         bc.transform.localScale = new Vector3(1, 1, 1);
                     composants[i][j] = bc;
+
+                    //if(bc.is)
 
                     if (firstPopulate)
                     {
@@ -280,6 +284,7 @@ public class GameController : MonoBehaviour {
         for (int n = 0; n < 1; n++)
             success = Engine.OneStep1(composants);
 
+
         if (!LVM.designerMode)
         {
 
@@ -341,15 +346,36 @@ public class GameController : MonoBehaviour {
 
     public void LoadNextLevel()
     {
-        LVM.currentLevel = currentLevel + 1;
-        SceneManager.LoadScene("level");
+        currentLevel++;
+        LoadLevel();
     }
 
     public void LoadPrevLevel()
     {
-        LVM.currentLevel = currentLevel - 1;
-        SceneManager.LoadScene("level");
+        currentLevel--;
+        LoadLevel();
     }
+
+    public void LoadLevel()
+    {
+        string filename = LVM.getPlaygroundName(currentLevel);
+        GetComponent<Designer>().LoadFromRessources(filename);
+
+        FindObjectOfType<DeckManager>().DrawDeck();
+
+        if (currentLevel == 1)
+            prevButton.gameObject.SetActive(false);
+        else
+            prevButton.gameObject.SetActive(true);
+
+        if (currentLevel < LVM.levelMax && ( LVM.LevelIsCompleted(currentLevel) || LVM.hacked) )
+            nextButton.gameObject.SetActive(true);
+        else
+            nextButton.gameObject.SetActive(false);
+
+    }
+
+
 
     void LateUpdate () {
 

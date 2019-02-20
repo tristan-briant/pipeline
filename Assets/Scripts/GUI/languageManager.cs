@@ -5,16 +5,21 @@ using UnityEngine.UI;
 
 public class languageManager : MonoBehaviour {
 
+    [TextArea]
     public string text_fr = "";
+    [TextArea]
     public string text_en = "";
     GameObject LVM;
 
     // Use this for initialization
     void Awake() {
-        LVM = GameObject.FindGameObjectWithTag("LevelManager");
+        LVM = GameObject.Find("LevelManager");
+        SwitchLanguage();
     }
 
-    private void Update()
+
+
+    public void SwitchLanguage()
     {
          switch (LVM.GetComponent<LevelManager>().language) {
             case "english":

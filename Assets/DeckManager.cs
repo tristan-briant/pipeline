@@ -9,10 +9,10 @@ public class DeckManager : MonoBehaviour
 
     private void Start()
     {
-        TogglePlayMode();
+        DrawDeck();
     }
 
-    public void TogglePlayMode()
+    public void DrawDeck()
     {
         bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
 
@@ -36,7 +36,8 @@ public class DeckManager : MonoBehaviour
                     slot.gameObject.SetActive(false);
                 }
                 else
-                { 
+                {
+                    slot.gameObject.SetActive(true);
                     slot.GetComponent<CreateComponent>().designermode = false;
                     count++;
                 }

@@ -1,4 +1,4 @@
-{"N":6,"M":6,"R":1.0,"L":1.0,"C":1.0,"Rground":50.0}
+﻿{"N":6,"M":6,"R":1.0,"L":1.0,"C":1.0,"Rground":50.0}
 Components/Pipeline
 {"PrefabPath":"Components/Pipeline","dir":0,"success":1.0,"fail":0.0,"destroyable":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"configPanel":{"instanceID":0}}
 Components/Elbow

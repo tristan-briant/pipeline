@@ -16,9 +16,13 @@ public class Designer : MonoBehaviour
 
     static public string PGdata;
 
-    private void Start()
+    private void Awake()
     {
         Pg = GameObject.Find("Playground");
+    }
+
+    private void Start()
+    {
         N = Pg.GetComponent<PlaygroundParameters>().N;
         M = Pg.GetComponent<PlaygroundParameters>().M;
     }
@@ -153,6 +157,8 @@ public class Designer : MonoBehaviour
     {
         if (PGdata == null) return;
 
+        PGdata = PGdata.Replace("\r", ""); //clean up string
+
         Pg = GameObject.Find("Playground"); 
         int count = Pg.transform.childCount;
         for (int i = 0; i < count; i++)        // On retire tout
@@ -173,6 +179,7 @@ public class Designer : MonoBehaviour
             }
         }
 
+
         string[] tokens = PGdata.Split('\n');
 
         int k = 0;
@@ -181,9 +188,11 @@ public class Designer : MonoBehaviour
         foreach (Transform slot in deck.transform)
         {
             string prefab = tokens[k++];
+            
             if (prefab != "empty")
             {
-                GameObject component = Instantiate(Resources.Load(prefab, typeof(GameObject))) as GameObject;
+                Debug.Log(prefab);
+                GameObject component = Instantiate(Resources.Load(prefab)) as GameObject; //Instantiate(Resources.Load(prefab, typeof(GameObject))) as GameObject;
                 component.transform.SetParent(slot.transform);
  
                 JsonUtility.FromJsonOverwrite(tokens[k++], slot.transform.GetComponentInChildren<BaseComponent>());
@@ -721,7 +730,7 @@ public class Designer : MonoBehaviour
         GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
 
-        deck.GetComponent<DeckManager>().TogglePlayMode();
+        deck.GetComponent<DeckManager>().DrawDeck();
 
         if (playMode)
         { //Go in playMode

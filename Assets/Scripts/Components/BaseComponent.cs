@@ -25,6 +25,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     //public bool empty = true;
     private float pressure;
     public bool destroyable=true;
+    public bool isSuccess = false;
 
     //public int x, y;
     public bool locked = false;

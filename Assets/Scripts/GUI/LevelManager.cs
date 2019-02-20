@@ -119,11 +119,7 @@ public class LevelManager : MonoBehaviour {
         {
             DontDestroyOnLoad(gameObject);
             instanceRef = this;
-            levelMax = GetLevelMax();
-            // for legacy purpose
-
-            //int lvc = PlayerPrefs.GetInt("Level Completed");
-
+            levelMax = playgroundName.Count;
         }
         else
         {
@@ -133,14 +129,13 @@ public class LevelManager : MonoBehaviour {
 
     public bool LevelIsCompleted(int i) {
         if (i < 1) return true; // level 0 alway completed
-        if (hacked == true) return true; //for debug purpose
         string s = PlayerPrefs.GetString("Level-" + playgroundName[i-1]);
         if (s == "completed") return true;
         return false;
     }
 
     public void ResetGame() {
-        for (int i = 0; i < GetLevelMax(); i++) {
+        for (int i = 0; i < levelMax; i++) {
             PlayerPrefs.SetString("Level-" + playgroundName[i],"");
         }
     }
@@ -152,9 +147,6 @@ public class LevelManager : MonoBehaviour {
         PlayerPrefs.Save();
     }
     
-    public int GetLevelMax() {
-        return playgroundName.Count;
-    }
 
     public string getPlaygroundName(int level) { 
         // Return the complete name (with path in Ressources) of the prefab playground

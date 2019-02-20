@@ -152,6 +152,7 @@ public class Engine  {
         int N = composants.Length;
         int M = composants[0].Length;
 
+
         float success = 1;
         float fail = 0;
 

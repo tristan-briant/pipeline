@@ -12,13 +12,7 @@ public class MenuManager : MonoBehaviour{
     public Sprite Locked;
     public LevelManager LVM;
 
-    public void LoadLevel(int levelNumber)
-    {
-        LVM.currentLevel = levelNumber;
-        LVM.scrollViewHight = levelList.transform.localPosition.y;
-        SceneManager.LoadScene("LevelScene");
-
-    }
+  
 
     private void Start()
     {
@@ -36,129 +30,57 @@ public class MenuManager : MonoBehaviour{
         LVM.Volume = volume;
         AudioListener.volume = LVM.Volume;
 
-        if (LVM.FirstLaunch)
-        {
-            //StartCoroutine("IntroScreen");
-            LVM.FirstLaunch = false;
-        }
-        else {
-            //removeIntro();
+        if (!LVM.FirstLaunch)
             GameObject.Find("MainCanvas").GetComponent<Animator>().Play("Level");
-
-        }
-        levelMax = LVM.GetLevelMax();
+        
+        levelMax = LVM.levelMax;
         LVM.completedLevel = levelCompleted = PlayerPrefs.GetInt("Level Completed");
 
         GenerateMenu();
 
         levelList.transform.localPosition =new Vector3(levelList.transform.localPosition.x, LVM.scrollViewHight,0);
 
+        LVM.FirstLaunch = false;
     }
-
-    /*public GameObject introScreen;
-    public void removeIntro()
-    {
-        introScreen.SetActive(false);
-
-    }
-
-    IEnumerator IntroScreen() {
-
-        introScreen.SetActive(true);
-
-        yield return new WaitForSeconds(5f);
-        if(introScreen!=null)
-            removeIntro();
-    }*/
 
     public void GenerateMenu()
     {
 
         foreach (Transform child in levelList.transform) // Clean up levelList
             Destroy(child.gameObject);
-        
- 
-        for (int i =1; i<= LVM.levelMax; i++)
+
+
+        for (int i = 1; i <= LVM.levelMax; i++)
         {
             GameObject go;
 
-            if (LVM.LevelIsCompleted(i) || LVM.hacked)
-            {
-                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonCompleted"), levelList.transform);
-                go.GetComponentInChildren<Text>().text = i.ToString();
-                int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
-                go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
-            }
-            else if (!LVM.LevelIsCompleted(i - 1))
-            {
-                go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonUnlocked"), levelList.transform);
-                go.GetComponentInChildren<Text>().text = i.ToString();
-                int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
-                go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
-            }
-            else
+            if (!LVM.LevelIsCompleted(i) && !LVM.LevelIsCompleted(i - 1) && !LVM.hacked)
             {
                 go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonLocked"), levelList.transform);
             }
-
-/*
-                if (LVM.getPlaygroundName(i).Contains("jelly"))
-                    go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonLocked"));
-                else
-                    go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonUnlocked"));
-
-           */
-
-            /*go.transform.SetParent(levelList.transform);
-            go.transform.localScale = new Vector3(1, 1, 1);
-            go.transform.localPosition = new Vector3(0, 0, 0);*/
-
-            //if (i > levelCompleted && !LVM.hacked)
-            /*if (!LVM.LevelIsCompleted(i-1) && !LVM.LevelIsCompleted(i))
-            {
-                go.GetComponentInChildren<Image>().sprite = Locked;
-                go.GetComponentInChildren<Text>().text = "";
-                go.GetComponentInChildren<languageManager>().enabled = false;
-                go.GetComponent<Animator>().enabled = false;
-                go.transform.GetComponentInChildren<Button>().interactable = false;
-            }
             else
             {
-                if (!LVM.LevelIsCompleted(i))
-                {
-                    go.GetComponentInChildren<languageManager>().enabled = true;
-                    go.GetComponent<Animator>().enabled = true;
-                }
+
+                if (LVM.LevelIsCompleted(i))
+                    go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonCompleted"), levelList.transform);
                 else
-                {
-                    go.GetComponentInChildren<languageManager>().enabled = false;
-                    go.GetComponent<Animator>().enabled = false;
-                    go.GetComponentInChildren<Text>().text = i.ToString();
+                    go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonUnlocked"), levelList.transform);
 
-                    // Show the icon if it exists
-                    Object obj = Resources.Load("MenuButtons/Icons/icon-" + LVM.getPlaygroundName(i), typeof(Sprite));
-                    Debug.Log("MenuButtons/Icons/icon-" + LVM.getPlaygroundName(i));
-                    if (obj != null)
-                    {
-                        GameObject icon = go.transform.Find("Icon").gameObject;
-                        icon.SetActive(true);
-                        icon.GetComponent<Image>().sprite=(Sprite)obj;
-                    }
-                }
-                if(i==LVM.currentLevel)
-                    go.GetComponentInChildren<Text>().color=new Color(0xFF/255.0f,0xEF/255.0f,0x31/255.0f,1);
-
+                go.GetComponentInChildren<Text>().text = i.ToString();
                 int level = i; // mandatory to pass the variable level in the delegate instead of i otherwise the last value of i is used
                 go.GetComponent<Button>().onClick.AddListener(delegate { LoadLevel(level); });
-            }*/
+
+            }
+
 
         }
     }
 
-    public void LoadDesigner()
+
+    public void LoadLevel(int levelNumber)
     {
-        LVM.currentLevel = 0;
-        //GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode=true;
+        LVM.currentLevel = levelNumber;
+        LVM.scrollViewHight = levelList.transform.localPosition.y;
         SceneManager.LoadScene("LevelScene");
     }
   
