@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameController : MonoBehaviour {
 
@@ -15,7 +16,7 @@ public class GameController : MonoBehaviour {
     //public BaseComponent vide;
     public BaseComponent videFrontier;
     public BaseFrontier[] borders;
-    public Sprite concrete; // image for locked component
+   // public Sprite concrete; // image for locked component
     public int currentLevel;
     public Text levelText;
     public Button nextButton;
@@ -31,6 +32,53 @@ public class GameController : MonoBehaviour {
     GameObject Pg; //The "playground" from which are determined N and M 
 
     bool firstPopulate = true;
+
+    bool gameOver = false;
+    bool fail = false;
+    public GameObject winText;
+    public GameObject loseText;
+
+    private void Start()
+    {
+        LVM = FindObjectOfType<LevelManager>();
+        currentLevel = LVM.currentLevel;
+        Pg = GameObject.Find("Playground");
+
+        if (currentLevel > 0) // 0 mean level design
+        {
+            GameObject.Find("MainCanvas").transform.Find("HeaderDesigner").gameObject.SetActive(false);
+            GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(true);
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
+                go.SetActive(false);
+            LVM.designerMode = false;
+            //DeckHolder.transform.GetChild(0).GetComponent<DeckManager>().TogglePlayMode();
+            DeckHolder.SetActive(true);
+
+            if (currentLevel == 1)
+                prevButton.gameObject.SetActive(false);
+            if (currentLevel == LVM.levelMax || !LVM.LevelIsCompleted(currentLevel))
+                nextButton.gameObject.SetActive(false);
+
+            string filename = LVM.getPlaygroundName(currentLevel);
+            GetComponent<Designer>().LoadFromRessources(filename);
+        }
+        else
+        {
+            GameObject.Find("MainCanvas").transform.Find("HeaderDesigner").gameObject.SetActive(true);
+            GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(false);
+            GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(true);
+            Pg = GameObject.Find("Playground");
+            InitializePlayground();
+        }
+        if (LVM.language == "french")
+            levelText.text = "Niveau " + currentLevel;
+        else
+            levelText.text = "Level " + currentLevel;
+
+        InvokeRepeating("Evolution", 0.0f, 0.01f);
+
+    }
+
 
     public void Pause(bool pause)
     {
@@ -50,45 +98,12 @@ public class GameController : MonoBehaviour {
     public void InitializePlayground()
     {
         ///////////// Array Initialization /////////////
-        LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
-
-        currentLevel = LVM.currentLevel;
-
-
-
-        if (currentLevel > 0) // 0 mean level design
-        {
-            if (currentLevel == 1)
-                prevButton.gameObject.SetActive(false);
-            if (currentLevel == LVM.levelMax || !LVM.LevelIsCompleted(currentLevel))
-                nextButton.gameObject.SetActive(false);
-
-            if (PgHolder.transform.childCount > 0)
-            {
-                DestroyImmediate(PgHolder.transform.GetChild(0).gameObject);
-            }
-
-            Pg = Instantiate(Resources.Load("Playgrounds/" + LVM.getPlaygroundName(currentLevel), typeof(GameObject))) as GameObject;
-
-            Pg.transform.SetParent(PgHolder.transform);
-            Pg.transform.localPosition = new Vector3(0, 0, 0);
-        }
-        else
-        {
-            //Pg = PgHolder.transform.GetChild(0).gameObject;
-            Pg = GameObject.Find("Playground");
-        }
-        if (LVM.language == "french")
-            levelText.text = "Niveau " + currentLevel;
-        else
-            levelText.text = "Level " + currentLevel;
-
+        
         N = Pg.GetComponent<GridLayoutGroup>().constraintCount; // -2 for the frontier
         M = Pg.transform.childCount / N; //itou
 
         Engine.initialize_p_i(N, M); // create the array of currant and pressure
-
-
+        
         composants = new BaseComponent[N][];
 
         for (int k = 0; k < N; k++)
@@ -100,14 +115,11 @@ public class GameController : MonoBehaviour {
         PopulateComposant();
 
         ResizePlayGround();
+        gameOver = false;
+        winText.SetActive(false);
     }
 
-    private void Start()
-    {
-        InitializePlayground();
-        InvokeRepeating("Evolution", 0.0f, 0.01f);
-
-    }
+   
 
     [ContextMenu("Resize Playground")]
     public void ResizePlayGround()
@@ -128,7 +140,6 @@ public class GameController : MonoBehaviour {
         Pg.transform.localScale = new Vector3(wc, wc, 1);
 
         Pg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        //Pg.transform.localPosition = Vector3.zero;
     }
     
     public void PopulateComposant()
@@ -258,36 +269,34 @@ public class GameController : MonoBehaviour {
         }
         firstPopulate = false;
     }
-    
 
-    bool gameOver=false;
-    bool fail=false;
-    public GameObject winText;
-    public GameObject loseText;
 
 
     void Evolution()
     {
 
-        float success=0; 
+        float success = 0;
 
-        for(int n=0;n<1;n++)
-            success= Engine.OneStep1(composants);
-            //success= Engine.oneStep2(composants);
+        for (int n = 0; n < 1; n++)
+            success = Engine.OneStep1(composants);
 
-        if (success >= 1 && BaseComponent.itemBeingDragged == null && !gameOver)
+        if (!LVM.designerMode)
         {
-            gameOver = true;
-            StartCoroutine("WinAnimation");
-        }
 
-        if (success < 0 && !gameOver) {
-            gameOver = true;
-            fail = true;
-            //CancelInvoke(); // Stop calculate the evolution
-            StartCoroutine("LoseAnimation");
-        }
+            if (success >= 1 && BaseComponent.itemBeingDragged == null && !gameOver)
+            {
+                gameOver = true;
+                StartCoroutine("WinAnimation");
+            }
 
+            if (success < 0 && !gameOver)
+            {
+                gameOver = true;
+                fail = true;
+                //CancelInvoke(); // Stop calculate the evolution
+                StartCoroutine("LoseAnimation");
+            }
+        }
     }
 
     IEnumerator WinAnimation()
@@ -308,7 +317,6 @@ public class GameController : MonoBehaviour {
 
 
     }
-
 
     IEnumerator LoseAnimation()
     {
@@ -342,7 +350,6 @@ public class GameController : MonoBehaviour {
         LVM.currentLevel = currentLevel - 1;
         SceneManager.LoadScene("level");
     }
-
 
     void LateUpdate () {
 

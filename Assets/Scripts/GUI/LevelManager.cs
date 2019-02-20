@@ -15,7 +15,8 @@ public class LevelManager : MonoBehaviour {
     public float scrollViewHight = 0;
     public bool FirstLaunch=true;
     public bool hacked = false;
-    public bool designer = false;
+    public bool designerMode = false;
+    public bool designerScene = false;
 
     public float Volume = 0.5f;
     public string language = "english";
@@ -32,7 +33,12 @@ public class LevelManager : MonoBehaviour {
     }
 
     List<string> playgroundName = new List<string>()
-    { };
+    {
+        "level1",
+        "level2",
+        "level3",
+        "level4"
+    };
 
     /*List<string> playgroundName = new List<string>()
     {
@@ -107,6 +113,24 @@ public class LevelManager : MonoBehaviour {
         "PG TransistorNot PNP"
     };*/
 
+    private void Awake()
+    {
+        if (instanceRef == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            instanceRef = this;
+            levelMax = GetLevelMax();
+            // for legacy purpose
+
+            //int lvc = PlayerPrefs.GetInt("Level Completed");
+
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
+    }
+
     public bool LevelIsCompleted(int i) {
         if (i < 1) return true; // level 0 alway completed
         if (hacked == true) return true; //for debug purpose
@@ -127,34 +151,7 @@ public class LevelManager : MonoBehaviour {
         PlayerPrefs.SetString("Level-" + playgroundName[i-1], "completed");
         PlayerPrefs.Save();
     }
-
-
-    private void Awake()
-    {
-        if (instanceRef == null)
-        {
-            DontDestroyOnLoad(gameObject);
-            instanceRef = this;
-            levelMax = GetLevelMax();
-            // for legacy purpose
-            
-            int lvc=PlayerPrefs.GetInt("Level Completed");
-
-
-            /*for(int i = 0; i < lvc; i++)
-            {
-                PlayerPrefs.SetString("Level-" + playgroundNameLegacy[i], "completed");
-            }*/
-            //PlayerPrefs.DeleteKey("Level Completed");
-
-            //AudioListener.volume = Volume;
-
-        }
-        else {
-            DestroyImmediate(gameObject);
-        }
-    }
-
+    
     public int GetLevelMax() {
         return playgroundName.Count;
     }

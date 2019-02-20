@@ -16,7 +16,7 @@ public class MenuManager : MonoBehaviour{
     {
         LVM.currentLevel = levelNumber;
         LVM.scrollViewHight = levelList.transform.localPosition.y;
-        SceneManager.LoadScene("level");
+        SceneManager.LoadScene("LevelScene");
 
     }
 
@@ -82,7 +82,7 @@ public class MenuManager : MonoBehaviour{
         {
             GameObject go;
 
-            if (LVM.LevelIsCompleted(i))
+            if (LVM.LevelIsCompleted(i) || LVM.hacked)
             {
                 go = Instantiate(Resources.Load<GameObject>("MenuButtons/ButtonCompleted"), levelList.transform);
                 go.GetComponentInChildren<Text>().text = i.ToString();
@@ -157,8 +157,9 @@ public class MenuManager : MonoBehaviour{
 
     public void LoadDesigner()
     {
-        GameObject.Find("LevelManager").GetComponent<LevelManager>().designer=true;
-        SceneManager.LoadScene("LevelDesigner");
+        LVM.currentLevel = 0;
+        //GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode=true;
+        SceneManager.LoadScene("LevelScene");
     }
   
 

@@ -33,13 +33,14 @@ public class ConfigFile : MonoBehaviour
 
         int index = 0;
 
-        fileNames = System.IO.Directory.GetFiles(Application.persistentDataPath, "*.txt");
+        fileNames = Directory.GetFiles(Application.persistentDataPath, "*.txt");
         foreach (string file in fileNames)
         {
             Debug.Log(file);
             GameObject go = Instantiate(fileButton);
             go.transform.SetParent(fileList.transform);
             go.transform.localScale = Vector3.one;
+            go.transform.localPosition = Vector3.zero;
             //go.GetComponent<Button>().onClick.RemoveAllListeners();
             int i = index;
             //go.GetComponent<Button>().onClick.AddListener(() => LoadFile(i));

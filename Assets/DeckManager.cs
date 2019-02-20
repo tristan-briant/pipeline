@@ -14,7 +14,7 @@ public class DeckManager : MonoBehaviour
 
     public void TogglePlayMode()
     {
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
 
         if (designerMode)
         {

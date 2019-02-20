@@ -190,7 +190,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         if (name.Contains("Empty")) return false;
 
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
         if (locked && !designerMode) return false;
 
         return true;
@@ -200,7 +200,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (dragged) return false;
 
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
         return designerMode;
     }
 
@@ -209,7 +209,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (dragged) return false;
         if (itemBeingDragged != null) return false;
 
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
 
         if (locked && !designerMode) return false;
 
@@ -229,7 +229,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     bool IsDestroyable()
     {
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
 
         if (designerMode) return true;
 
@@ -250,7 +250,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     bool IsMovable()
     {
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designer;
+        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
 
         if (designerMode)
             return true;
@@ -321,6 +321,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
         CP.transform.localScale = Vector3.one;
+        CP.transform.localPosition = Vector3.zero;
 
         RectTransform rect = CP.transform.GetComponent<RectTransform>();
         rect.sizeDelta = new Vector2(0, 300);

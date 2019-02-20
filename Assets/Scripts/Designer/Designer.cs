@@ -18,7 +18,6 @@ public class Designer : MonoBehaviour
 
     private void Start()
     {
-        //Pg = GameObject.Find("PlaygroundHolder").transform.GetChild(0).gameObject;
         Pg = GameObject.Find("Playground");
         N = Pg.GetComponent<PlaygroundParameters>().N;
         M = Pg.GetComponent<PlaygroundParameters>().M;
@@ -35,7 +34,7 @@ public class Designer : MonoBehaviour
     {
         GameObject canvas = GameObject.Find("CanvasThumbnail");
         Pg.transform.SetParent(canvas.transform);
-        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         gc.ResizePlayGround();
 
         Texture2D texture = new Texture2D(256, 256, TextureFormat.RGB24, false);
@@ -95,22 +94,13 @@ public class Designer : MonoBehaviour
     //[ContextMenu("SaveToFile")]
     public void SaveToFile()
     {
-        //GameObject.Find("Message").GetComponent<Text>().text +="saving...\n";
-
         string filename = "PlayGround" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
             + System.DateTime.Now.ToLongTimeString().Replace(":", "-");
 
         string file = Path.Combine(Application.persistentDataPath,filename + ".txt");
 
-        Debug.Log(file);
-        //GameObject.Find("Message").GetComponent<Text>().text += file + "\n";
-
         SaveToString();
-        //PlayerPrefs.SetString("SavedPlaygroud", PGdata);
-        /*using (StreamWriter streamWriter = File.CreateText(file))
-        {
-            streamWriter.Write(PGdata);
-        }*/
+       
         File.WriteAllText(file, PGdata);
 
         MakeThumb(Path.Combine(Application.persistentDataPath,  filename + ".png"));
@@ -122,7 +112,7 @@ public class Designer : MonoBehaviour
         PlaygroundParameters parameters = FindObjectOfType<PlaygroundParameters>();
         PGdata = JsonUtility.ToJson(parameters) + "\n";
 
-        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
         foreach (Transform slot in deck.transform)
         {
@@ -158,10 +148,12 @@ public class Designer : MonoBehaviour
         Debug.Log(PGdata);
     }
 
+    [ContextMenu("LoadFromString")]
     public void LoadFromString()
     {
         if (PGdata == null) return;
 
+        Pg = GameObject.Find("Playground"); 
         int count = Pg.transform.childCount;
         for (int i = 0; i < count; i++)        // On retire tout
         {
@@ -169,7 +161,7 @@ public class Designer : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
-        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
 
         foreach (Transform slot in deck.transform)
@@ -228,15 +220,19 @@ public class Designer : MonoBehaviour
 
         CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
 
-        GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
-
-        ResizePlayGround();
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
     }
 
     public void LoadFromFile(string filename)
     {
         PGdata = File.ReadAllText(filename);
+        LoadFromString();
+    }
+
+    public void LoadFromRessources(string filename)
+    {
+        PGdata = Resources.Load<TextAsset>("Levels/" + filename).ToString();
         LoadFromString();
     }
 
@@ -262,8 +258,6 @@ public class Designer : MonoBehaviour
         PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
         param.N = N;
         param.M = M;
-
-
 
         for (int i = 1; i < N - 1; i++)
         {
@@ -434,7 +428,7 @@ public class Designer : MonoBehaviour
             //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
 
-        bool designerMode = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designer;
+        bool designerMode = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designerMode;
 
         component.GetComponent<BaseComponent>().destroyable = designerMode;
 
@@ -443,6 +437,7 @@ public class Designer : MonoBehaviour
 
     public void ResetField()
     {
+        Pg = GameObject.Find("Playground");
         PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
         param.N = N;
         param.M = M;
@@ -475,60 +470,11 @@ public class Designer : MonoBehaviour
 
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 2, 5);
 
-        GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
-
-        ResizePlayGround();
-    }
-
-    void ResizePlayGround()
-    {
-        Transform go = Pg.transform.parent;
-        RectTransform objectRectTransform = go.GetComponent<RectTransform>();
-        float width = objectRectTransform.rect.width;
-        float height = objectRectTransform.rect.height;
-
-        float wx = width / (100f * (N - 1));
-        float wy = height / (100f * M);
-
-        float wc = Mathf.Min(wx, wy);
-
-        Pg.transform.localScale = new Vector3(wc, wc, 1);
-        //Pg.transform.localPosition = Vector3.zero;
-    }
-
-    public void ChangeSize()
-    {
-        PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
-
-        GameObject Temp = new GameObject();
-
-        Debug.Log(Pg.transform.childCount);
-
-        int count = Pg.transform.childCount;
-        for (int i = 0; i < count; i++)
-        {
-            Transform child = Pg.transform.GetChild(0);
-            child.SetParent(Temp.transform);
-        }
-
-
-        if (N >= 4 && M >= 4)
-        {
-            if (N < param.N)
-            {
-                for (int i = N - 2; i < param.N - 2; i++)
-                    for (int j = 0; j < param.M; j++)
-                    {
-
-                    }
-            }
-
-
-
-        }
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
     }
 
+  
     public void ReduceWidth()
     {
         if (N > MinSize)
@@ -542,7 +488,7 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().N = N - 1;
             N = N - 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
         }
         else
         {
@@ -572,7 +518,7 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().N = N + 1;
             N = N + 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
         }
         else
         {
@@ -592,7 +538,7 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().M = M - 1;
             M = M - 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
 
 
@@ -653,7 +599,7 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().M = M + 1;
             M = M + 1;
 
-            GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>().InitializePlayground();
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
             j = M - 1;
             int type = Pg.transform.GetChild((j - 2) * N).GetComponentInChildren<BaseFrontier>().type;
@@ -770,9 +716,9 @@ public class Designer : MonoBehaviour
             go.SetActive(!playMode);
         }
 
-        GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designer = !playMode;
+        GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designerMode = !playMode;
 
-        GameController gc = GameObject.FindGameObjectWithTag("gameController").GetComponent<GameController>();
+        GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
 
         deck.GetComponent<DeckManager>().TogglePlayMode();
@@ -792,5 +738,6 @@ public class Designer : MonoBehaviour
         }
 
     }
+
 
 }
