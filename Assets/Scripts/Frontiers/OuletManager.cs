@@ -40,15 +40,12 @@ public class OuletManager : BaseFrontier
     //float pp = 0;
     //float ii = 0;
     GameObject water=null, water0=null, arrow=null, bubble=null, moulin;
-    public bool isSuccess = false;
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
     Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
-    //private int mode = 0;
     private bool periodic = false;
     private float periode = 2;
     public float Periode { get => periode; set => periode = value; }
-    //public int Mode { get => mode; set => mode = value; }
     public bool Periodic { get => periodic; set => periodic = value; }
 
  

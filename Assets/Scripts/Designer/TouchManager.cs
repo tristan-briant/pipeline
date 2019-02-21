@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class TouchManager : MonoBehaviour , IPointerDownHandler, IPointerUpHandler
 {
     //public float incrementMultiplier;
-    float longPressDuration = 0.5f;
+    float longPressDuration = 0.3f;
     bool pressing = false;
     public UnityEvent OnClick;
     public UnityEvent OnShortClick;

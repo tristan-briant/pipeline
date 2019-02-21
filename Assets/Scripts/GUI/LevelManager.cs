@@ -32,13 +32,7 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    List<string> playgroundName = new List<string>()
-    {
-        "level1",
-        "level2",
-        "level3",
-        "level4"
-    };
+    List<string> playgroundName;
 
     /*List<string> playgroundName = new List<string>()
     {
@@ -79,39 +73,7 @@ public class LevelManager : MonoBehaviour {
         "PG TransistorNot PNP"
     };
 
-    List<string> playgroundNameLegacy = new List<string>()
-    {
-        "Pg 0",
-        "Pg 0b",
-        "playground1",
-        "playground2",
-        "Pg 3 DBM",
-        "Pg jelly0",
-        "Pg double DBM",
-        "playground3",
-        "PG bonus1",
-        "PG bonus2",
-        "Pg 4 pressostats",
-        "Pg 1P2R",
-        "Pg jelly1",
-        "Pg double DBM2",
-        "Pg Rampe tension",
-        "PG DBM+PST",
-        "PG Capa1",
-        "PG Capa2",
-        "Pg jelly2",
-        "PG Capa3",
-        "PG Capa4",
-        "PG Diode Capa",
-        "PG Diode1",
-        "PG Diode2",
-        "PG D demi pont",
-        "PG Transistor0a",
-        "PG Transistor0b",
-        "PG Transistor1",
-        "PG TransistorNot",
-        "PG TransistorNot PNP"
-    };*/
+   */
 
     private void Awake()
     {
@@ -119,12 +81,21 @@ public class LevelManager : MonoBehaviour {
         {
             DontDestroyOnLoad(gameObject);
             instanceRef = this;
+            LoadPlaygroundList();
             levelMax = playgroundName.Count;
         }
         else
         {
             DestroyImmediate(gameObject);
         }
+    }
+
+
+    public void LoadPlaygroundList()
+    {
+        string names = Resources.Load<TextAsset>("Levels/PlaygroundList").ToString();
+        names = names.Replace("\r", ""); //clean up string 
+        playgroundName = new List<string>(names.Split('\n'));
     }
 
     public bool LevelIsCompleted(int i) {
@@ -135,8 +106,8 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void ResetGame() {
-        for (int i = 0; i < levelMax; i++) {
-            PlayerPrefs.SetString("Level-" + playgroundName[i],"");
+        for (int i = 1; i <= levelMax; i++) {
+            PlayerPrefs.SetString("Level-" + playgroundName[i-1],"");
         }
     }
 

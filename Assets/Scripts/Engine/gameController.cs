@@ -145,9 +145,8 @@ public class GameController : MonoBehaviour {
 
     public void PopulateComposant()
     {
-        //Debug.Log("Populate!");
         Sprite[] sprites = Resources.LoadAll<Sprite>("Field/GrassAtlas");
-        HasSuccessComponent = false;
+        
 
         for (int i = 1; i < N-1; i++)
             for (int j = 1; j < M-1; j++)
@@ -168,7 +167,7 @@ public class GameController : MonoBehaviour {
                         bc.transform.localScale = new Vector3(1, 1, 1);
                     composants[i][j] = bc;
 
-                    //if(bc.is)
+                    
 
                     if (firstPopulate)
                     {
@@ -271,6 +270,13 @@ public class GameController : MonoBehaviour {
             }
 
         }
+
+        HasSuccessComponent = false;
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < M; j++)
+                if (composants[i][j].isSuccess)
+                    HasSuccessComponent = true;
+
         firstPopulate = false;
     }
 
@@ -284,6 +290,7 @@ public class GameController : MonoBehaviour {
         for (int n = 0; n < 1; n++)
             success = Engine.OneStep1(composants);
 
+        if (!HasSuccessComponent) success = 0; // Avoid to trigger win animation if no success component in the scene
 
         if (!LVM.designerMode)
         {

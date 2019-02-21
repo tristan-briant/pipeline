@@ -36,7 +36,7 @@ public class GroundManager : BaseFrontier
     
     //float ii = 0;
     GameObject water, water0, arrow;
-    public bool isSuccess = false;
+    //public bool isSuccess = false;
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
     Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);

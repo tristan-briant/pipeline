@@ -367,18 +367,14 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnDrag(PointerEventData eventData)
     {
-        
         Vector3 vec = Input.mousePosition;
         vec.z = 1.0f;
         transform.position = Camera.main.ScreenToWorldPoint(vec);
     }
 
-
-    //public void OnEndDrag(PointerEventData eventData)
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
         // Happens after OnDrop
-
         Drop();
     }
 
@@ -451,7 +447,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
 
         if (endParent == null && startParent == null) { //Designer + coup dans l'eau
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
 
