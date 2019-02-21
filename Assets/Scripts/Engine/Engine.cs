@@ -8,7 +8,7 @@ public class Engine  {
     static float[][] pression;
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
-    const float dt = 0.05f; // 0.05f pour oneStep1
+    const float dt = 0.1f; // 0.05f pour oneStep1
     const float alpha = 0.2f; // 0.2f
 
     //const float dt = 0.005f;

@@ -158,7 +158,12 @@ public class DebitmeterManager : BaseComponent
         cadranMax.GetComponent<Image>().fillAmount = 0.5f - angleH * 0.32f;
         cadranMin.GetComponent<Image>().fillAmount = 0.5f - angleL * 0.32f;
 
-        float v = Mathf.Round(20 * -f)/20;
+        float v;
+        if (Mathf.Abs(f)<1 )
+            v = Mathf.Round(100 * -f)/100;
+        else
+            v = Mathf.Round(10 * -f) / 10;
+
         value.GetComponent<Text>().text = v.ToString();
 
         float alpha;

@@ -357,7 +357,7 @@ public class Designer : MonoBehaviour
         slot.transform.localScale = Vector3.one;
         if (dir == 3)
         {
-            slot.transform.localScale = new Vector3(-1, 1, 1);
+            slot.transform.localScale = new Vector3(1, -1, 1);
             slot.transform.localRotation = Quaternion.Euler(0, 0, -90f);
         }
         else if (dir == 5)

@@ -43,14 +43,14 @@ public class OuletManager : BaseFrontier
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
     Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
-    private bool periodic = false;
-    private float periode = 2;
+    public bool periodic = false;
+    public float periode = 2;
     public float Periode { get => periode; set => periode = value; }
     public bool Periodic { get => periodic; set => periodic = value; }
 
  
     float ppset;
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
         if (periodic)
             ppset = pset * Mathf.Sin(2 * Mathf.PI * Time.time / periode);
@@ -70,13 +70,7 @@ public class OuletManager : BaseFrontier
          */
         f = i[0]; //for bubble animation
 
-        if (isSuccess)
-        {
-            if (Mathf.Abs(f) > 0.1)
-                success = Mathf.Clamp(success + 0.005f, 0, 1);
-            else
-                success = Mathf.Clamp(success - 0.05f, 0, 1);
-        }
+       
 
     }
 
@@ -119,7 +113,7 @@ public class OuletManager : BaseFrontier
     private void Update()
     {
         if (water)
-            water.GetComponent<Image>().color = PressureColor(pset);
+            water.GetComponent<Image>().color = PressureColor(ppset);
         if (water0)
             water0.GetComponent<Image>().color = PressureColor(pin[0]);
         
@@ -140,6 +134,17 @@ public class OuletManager : BaseFrontier
         {
             moulin.GetComponent<Animator>().SetFloat("speed", Mathf.Clamp(ppset,-3f,3f));
         }
+
+        if (isSuccess)
+        {
+            const float timeSuccess = 4.0f;  
+            if (f > 0.2f)
+                success = Mathf.Clamp(success + Time.deltaTime/ timeSuccess, 0, 1);
+            else
+                success = Mathf.Clamp(success - 10 * Time.deltaTime/ timeSuccess, 0, 1);
+        }
+
+
     }
 
 }

@@ -8,9 +8,9 @@ public class TeManager : BaseComponent
 {
 
     GameObject water0, water2, water3, bubble0, bubble2, bubble3;
-    float x_bulle1 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
-    float f1, f2, f3;
-    float i1 = 0, i2 = 0, i3 = 0;
+    float x_bulle0 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
+    float f0,  f2, f3;
+    float i0 = 0,  i2 = 0, i3 = 0;
 
     //public float x_bulle = 0;
     float r_bulle = 0.1f;
@@ -20,21 +20,47 @@ public class TeManager : BaseComponent
     public override void Reset_i_p()
     {
         base.Reset_i_p();
-        i1 = i2 = i3 = f1 = f2 = f3 = 0;
+        i0 = i2 = i3 = f0 = f2 = f3 = 0;
     }
 
     public override void Calcule_i_p(float[] p, float[] i,float alpha)
     {
 
-        float a = p[0], b = p[2], c = p[3];
+        //float a = p[0], b = p[2], c = p[3];
+       /* float p0 = p[0], p1 = p[1], p2 = p[2], p3 = p[3];
 
         i1 = i[0]; x_bulle1 -= 0.05f * i1; //// pour le dessin
+        i2 = i[2]; x_bulle2 += 0.05f * i2;
+        i3 = i[3]; x_bulle3 -= 0.05f * i3;*/
+
+        float p0 = p[0], p2 = p[2], p3 = p[3];
+
+
+        i0 = i[0]; x_bulle0 -= 0.05f * i0; //// pour le dessin
+        //i1 = i[1]; x_bulle1 += 0.05f * i1; 
         i2 = i[2]; x_bulle2 += 0.05f * i2;
         i3 = i[3]; x_bulle3 -= 0.05f * i3;
 
         q += (i[0] + i[2] + i[3]) * alpha; //q*=0.99;
 
-        f1 += (p[0] - p[2]) / L * alpha;
+        f0 += (p[0] - q) / L * alpha;
+        //f1 += (p[1] - q) / L * alpha;
+        f2 += (p[2] - q) / L * alpha;
+        f3 += (p[3] - q) / L * alpha;
+
+        p[0] = (q / C + (i[0] - f0) * R);
+        //p[1] = (q / C + (i[1] - f1) * R);
+        p[2] = (q / C + (i[2] - f2) * R);
+        p[3] = (q / C + (i[3] - f3) * R);
+
+        i[0] = (f0 + (p0 - q / C) / R);
+        //i[1] = (f1 + (p1 - q / C) / R);
+        i[2] = (f2 + (p2 - q / C) / R);
+        i[3] = (f3 + (p3 - q / C) / R);
+
+        Pressure = Mathf.Clamp(0.5f * (p[0] + p[2] + p[3])/3.0f, -1f, 1f); ;
+
+        /*f1 += (p[0] - p[2]) / L * alpha;
         f2 += (p[2] - p[3]) / L * alpha;
         f3 += (p[3] - p[0]) / L * alpha;
 
@@ -44,9 +70,9 @@ public class TeManager : BaseComponent
 
         i[0] = (f1 - f3 + (a - q / C) / R);
         i[2] = (f2 - f1 + (b - q / C) / R);
-        i[3] = (f3 - f2 + (c - q / C) / R);
+        i[3] = (f3 - f2 + (c - q / C) / R);*/
 
-       
+
 
         Pressure = Mathf.Clamp(0.5f * q, -1f, 1f); ;
 
@@ -55,7 +81,8 @@ public class TeManager : BaseComponent
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 1);
+        //Calcule_i_p_blocked(p, i, dt, 1);
+        i[1] = 0;
     }
 
     protected override void Start()
@@ -79,16 +106,16 @@ public class TeManager : BaseComponent
 
 
         //////////BUBBLE 0
-        if (Mathf.Abs(i1) > fMinBubble)
+        if (Mathf.Abs(i0) > fMinBubble)
         {
             float xmax = 0.5f - r_bulle;
-            if (x_bulle1 > xmax) x_bulle1 = -xmax;
-            if (x_bulle1 < -xmax) x_bulle1 = xmax;
+            if (x_bulle0 > xmax) x_bulle0 = -xmax;
+            if (x_bulle0 < -xmax) x_bulle0 = xmax;
 
 
-            if (x_bulle1 > 0)
+            if (x_bulle0 > 0)
             {
-                bubble0.transform.localPosition = new Vector3(x_bulle1 * 100, 0, 0);
+                bubble0.transform.localPosition = new Vector3(x_bulle0 * 100, 0, 0);
                 bubble0.SetActive(true);
             }
             else bubble0.SetActive(false);
