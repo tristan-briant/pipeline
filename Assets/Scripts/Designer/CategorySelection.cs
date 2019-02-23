@@ -32,7 +32,7 @@ public class CategorySelection : MonoBehaviour {
         GameObject CP = Instantiate(configPanel);
 
        
-        CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
+        CP.transform.SetParent(GameObject.Find("CanvasConfig").transform);
         CP.transform.localScale = Vector3.one;
         CP.transform.localPosition = Vector3.zero;
 

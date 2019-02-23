@@ -68,10 +68,10 @@ public class GameController : MonoBehaviour {
 
 
 
-        if (LVM.language == "french")
+        /*if (LVM.language == "french")
             levelText.text = "Niveau " + currentLevel;
         else
-            levelText.text = "Level " + currentLevel;
+            levelText.text = "Level " + currentLevel;*/
 
         InvokeRepeating("Evolution", 0.0f, 0.005f);
 
@@ -154,10 +154,10 @@ public class GameController : MonoBehaviour {
                 GameObject slot = Pg.transform.GetChild((i) + (j)*(N)).gameObject; //the slot
       
 
-                if (slot.transform.childCount > 0)
+                if (slot.transform.childCount > 1)
                 {
-                    if (slot.transform.childCount > 1) Debug.Log("Populate error" + slot.transform.childCount);
-                    BaseComponent bc = (BaseComponent)slot.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                    if (slot.transform.childCount !=2) Debug.Log("Populate error" + slot.transform.childCount);
+                    BaseComponent bc = (BaseComponent)slot.transform.GetChild(1).GetComponent(typeof(BaseComponent));
                     Vector3 v = bc.transform.localPosition;
                     v.z = 0;
                     bc.transform.localPosition=v;
@@ -171,16 +171,16 @@ public class GameController : MonoBehaviour {
 
                     if (firstPopulate)
                     {
-                        slot.GetComponent<Image>().sprite = sprites[((i + j) % 2) * 2 + +(int)Random.Range(0, 1.999f)];
+                        slot.GetComponentInChildren<Image>().sprite = sprites[((i + j) % 2) * 2 + +(int)Random.Range(0, 1.999f)];
                     }
                 }
                 else
                 {
                     if (firstPopulate)
                     {
-                        slot.GetComponent<Image>().sprite = sprites[( (i+j) %2)*2 + (int)Random.Range(0,1.999f) ];
+                        slot.GetComponentInChildren<Image>().sprite = sprites[( (i+j) %2)*2 + (int)Random.Range(0,1.999f) ];
                         //float c = 1.0f - Random.Range(0.0f, 0.3f);
-                        slot.GetComponent<Image>().color = Color.white;
+                        slot.GetComponentInChildren<Image>().color = Color.white;
                     }
                     GameObject bc = Instantiate(Resources.Load("Components/Empty", typeof(GameObject))) as GameObject;
                     bc.transform.SetParent(slot.transform);
@@ -198,8 +198,8 @@ public class GameController : MonoBehaviour {
                 int j = 0;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
-                if (go.transform.childCount > 0)
-                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                if (go.transform.childCount > 1)
+                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
                 else
                 {
                     bc = Instantiate(videFrontier);
@@ -217,8 +217,8 @@ public class GameController : MonoBehaviour {
                 int j = M-1;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
-                if (go.transform.childCount > 0)
-                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                if (go.transform.childCount > 1)
+                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
                 else
                 {
                     bc = Instantiate(videFrontier);
@@ -236,8 +236,8 @@ public class GameController : MonoBehaviour {
                 int i = 0;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
-                if (go.transform.childCount > 0)
-                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                if (go.transform.childCount > 1)
+                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
                 else
                 {
                     bc = Instantiate(videFrontier);
@@ -255,8 +255,8 @@ public class GameController : MonoBehaviour {
                 int i = N-1;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
-                if (go.transform.childCount > 0)
-                    bc = (BaseComponent)go.transform.GetChild(0).GetComponent(typeof(BaseComponent));
+                if (go.transform.childCount > 1)
+                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
                 else
                 {
                     bc = Instantiate(videFrontier);

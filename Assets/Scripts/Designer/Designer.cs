@@ -395,8 +395,6 @@ public class Designer : MonoBehaviour
             component.transform.localPosition = Vector3.zero;
             component.transform.localScale = Vector3.one;
             component.GetComponent<BaseComponent>().dir = dir;
-            //component.GetComponent<BaseComponent>().Rotate();
-            //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
         }
 
         return slot;
@@ -410,7 +408,6 @@ public class Designer : MonoBehaviour
         slot.transform.localPosition = Vector3.zero;
         slot.transform.localScale = Vector3.one;
         slot.transform.localRotation = Quaternion.identity;
-
 
         GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
         component.transform.SetParent(slot.transform);

@@ -10,6 +10,7 @@ public class SlotManager : MonoBehaviour , IDropHandler {
     public int type=0; //for frontier
     public int dir=0;
 
+
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
         if (BaseComponent.itemBeingDragged)
@@ -64,7 +65,7 @@ public class SlotManager : MonoBehaviour , IDropHandler {
             case 4: index = (int)Random.Range(1, 2.999f); break;
             case 5: index = 0; break;
         }
-        GetComponent<Image>().sprite = sprites[index];
+        GetComponentInChildren<Image>().sprite = sprites[index];
     }
 }
 

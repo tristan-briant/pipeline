@@ -312,15 +312,14 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public virtual void OnLongClick()
     {
         //Launch Config Panel
-        foreach (ConfigPanel cp in GameObject.FindObjectsOfType<ConfigPanel>())
+        foreach (ConfigPanel cp in FindObjectsOfType<ConfigPanel>())
             cp.Close();
 
         if (configPanel == null) return;
 
-        GameObject CP = Instantiate(configPanel);
+        GameObject CP = Instantiate(configPanel, GameObject.Find("CanvasConfig").transform);
         CP.GetComponent<ConfigPanel>().component = this;
 
-        CP.transform.SetParent(GameObject.Find("MainCanvas").transform);
         CP.transform.localScale = Vector3.one;
         CP.transform.localPosition = Vector3.zero;
 
@@ -356,7 +355,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         GetComponent<CanvasGroup >().blocksRaycasts = false;
         canvas = GameObject.FindGameObjectWithTag("Playground").transform;
-        transform.SetParent(canvas);
+        
+        transform.SetParent(GameObject.Find("CanvasDragged").transform);
         dragged = true;
         gc.PopulateComposant();
 
@@ -368,8 +368,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnDrag(PointerEventData eventData)
     {
         Vector3 vec = Input.mousePosition;
+        //vec= Camera.main.ScreenToWorldPoint(vec);
         vec.z = 1.0f;
         transform.position = Camera.main.ScreenToWorldPoint(vec);
+        //transform.localPosition = vec;
     }
 
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
@@ -387,7 +389,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         if (endParent==null && startParent) //retour au point de départ 
         {
-            DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+            DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
                                                                   /* Destroyimmediate et pas destroy simple sinon present jusqu'à la fin du frame et populatecomposant fail et le trouve toujours  */
             transform.SetParent(startParent);
         }
@@ -396,12 +398,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         { // on échange
             if (endParent == startParent)
             {
-                DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
                 transform.SetParent(endParent);
             }
             else
             {
-                Transform c = endParent.GetChild(0);
+                Transform c = endParent.GetChild(1);
                 if (c.GetComponent<BaseComponent>().IsEmpty())
                 {
                     DestroyImmediate(c.gameObject);
@@ -413,12 +415,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
                     {
                         c.SetParent(startParent);
                         c.localPosition = Vector3.zero;
-                        DestroyImmediate(startParent.GetChild(0).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                        DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
                         transform.SetParent(endParent);
                     }
                     else // retour à la case départ
                     {
-                        DestroyImmediate(startParent.GetChild(0).gameObject);//On enlève le composant vide qui a été placé au début du drag
+                        DestroyImmediate(startParent.GetChild(1).gameObject);//On enlève le composant vide qui a été placé au début du drag
                         transform.SetParent(startParent);
                     }
                 }
@@ -429,14 +431,14 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (endParent && startParent == null) { //provient du designer
             if (name.Contains("Rock"))
             {
-                endParent.GetChild(0).GetComponent<BaseComponent>().ToggleLocked();
+                endParent.GetChild(1).GetComponent<BaseComponent>().ToggleLocked();
                 Destroy(gameObject);
             }
             else
             {
-                if (endParent.GetChild(0).GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
+                if (endParent.GetChild(1).GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
                 {
-                    DestroyImmediate(endParent.GetChild(0).gameObject);
+                    DestroyImmediate(endParent.GetChild(1).gameObject);
                     transform.SetParent(endParent);
                 }
                 else

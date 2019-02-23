@@ -11,10 +11,11 @@ public class ConfigFile : MonoBehaviour
 
     void Start()
     {
-        Canvas canvas = gameObject.AddComponent<Canvas>();
+        /*Canvas canvas = gameObject.AddComponent<Canvas>();
         canvas.overrideSorting = true;
         canvas.sortingOrder = 3;
-        gameObject.AddComponent<GraphicRaycaster>();
+        gameObject.AddComponent<GraphicRaycaster>();*/
+
 
         ListFile();
     }

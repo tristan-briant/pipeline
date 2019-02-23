@@ -20,10 +20,10 @@ public class ConfigPanel : MonoBehaviour {
         selec.transform.localScale = Vector3.one;
         selec.transform.localPosition = Vector3.zero;
 
-        Canvas canvas = gameObject.AddComponent<Canvas>();
+        /*Canvas canvas = gameObject.AddComponent<Canvas>();
         canvas.overrideSorting = true;
-        canvas.sortingOrder = 3;
-        gameObject.AddComponent<GraphicRaycaster>();
+        canvas.sortingOrder = 3;*/
+        //gameObject.AddComponent<GraphicRaycaster>();
     }
 
     public void Close()
