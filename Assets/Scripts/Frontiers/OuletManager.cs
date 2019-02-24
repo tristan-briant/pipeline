@@ -36,9 +36,6 @@ public class OuletManager : BaseFrontier
 
  
 
-
-    //float pp = 0;
-    //float ii = 0;
     GameObject water=null, water0=null, arrow=null, bubble=null, moulin;
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
@@ -69,9 +66,7 @@ public class OuletManager : BaseFrontier
          ii = (-f + (pset - q / C) / (rin * 0.5f));
          */
         f = i[0]; //for bubble animation
-
-       
-
+        
     }
 
     float pp = 0;
@@ -107,8 +102,11 @@ public class OuletManager : BaseFrontier
         if (transform.Find("Moulin"))
             moulin = transform.Find("Moulin").gameObject;
 
-    }
+        if (isSuccess)
+            success = 0;
+        configPanel = Resources.Load("ConfigPanel/ConfigInlet") as GameObject;
 
+    }
 
     private void Update()
     {

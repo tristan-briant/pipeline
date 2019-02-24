@@ -12,8 +12,25 @@ public class ResistorManager : BaseComponent {
 
     public Sprite[] TubeVariant;
     public Sprite[] WaterVariant;
+    Sprite[] Variant;
 
     public float Res { get => res; set{ res = Mathf.Round( value*100)/100; UpdateValue(); } }
+
+    protected override void Start()
+    {
+        base.Start();
+        water = this.transform.Find("Water").gameObject;
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+
+        bubble = this.transform.Find("Bubble").gameObject;
+        f = 0;
+        bubble.gameObject.SetActive(true); //May be deactivated if from designer
+        bubble.GetComponent<Animator>().SetFloat("speed", -f / fMinBubble);
+
+        
+    }
+
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
@@ -36,6 +53,8 @@ public class ResistorManager : BaseComponent {
 
     override public void Awake()
     {
+        Variant = Resources.LoadAll<Sprite>("Components/Resistor-Variants");
+        configPanel = Resources.Load("ConfigPanel/ConfigResistor") as GameObject;
         UpdateValue();
     }
 
@@ -56,18 +75,18 @@ public class ResistorManager : BaseComponent {
 
         if (res > 3.0f)
         {
-            transform.Find("Tube").GetComponent<Image>().sprite = TubeVariant[0];
-            transform.Find("Water").GetComponent<Image>().sprite = WaterVariant[0];
+            transform.Find("Tube").GetComponent<Image>().sprite = Variant[0];
+            transform.Find("Water").GetComponent<Image>().sprite = Variant[3];
         }
         else if(res > 1.5f)
         {
-            transform.Find("Tube").GetComponent<Image>().sprite = TubeVariant[1];
-            transform.Find("Water").GetComponent<Image>().sprite = WaterVariant[1];
+            transform.Find("Tube").GetComponent<Image>().sprite = Variant[1];
+            transform.Find("Water").GetComponent<Image>().sprite = Variant[4];
         }
         else
         {
-            transform.Find("Tube").GetComponent<Image>().sprite = TubeVariant[2];
-            transform.Find("Water").GetComponent<Image>().sprite = WaterVariant[2];
+            transform.Find("Tube").GetComponent<Image>().sprite = Variant[2];
+            transform.Find("Water").GetComponent<Image>().sprite = Variant[5];
         }
             
     }
@@ -78,19 +97,7 @@ public class ResistorManager : BaseComponent {
         Calcule_i_p_blocked(p, i, dt, 3);
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        water = this.transform.Find("Water").gameObject;
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
-
-        bubble = this.transform.Find("Bubble").gameObject;
-        f = 0;
-        bubble.gameObject.SetActive(true); //May be deactivated if from designer
-        bubble.GetComponent<Animator>().SetFloat("speed", -f / fMinBubble);
-    }
-
+    
     private void Update()
     {
         water.GetComponent<Image>().color = PressureColor(q / C);

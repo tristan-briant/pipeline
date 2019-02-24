@@ -95,6 +95,9 @@ public class capacitorManager : BaseComponent {
         bubble2.gameObject.SetActive(true);
         bubble0.GetComponent<Animator>().SetFloat("speed", f0 / fMinBubble);
         bubble2.GetComponent<Animator>().SetFloat("speed", f2 / fMinBubble);
+
+        configPanel = Resources.Load("ConfigPanel/ConfigCapacity") as GameObject;
+
     }
 
     private void Update()

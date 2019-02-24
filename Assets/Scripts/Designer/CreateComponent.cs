@@ -41,8 +41,10 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
 
         NewComponent.GetComponent<BaseComponent>().enabled = true;
-        Transform canvas = GameObject.FindGameObjectWithTag("Playground").transform;
-        NewComponent.transform.SetParent(canvas);
+        //Transform canvas = GameObject.Find("CanvasDragged").transform;//GameObjectWithTag("Playground").transform;
+        //NewComponent.transform.SetParent(canvas);
+
+        NewComponent.GetComponent<BaseComponent>().ChangeParent(GameObject.Find("CanvasDragged").transform);
 
         NewComponent.transform.localPosition = Vector3.zero;
         NewComponent.transform.localScale = Vector3.one * 1.2f;

@@ -27,13 +27,7 @@ public class Designer : MonoBehaviour
         M = Pg.GetComponent<PlaygroundParameters>().M;
     }
 
-    public void Close()
-    {
-        Destroy(gameObject);
-    }
 
-
-    [ContextMenu("Make Thumbnail")]
     public void MakeThumb(string filename)
     {
         GameObject canvas = GameObject.Find("CanvasThumbnail");
@@ -110,7 +104,8 @@ public class Designer : MonoBehaviour
         MakeThumb(Path.Combine(Application.persistentDataPath,  filename + ".png"));
     }
 
-    public void SaveToString()
+
+    public void SaveToString(bool reset=false)
     {
         PGdata = "";
         PlaygroundParameters parameters = FindObjectOfType<PlaygroundParameters>();
@@ -121,7 +116,7 @@ public class Designer : MonoBehaviour
         foreach (Transform slot in deck.transform)
         {
             BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
-            if (component != null && component.name != "")
+            if (component != null && component.name != "" && !reset)
             {
                 string path = component.PrefabPath;
                 PGdata += path + "\n";
@@ -145,11 +140,41 @@ public class Designer : MonoBehaviour
             else
             {
                 PGdata += "empty\n";
+                PGdata += "\n";
+
             }
 
         }
 
         Debug.Log(PGdata);
+    }
+
+    void ClearPlayground()
+    {
+        Pg = GameObject.Find("Playground");
+        int count = Pg.transform.childCount;
+        for (int i = 0; i < count; i++)        // On retire tout
+        {
+            Transform child = Pg.transform.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+
+        GameObject edge = GameObject.Find("LeftEdge");
+        count = edge.transform.childCount;
+        for (int i = 0; i < count; i++)        // On retire tout
+        {
+            Transform child = edge.transform.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+
+        edge = GameObject.Find("RightEdge");
+        count = edge.transform.childCount;
+        for (int i = 0; i < count; i++)        // On retire tout
+        {
+            Transform child = edge.transform.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+
     }
 
     [ContextMenu("LoadFromString")]
@@ -159,7 +184,7 @@ public class Designer : MonoBehaviour
 
         PGdata = PGdata.Replace("\r", ""); //clean up string
 
-        Pg = GameObject.Find("Playground"); 
+        Pg = GameObject.Find("Playground");
         int count = Pg.transform.childCount;
         for (int i = 0; i < count; i++)        // On retire tout
         {
@@ -167,14 +192,31 @@ public class Designer : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
+        GameObject edge = GameObject.Find("LeftEdge");
+        count = edge.transform.childCount;
+        for (int i = 0; i < count; i++)        // On retire tout
+        {
+            Transform child = edge.transform.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+
+        edge = GameObject.Find("RightEdge");
+        count = edge.transform.childCount;
+        for (int i = 0; i < count; i++)        // On retire tout
+        {
+            Transform child = edge.transform.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+
+
         GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
 
-        foreach (Transform slot in deck.transform)
+        foreach (Transform slotDeck in deck.transform)
         {
-            if (slot.transform.childCount > 0)
+            if (slotDeck.transform.childCount > 0)
             {
-                Transform child = slot.transform.GetChild(0);
+                Transform child = slotDeck.transform.GetChild(0);
                 DestroyImmediate(child.gameObject);
             }
         }
@@ -185,18 +227,18 @@ public class Designer : MonoBehaviour
         int k = 0;
         JsonUtility.FromJsonOverwrite(tokens[k++], Pg.GetComponent<PlaygroundParameters>()); //k=0 puis 1  
 
-        foreach (Transform slot in deck.transform)
+        foreach (Transform slotDeck in deck.transform)
         {
             string prefab = tokens[k++];
             
             if (prefab != "empty")
             {
-                Debug.Log(prefab);
                 GameObject component = Instantiate(Resources.Load(prefab)) as GameObject; //Instantiate(Resources.Load(prefab, typeof(GameObject))) as GameObject;
-                component.transform.SetParent(slot.transform);
+                //component.transform.SetParent(slotDeck.transform);
+                component.GetComponent<BaseComponent>().ChangeParent(slotDeck.transform);
  
-                JsonUtility.FromJsonOverwrite(tokens[k++], slot.transform.GetComponentInChildren<BaseComponent>());
-                slot.GetComponent<CreateComponent>().Start();
+                JsonUtility.FromJsonOverwrite(tokens[k++], slotDeck.transform.GetComponentInChildren<BaseComponent>());
+                slotDeck.GetComponent<CreateComponent>().Start();
 
             }
         }
@@ -207,27 +249,37 @@ public class Designer : MonoBehaviour
 
         Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
 
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 1, tokens[k++]);
+        GameObject slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 1, tokens[k++]);
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, true);
 
         for (int i = 1; i < N - 1; i++)
         {
             CreateSlot(Pg, "Field/SlotWall", tokens[k++], 0, tokens[k++]);
         }
 
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 0, tokens[k++]);
+        slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 0, tokens[k++]);
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, false);
 
         for (int j = 1; j < M - 1; j++)
         {
-            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 1, tokens[k++]);
+            slot = CreateSlot(Pg, "Field/SlotWall", tokens[k++], 1, tokens[k++]);
+            CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, true);
+
             for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotComponent", tokens[k++], 0, tokens[k++]); //empty component
-            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 3, tokens[k++]);
+
+            slot = CreateSlot(Pg, "Field/SlotWall", tokens[k++], 3, tokens[k++]);
+            CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, false);
+
         }
 
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 2, tokens[k++]);
+        slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 2, tokens[k++]);
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, true);
 
         for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", tokens[k++], 2, tokens[k++]);
 
-        CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
+        slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, false);
+
 
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
@@ -249,7 +301,7 @@ public class Designer : MonoBehaviour
     public void LoadFromLastFile()
     {
         string filename;
-        string[] fileNames = System.IO.Directory.GetFiles(Application.persistentDataPath, "*.txt");
+        string[] fileNames = Directory.GetFiles(Application.persistentDataPath, "*.txt");
         if (fileNames.Length > 0)
         {
             filename = fileNames[fileNames.Length - 1];
@@ -257,97 +309,7 @@ public class Designer : MonoBehaviour
             LoadFromString();
         }
     }
-
-    [ContextMenu("ChangeBorder")]
-    public void ChangeBorder()
-    {
-        // First, check parameter and change value of dimension 
-        int N = Pg.GetComponent<GridLayoutGroup>().constraintCount;
-        int M = Pg.transform.childCount / N;
-        PlaygroundParameters param = Pg.GetComponent<PlaygroundParameters>();
-        param.N = N;
-        param.M = M;
-
-        for (int i = 1; i < N - 1; i++)
-        {
-            int j = 0;
-            GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-
-            Transform bc = go.transform.GetChild(0);
-            if (bc.name.Contains("Wall"))
-            {
-
-                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
-                c.transform.SetParent(go.transform);
-                c.transform.localScale = Vector3.one;
-                c.transform.localPosition = Vector3.zero;
-
-                DestroyImmediate(bc.gameObject);
-            }
-
-        }
-
-        for (int i = 0; i < N; i++)
-        {
-            int j = M - 1;
-            GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-            Transform bc = go.transform.GetChild(0);
-            if (bc.name.Contains("Wall"))
-            {
-
-                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
-                c.transform.SetParent(go.transform);
-                c.transform.localScale = Vector3.one;
-                c.GetComponent<BaseComponent>().dir = 2;
-                c.transform.localRotation = Quaternion.Euler(0.0f, 0f, 180f);
-                c.transform.localPosition = Vector3.zero;
-
-                DestroyImmediate(bc.gameObject);
-            }
-
-        }
-
-        for (int j = 1; j < M - 1; j++)
-        {
-            int i = 0;
-            GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-            Transform bc = go.transform.GetChild(0);
-            if (bc.name.Contains("Wall"))
-            {
-
-                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
-                c.transform.SetParent(go.transform);
-                c.transform.localScale = Vector3.one;
-                c.GetComponent<BaseComponent>().dir = 1;
-                c.transform.localRotation = Quaternion.Euler(0.0f, 0f, 90f);
-                c.transform.localPosition = Vector3.zero;
-
-                DestroyImmediate(bc.gameObject);
-            }
-
-        }
-        for (int j = 1; j < M - 1; j++)
-        {
-            int i = N - 1;
-            GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
-            Transform bc = go.transform.GetChild(0);
-            if (bc.name.Contains("Wall"))
-            {
-
-                GameObject c = Instantiate(Resources.Load("Frontiers/Wall", typeof(GameObject))) as GameObject;
-                c.transform.SetParent(go.transform);
-                c.transform.localScale = Vector3.one;
-                c.GetComponent<BaseComponent>().dir = 3;
-                c.transform.localRotation = Quaternion.Euler(0.0f, 0f, -90f);
-                c.transform.localPosition = Vector3.zero;
-
-                DestroyImmediate(bc.gameObject);
-            }
-
-        }
-
-    }
-
+    
 
     GameObject CreateSlotFrontier(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, int type)
     {
@@ -401,7 +363,7 @@ public class Designer : MonoBehaviour
     }
     
 
-    void CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, string data)
+    GameObject CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, string data)
     {
         GameObject slot = Instantiate(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
@@ -409,37 +371,64 @@ public class Designer : MonoBehaviour
         slot.transform.localScale = Vector3.one;
         slot.transform.localRotation = Quaternion.identity;
 
-        GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
-        component.transform.SetParent(slot.transform);
-        component.transform.localPosition = Vector3.zero;
-        component.transform.localScale = Vector3.one;
-
-
-        JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
-        slot.transform.GetComponentInChildren<BaseComponent>().Awake();
-
-        if (slot.GetComponentInChildren<BaseFrontier>() != null)
-        { //if corner or frontier
-            component.GetComponent<BaseFrontier>().InitializeSlot();
-            component.GetComponent<BaseComponent>().dir = dir;  //override frontier direction in case it is in the wrong way
-            //component.GetComponent<BaseComponent>().Rotate();
-
-            //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
-        }
-        else
+        if (PrefabComponentPath != "empty")
         {
-            dir = component.GetComponent<BaseComponent>().dir;
-            //component.GetComponent<BaseComponent>().Rotate();
+            GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+            //component.transform.SetParent(slot.transform);
+            component.GetComponent<BaseComponent>().ChangeParent(slot.transform);
+            component.transform.localPosition = Vector3.zero;
+            component.transform.localScale = Vector3.one;
 
-            //component.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+
+            JsonUtility.FromJsonOverwrite(data, slot.transform.GetComponentInChildren<BaseComponent>());
+            slot.transform.GetComponentInChildren<BaseComponent>().Awake();
+
+            if (slot.GetComponentInChildren<BaseFrontier>() != null)
+            { //if corner or frontier
+                component.GetComponent<BaseFrontier>().InitializeSlot();
+                component.GetComponent<BaseComponent>().dir = dir;  //override frontier direction in case it is in the wrong way
+            }
+
+            bool designerMode = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designerMode;
+
+            component.GetComponent<BaseComponent>().destroyable = designerMode;
         }
-
-        bool designerMode = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designerMode;
-
-        component.GetComponent<BaseComponent>().destroyable = designerMode;
+        return slot;
 
     }
 
+    void CreateSlotEdge(int type,bool onTheLeft)
+    {
+        Transform edge;
+        GameObject slot = Instantiate(Resources.Load("Field/SlotEdge", typeof(GameObject))) as GameObject;
+        if (onTheLeft)
+            edge = GameObject.Find("LeftEdge").transform;
+        else
+            edge = GameObject.Find("RightEdge").transform;
+
+        slot.transform.SetParent(edge);
+        slot.transform.localPosition = Vector3.zero;
+        slot.transform.localScale = Vector3.one;
+
+        ChangeSlotEdgeImage(slot, type);
+    }
+
+    public void ChangeSlotEdgeImage(GameObject slot, int type)
+    {
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Field/AtlasEdge");
+
+        Image im = slot.GetComponentInChildren<Image>();
+
+        switch (type)
+        {
+            case 0: 
+            case 1: im.color=new Color(0,0,0,0); break;
+            case 2: im.color = Color.white; im.sprite = sprites[(int)Random.Range(0, 1.999f)]; break;
+            case 3: 
+            case 4: 
+            case 5: im.color = Color.white; im.sprite = sprites[2]; break;
+        }
+    }
 
     public void ResetField()
     {
@@ -449,38 +438,40 @@ public class Designer : MonoBehaviour
         param.M = M;
 
         // On retire tout
-        int count = Pg.transform.childCount;
-        for (int i = 0; i < count; i++)
-        {
-            Transform child = Pg.transform.GetChild(0);
-            DestroyImmediate(child.gameObject);
-        }
+        ClearPlayground();
 
         Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
 
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 6, 0);
+        CreateSlotEdge(0,true);
+
         for (int i = 1; i < N - 1; i++) CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 0, 1);
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 0, 0);
+        CreateSlotEdge(0, false);
 
         for (int j = 1; j < M - 1; j++)
         {
-            int type = Mathf.Min(j, 4);
+            int type = Mathf.Min(j+1, 4);
             CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 1, type);
+            CreateSlotEdge(type, true);
             for (int i = 1; i < N - 1; i++) CreateSlotComponent(Pg, "Field/SlotComponent", "", 0); //empty component
             CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 3, type);
+            CreateSlotEdge(type, false);
+
         }
 
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 5, 5);
+        CreateSlotEdge(5, true);
 
         for (int i = 1; i < N - 1; i++) CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 2, 4);
 
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 2, 5);
+        CreateSlotEdge(5, false);
 
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
     }
 
-  
     public void ReduceWidth()
     {
         if (N > MinSize)
@@ -541,14 +532,15 @@ public class Designer : MonoBehaviour
             {
                 DestroyImmediate(Pg.transform.GetChild(i + j * N).gameObject);
             }
+            GameObject edge = GameObject.Find("LeftEdge");
+            DestroyImmediate(edge.transform.GetChild(M - 2).gameObject);
+            edge = GameObject.Find("RightEdge");
+            DestroyImmediate(edge.transform.GetChild(M - 2).gameObject);
+
             Pg.GetComponent<PlaygroundParameters>().M = M - 1;
             M = M - 1;
 
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
-
-
-
-            /****   ***/
 
             int type = Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type;
 
@@ -634,7 +626,8 @@ public class Designer : MonoBehaviour
             Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
             Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
 
-
+            CreateSlotEdge(4, true);
+            CreateSlotEdge(4, false);
 
         }
         else
@@ -672,6 +665,10 @@ public class Designer : MonoBehaviour
         Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
         Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
         Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
+
+        GameObject edge = GameObject.Find(left ? "LeftEdge" : "RightEdge"); ;
+        ChangeSlotEdgeImage(edge.transform.GetChild(j-1).gameObject, 1);
+        ChangeSlotEdgeImage(edge.transform.GetChild(j).gameObject, 2);
     }
 
     public void DecreaseBeach(bool left)
@@ -704,6 +701,12 @@ public class Designer : MonoBehaviour
         Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
         Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
         Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
+
+        GameObject edge = GameObject.Find(left ? "LeftEdge" : "RightEdge");
+        ChangeSlotEdgeImage(edge.transform.GetChild(j-1).gameObject, 2);
+        ChangeSlotEdgeImage(edge.transform.GetChild(j).gameObject, 4);
+        //ChangeSlotEdgeImage(edge.transform.GetChild(j+1).gameObject, 4);
+
     }
 
 
@@ -746,4 +749,7 @@ public class Designer : MonoBehaviour
     }
 
 
+
+
+   
 }

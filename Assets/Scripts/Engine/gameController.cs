@@ -7,18 +7,19 @@ using System.IO;
 
 public class GameController : MonoBehaviour {
 
-    public int N,M; // size of the playground
+    public int N, M; // size of the playground
 
-    float[][] deltai; 
+    float[][] deltai;
     float[][] deltap;
 
     public BaseComponent[][] composants;
     //public BaseComponent vide;
     public BaseComponent videFrontier;
     public BaseFrontier[] borders;
-   // public Sprite concrete; // image for locked component
+    // public Sprite concrete; // image for locked component
     public int currentLevel;
     public Text levelText;
+    public Text nextLevelText;
     public Button nextButton;
     public Button prevButton;
 
@@ -44,7 +45,7 @@ public class GameController : MonoBehaviour {
         currentLevel = LVM.currentLevel;
         Pg = GameObject.Find("Playground");
 
-        if (currentLevel > 0) // 0 mean level design
+        if (currentLevel > 0) // (0 mean level designer)
         {
             GameObject.Find("MainCanvas").transform.Find("HeaderDesigner").gameObject.SetActive(false);
             GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(true);
@@ -53,25 +54,21 @@ public class GameController : MonoBehaviour {
             LVM.designerMode = false;
             DeckHolder.SetActive(true);
 
+ 
             LoadLevel();
         }
-        else
+        else //level designer
         {
             GameObject.Find("MainCanvas").transform.Find("HeaderDesigner").gameObject.SetActive(true);
             GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(false);
             GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(true);
             Pg = GameObject.Find("Playground");
             LVM.designerMode = true;
+            nextLevelText.gameObject.SetActive(false);
+            levelText.gameObject.SetActive(false);
 
             InitializePlayground();
         }
-
-
-
-        /*if (LVM.language == "french")
-            levelText.text = "Niveau " + currentLevel;
-        else
-            levelText.text = "Level " + currentLevel;*/
 
         InvokeRepeating("Evolution", 0.0f, 0.005f);
 
@@ -96,12 +93,12 @@ public class GameController : MonoBehaviour {
     public void InitializePlayground()
     {
         ///////////// Array Initialization /////////////
-        
+        Pg = GameObject.Find("Playground");
         N = Pg.GetComponent<GridLayoutGroup>().constraintCount; // -2 for the frontier
         M = Pg.transform.childCount / N; //itou
 
         Engine.initialize_p_i(N, M); // create the array of currant and pressure
-        
+
         composants = new BaseComponent[N][];
 
         for (int k = 0; k < N; k++)
@@ -117,7 +114,7 @@ public class GameController : MonoBehaviour {
         winText.SetActive(false);
     }
 
-   
+
 
     [ContextMenu("Resize Playground")]
     public void ResizePlayGround()
@@ -129,15 +126,21 @@ public class GameController : MonoBehaviour {
         Debug.Log(" W :" + width + " H  " + height);
         Debug.Log(" N :" + N + " M  " + M);
 
-        //float wx = width / (100f * (N - 1));
-        float wx = width / (100f * (N ));
+        float wx = width / (100f * N);
         float wy = height / (100f * M);
 
         float wc = Mathf.Min(wx, wy);
 
         Pg.transform.localScale = new Vector3(wc, wc, 1);
-
         Pg.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+        GameObject edge = GameObject.Find("LeftEdge");
+        edge.GetComponent<RectTransform>().sizeDelta = new Vector2((width / wc - (100 * N)) / 2, 100 * M);
+        edge.transform.localScale = wc * Vector3.one;
+
+        edge = GameObject.Find("RightEdge");
+        edge.GetComponent<RectTransform>().sizeDelta = new Vector2((width / wc - (100 * N)) / 2, 100 * M);
+        edge.transform.localScale = wc * Vector3.one;
     }
 
 
@@ -146,28 +149,28 @@ public class GameController : MonoBehaviour {
     public void PopulateComposant()
     {
         Sprite[] sprites = Resources.LoadAll<Sprite>("Field/GrassAtlas");
-        
 
-        for (int i = 1; i < N-1; i++)
-            for (int j = 1; j < M-1; j++)
+
+        for (int i = 1; i < N - 1; i++)
+            for (int j = 1; j < M - 1; j++)
             {
-                GameObject slot = Pg.transform.GetChild((i) + (j)*(N)).gameObject; //the slot
-      
+                GameObject slot = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
+
 
                 if (slot.transform.childCount > 1)
                 {
-                    if (slot.transform.childCount !=2) Debug.Log("Populate error" + slot.transform.childCount);
+                    if (slot.transform.childCount != 2) Debug.Log("Populate error" + slot.transform.childCount);
                     BaseComponent bc = (BaseComponent)slot.transform.GetChild(1).GetComponent(typeof(BaseComponent));
                     Vector3 v = bc.transform.localPosition;
                     v.z = 0;
-                    bc.transform.localPosition=v;
-                    if(bc.mirror)
+                    bc.transform.localPosition = v;
+                    if (bc.mirror)
                         bc.transform.localScale = new Vector3(-1, 1, 1);
                     else
                         bc.transform.localScale = new Vector3(1, 1, 1);
                     composants[i][j] = bc;
 
-                    
+
 
                     if (firstPopulate)
                     {
@@ -178,7 +181,7 @@ public class GameController : MonoBehaviour {
                 {
                     if (firstPopulate)
                     {
-                        slot.GetComponentInChildren<Image>().sprite = sprites[( (i+j) %2)*2 + (int)Random.Range(0,1.999f) ];
+                        slot.GetComponentInChildren<Image>().sprite = sprites[((i + j) % 2) * 2 + (int)Random.Range(0, 1.999f)];
                         //float c = 1.0f - Random.Range(0.0f, 0.3f);
                         slot.GetComponentInChildren<Image>().color = Color.white;
                     }
@@ -188,12 +191,12 @@ public class GameController : MonoBehaviour {
                     bc.transform.localPosition = Vector3.zero;
                     composants[i][j] = bc.GetComponent<BaseComponent>();
                 }
-        }
+            }
 
 
         //if (firstPopulate)
         {
-            for (int i = 0; i < N ; i++)
+            for (int i = 0; i < N; i++)
             {
                 int j = 0;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
@@ -212,9 +215,9 @@ public class GameController : MonoBehaviour {
                 (bc as BaseFrontier).GetValueFromSlot();
             }
 
-            for (int i = 0; i < N ; i++)
+            for (int i = 0; i < N; i++)
             {
-                int j = M-1;
+                int j = M - 1;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
                 if (go.transform.childCount > 1)
@@ -252,7 +255,7 @@ public class GameController : MonoBehaviour {
 
             for (int j = 1; j < M - 1; j++)
             {
-                int i = N-1;
+                int i = N - 1;
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
                 if (go.transform.childCount > 1)
@@ -319,16 +322,15 @@ public class GameController : MonoBehaviour {
         yield return new WaitForSeconds(2f);
         if (currentLevel < LVM.levelMax)
         {
-            if (LVM.language == "french")
-                levelText.text = "Niveau suivant";
-            else
-                levelText.text = "Next level";
-            levelText.GetComponent<Button>().enabled = true;
-            levelText.GetComponent<Animator>().enabled = true;
+
+            levelText.gameObject.SetActive(false);
+            nextLevelText.gameObject.SetActive(true);
+            nextButton.gameObject.SetActive(true);
         }
-
-
     }
+
+
+
 
     IEnumerator LoseAnimation()
     {
@@ -379,6 +381,11 @@ public class GameController : MonoBehaviour {
             nextButton.gameObject.SetActive(true);
         else
             nextButton.gameObject.SetActive(false);
+
+        levelText.gameObject.SetActive(true);
+        levelText.text = levelText.GetComponent<languageManager>().GetText() + currentLevel;
+        nextLevelText.gameObject.SetActive(false);
+
 
     }
 

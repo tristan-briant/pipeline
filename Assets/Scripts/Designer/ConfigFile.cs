@@ -13,10 +13,9 @@ public class ConfigFile : MonoBehaviour
     {
         /*Canvas canvas = gameObject.AddComponent<Canvas>();
         canvas.overrideSorting = true;
-        canvas.sortingOrder = 3;
-        gameObject.AddComponent<GraphicRaycaster>();*/
+        canvas.sortingOrder = 3;*/
 
-
+        gameObject.AddComponent<GraphicRaycaster>();
         ListFile();
     }
 

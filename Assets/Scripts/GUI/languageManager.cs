@@ -17,7 +17,19 @@ public class languageManager : MonoBehaviour {
         SwitchLanguage();
     }
 
-
+    public string GetText()
+    {
+        switch (LVM.GetComponent<LevelManager>().language)
+        {
+            case "english":
+            case "English":
+            default:
+                return text_en;
+            case "french":
+            case "French":
+                return text_fr;
+        }
+    }
 
     public void SwitchLanguage()
     {

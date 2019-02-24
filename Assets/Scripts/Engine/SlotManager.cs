@@ -61,7 +61,7 @@ public class SlotManager : MonoBehaviour , IDropHandler {
             case 0: index = 7; break;
             case 1: index = (int)Random.Range(5, 6.999f); break;
             case 2: index = 4; break;
-            case 3: index = 3; break;
+            case 3: //index = 3; break;
             case 4: index = (int)Random.Range(1, 2.999f); break;
             case 5: index = 0; break;
         }

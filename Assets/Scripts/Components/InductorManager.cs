@@ -19,6 +19,22 @@ public class InductorManager : BaseComponent
     public float Lin { get => lin; set => lin = value; }
     public float Rin { get => rin; set => rin = value; }
 
+
+    protected override void Start()
+    {
+        base.Start();
+        water0 = this.transform.Find("Water0").gameObject;
+        water2 = this.transform.Find("Water2").gameObject;
+        water = this.transform.Find("Water").gameObject;
+
+        propeller = this.transform.Find("Propeller").gameObject;
+        bubble = this.transform.Find("Bubble").gameObject;
+        anim = bubble.GetComponent<Animation>();
+
+        GetComponent<Animator>().SetFloat("speed", 0);
+        configPanel = Resources.Load("ConfigPanel/ConfigInductor") as GameObject;
+    }
+
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
         //R = 16f;//C = 2;
@@ -48,20 +64,7 @@ public class InductorManager : BaseComponent
     }
 
 
-    protected override void Start()
-    {
-        base.Start();
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
-        water = this.transform.Find("Water").gameObject;
-
-        propeller = this.transform.Find("Propeller").gameObject;
-        bubble = this.transform.Find("Bubble").gameObject;
-        anim=bubble.GetComponent<Animation>();
-
-        GetComponent<Animator>().SetFloat("speed", 0);
-
-    }
+   
 
     private void Update()
     {

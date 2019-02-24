@@ -11,30 +11,33 @@ public class ConfigPanel : MonoBehaviour {
     public GameObject selection;
 
     GameObject selec;
+    bool connected = false; //true if linked to a component
 
     public virtual void Start()
     {
-        selec = Instantiate(selection);
-        selec.transform.SetParent(component.transform);
-        selec.transform.SetAsFirstSibling();
-        selec.transform.localScale = Vector3.one;
-        selec.transform.localPosition = Vector3.zero;
+        if (component)
+        {
+            selec = Instantiate(selection);
+            selec.transform.SetParent(component.transform);
+            selec.transform.SetAsFirstSibling();
+            selec.transform.localScale = Vector3.one;
+            selec.transform.localPosition = Vector3.zero;
+            connected = true;
+        }
 
-        /*Canvas canvas = gameObject.AddComponent<Canvas>();
-        canvas.overrideSorting = true;
-        canvas.sortingOrder = 3;*/
-        //gameObject.AddComponent<GraphicRaycaster>();
+        gameObject.AddComponent<GraphicRaycaster>();
     }
 
     public void Close()
     {
         Destroy(gameObject);
-        Destroy(selec);
+        if(selec)
+            Destroy(selec);
     }
 
     public void Update()
     {
-        if (selec == null) // the component has been deleted
+        if (connected && selec == null) // the component has been deleted
             Destroy(gameObject);
     }
 

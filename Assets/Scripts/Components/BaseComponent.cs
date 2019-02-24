@@ -12,43 +12,22 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected float q = 0, f = 0;
     protected float[] qq = { 0, 0, 0, 0 };
     protected float[] ff = { 0, 0, 0, 0 };
+    protected GameObject configPanel;
 
     public int dir=0;
     protected float R = 1f, L = 1f, C =1f, Rground = 50;
     protected float fluxMinSound =0.01f;
-    //protected string Name;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
-    public float success = 1;
-    public float fail = 0;
-    public const float fMinBubble = 0.05f;
-    //public bool empty = true;
+    [System.NonSerialized] public float success = 1;
+    protected float fail = 0;
+    protected const float fMinBubble = 0.05f;
     private float pressure;
+    public float Pressure { get => pressure; set => pressure = value; }
     public bool destroyable=true;
     public bool isSuccess = false;
-
-    //public int x, y;
     public bool locked = false;
-    public bool Locked
-    {
-        get
-        {
-            return locked;
-        }
-
-        set
-        {
-            locked = value;
-            SetLocked();
-        }
-    }
-
-    public virtual void Awake()
-    {
-    }
-
-    public float Pressure { get => pressure; set => pressure = value; }
-
+    public bool Locked { get => locked; set { locked = value; SetLocked(); } }
     public bool dir_locked = false;
     public bool mirror = false;
     public bool isFrontiers=false;
@@ -58,6 +37,29 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected GameController gc; // le moteur du jeu à invoquer parfois
     protected AudioSource[] audios;
     PlaygroundParameters parameters;
+
+    public virtual void Awake()
+    {
+    }
+
+    protected virtual void Start()
+    {
+        success = 1;
+        gc = (GameController)GameObject.Find("GameController").GetComponent(typeof(GameController)); //find the game engine
+
+        parameters = transform.GetComponentInParent<PlaygroundParameters>();
+        audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
+
+        if (parameters != null)
+        {
+            R = parameters.R;
+            C = parameters.C;
+            L = parameters.L;
+            Rground = parameters.Rground;
+        }
+        Rotate();
+        SetLocked();
+    }
 
     protected Color PressureColor(float p)
     { // donne la convention de pression
@@ -148,26 +150,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         */
 
         i[index] = 0;
-    }
-
-
-    protected virtual void Start()
-    {
-        success = 1;
-        gc = (GameController)GameObject.Find("GameController").GetComponent(typeof(GameController)); //find the game engine
-
-        parameters = transform.GetComponentInParent<PlaygroundParameters>();
-        audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
-
-        if (parameters != null)
-        {
-            R = parameters.R;
-            C = parameters.C;
-            L = parameters.L;
-            Rground = parameters.Rground;
-        }
-        Rotate();
-        SetLocked();
     }
 
     void ToggleLocked()
@@ -308,7 +290,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
-    public GameObject configPanel;
     public virtual void OnLongClick()
     {
         //Launch Config Panel
@@ -329,11 +310,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     }
     
-
     public static Transform startParent;
     public static Transform endParent;
 
-    Transform canvas;
+    //Transform canvas;
     public static GameObject itemBeingDragged;
 
     public virtual void BlockCurrant()
@@ -353,11 +333,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         startParent = transform.parent;
         endParent = null;
 
-        GetComponent<CanvasGroup >().blocksRaycasts = false;
-        canvas = GameObject.FindGameObjectWithTag("Playground").transform;
-        
-        transform.SetParent(GameObject.Find("CanvasDragged").transform);
+        //GetComponent<CanvasGroup >().blocksRaycasts = false;
+
         dragged = true;
+
+        ChangeParent(GameObject.Find("CanvasDragged").transform);
+
         gc.PopulateComposant();
 
         transform.localScale = transform.localScale * 1.2f;
@@ -385,43 +366,54 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         itemBeingDragged = null;
         transform.localScale = Vector3.one;//transform.localScale / 1.2f;
 
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
+        //GetComponent<CanvasGroup>().blocksRaycasts = true;
 
         if (endParent==null && startParent) //retour au point de départ 
         {
-            DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+            //DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
                                                                   /* Destroyimmediate et pas destroy simple sinon present jusqu'à la fin du frame et populatecomposant fail et le trouve toujours  */
-            transform.SetParent(startParent);
+
+            //ChangeParent(startParent);
+            StartCoroutine(FlightToFinalPosition(startParent));
         }
 
         if (endParent && startParent)
         { // on échange
             if (endParent == startParent)
             {
-                DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
-                transform.SetParent(endParent);
+                StartCoroutine(FlightToFinalPosition(endParent));
+                //DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
+                //transform.SetParent(endParent);
+                //ChangeParent(endParent);
+                //gc.PopulateComposant();
             }
             else
             {
                 Transform c = endParent.GetChild(1);
                 if (c.GetComponent<BaseComponent>().IsEmpty())
                 {
-                    DestroyImmediate(c.gameObject);
-                    transform.SetParent(endParent);
+                    StartCoroutine(FlightToFinalPosition(endParent));
+                    /*DestroyImmediate(c.gameObject);
+                    //transform.SetParent(endParent);
+                    ChangeParent(endParent);
+                    gc.PopulateComposant();*/
                 }
                 else
                 {
                     if (c.GetComponent<BaseComponent>().IsMovable())
                     {
-                        c.SetParent(startParent);
-                        c.localPosition = Vector3.zero;
-                        DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
-                        transform.SetParent(endParent);
+                      
+                        c.GetComponent<BaseComponent>().ChangeParent(GameObject.Find("CanvasDragged").transform);
+                        gc.PopulateComposant();
+
+                        StartCoroutine(c.GetComponent<BaseComponent>().FlightToFinalPosition(startParent));
+
+                        StartCoroutine(FlightToFinalPosition(endParent));
+
                     }
                     else // retour à la case départ
                     {
-                        DestroyImmediate(startParent.GetChild(1).gameObject);//On enlève le composant vide qui a été placé au début du drag
-                        transform.SetParent(startParent);
+                        StartCoroutine(FlightToFinalPosition(startParent));
                     }
                 }
 
@@ -438,8 +430,13 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             {
                 if (endParent.GetChild(1).GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
                 {
-                    DestroyImmediate(endParent.GetChild(1).gameObject);
-                    transform.SetParent(endParent);
+                    StartCoroutine(FlightToFinalPosition(endParent));
+
+                    //DestroyImmediate(endParent.GetChild(1).gameObject);
+                    //transform.SetParent(endParent);
+                    //ChangeParent(endParent);
+                    
+
                 }
                 else
                 {
@@ -453,18 +450,69 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             return;
         }
 
-        transform.localPosition = Vector3.zero;
-        transform.localScale = Vector3.one;
+        //transform.localPosition = Vector3.zero;
+        //transform.localScale = Vector3.one;
 
         dragged = false;
         startParent = endParent = null;
 
-        gc.PopulateComposant();
-        audios[1].Play();
+        //gc.PopulateComposant();
+        //audios[1].Play();
     }
 
     protected float SpeedAnim()
     {
         return Mathf.Atan(f) / fMinBubble;
+    }
+
+    public void ChangeParent(Transform newParent) // set new parent and change sorting layer
+    {
+        transform.SetParent(newParent);
+        Canvas canvasParent = newParent.GetComponentInParent<Canvas>();
+        if (canvasParent)
+        {
+            foreach (Canvas c in GetComponentsInChildren<Canvas>())
+                c.sortingLayerName = canvasParent.sortingLayerName;
+        }
+
+        //transform.localPosition = Vector3.zero;
+        //transform.localScale = Vector3.one;
+       
+    }
+
+    public IEnumerator FlightToFinalPosition(Transform newParent,float flightTime=0.1f, bool cleanNewParent=true)
+    {
+        Vector3 initialPosition = transform.position;
+        Vector3 finalPosition = newParent.position;
+
+        float t = 0;
+
+        while (t<flightTime)
+        {
+            t += Time.deltaTime;
+            transform.position = (initialPosition * (flightTime - t) + finalPosition * t) / flightTime;
+            yield return new WaitForEndOfFrame();
+        }
+        
+
+        transform.SetParent(newParent);
+        Canvas canvasParent = newParent.GetComponentInParent<Canvas>();
+        if (canvasParent)
+        {
+            foreach (Canvas c in GetComponentsInChildren<Canvas>())
+                c.sortingLayerName = canvasParent.sortingLayerName;
+        }
+
+
+        transform.localPosition = Vector3.zero;
+        transform.localScale = Vector3.one;
+
+        if (cleanNewParent)
+            DestroyImmediate(newParent.GetChild(1).gameObject);
+
+        transform.SetParent(newParent);
+
+        gc.PopulateComposant();
+        audios[1].Play();
     }
 }

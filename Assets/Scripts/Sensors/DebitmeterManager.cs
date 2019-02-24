@@ -27,7 +27,30 @@ public class DebitmeterManager : BaseComponent
 
     const float beta = 0.1f;
 
-    void calculateSetPoint()
+    protected override void Start()
+    {
+        base.Start();
+        success = 0;
+        water = transform.Find("Water").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
+
+        bubble = transform.Find("Bubble").gameObject;
+        cadranMin = transform.Find("Cadran Min").gameObject;
+        cadranMax = transform.Find("Cadran Max").gameObject;
+
+        arrow = transform.Find("Arrow").gameObject;
+        shine = transform.Find("Shine").gameObject;
+        value = transform.Find("Value").gameObject;
+
+        f = 0;
+        bubble.GetComponent<Animator>().SetFloat("speed", 0);
+
+        configPanel = Resources.Load("ConfigPanel/ConfigDebimeter") as GameObject;
+    }
+
+
+    void CalculateSetPoint()
     {
         float mean, tolerance, t;
         switch (mode)
@@ -88,12 +111,9 @@ public class DebitmeterManager : BaseComponent
         i[0] = (f + (a - q / C) / R);
         i[2] = (-f + (b - q / C) / R);
 
-
-        //x_bulle -= 0.05f * f;
-
         flux = (1 - beta) * flux + beta * f;
 
-        calculateSetPoint();
+        CalculateSetPoint();
         if (SPL < -flux && -flux < SPH && itemBeingDragged == null)
             success = Mathf.Clamp(success + successSpeed, 0, 1);
         else
@@ -107,26 +127,7 @@ public class DebitmeterManager : BaseComponent
         Calcule_i_p_blocked(p, i, dt, 3);
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        success = 0;
-        water = transform.Find("Water").gameObject;
-        water0 = transform.Find("Water0").gameObject;
-        water2 = transform.Find("Water2").gameObject;
-
-        bubble = transform.Find("Bubble").gameObject;
-        cadranMin = transform.Find("Cadran Min").gameObject;
-        cadranMax = transform.Find("Cadran Max").gameObject;
-
-        arrow = transform.Find("Arrow").gameObject;
-        shine = transform.Find("Shine").gameObject;
-        value= transform.Find("Value").gameObject;
-
-        f = 0;
-        bubble.GetComponent<Animator>().SetFloat("speed", 0);
-
-    }
+   
 
 
     private void Update()
@@ -136,21 +137,11 @@ public class DebitmeterManager : BaseComponent
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        //float speed = Mathf.Atan(f )/ fMinBubble;
-        /*if (f >= 0)
-            speed = Mathf.Sqrt(f / fMinBubble);
-        else
-            speed = -Mathf.Sqrt(-f / fMinBubble);*/
-
         bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
-
-
-       
 
         const float ANGLEMAX = 180 / 4.8f;
         float angle = Mathf.Clamp(flux / iMax * ANGLEMAX, -ANGLEMAX * 1.2f, ANGLEMAX * 1.2f);
 
-        //float angleH, angleL;
         float angleH = Mathf.Clamp((SPH) / iMax, -1, 1);
         float angleL = Mathf.Clamp((SPL) / iMax, -1, 1);
 

@@ -77,6 +77,7 @@ public class PressostatManager : BaseComponent {
         success = 0;
         
         shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+        configPanel = Resources.Load("ConfigPanel/ConfigPressostat") as GameObject;
 
         base.Start();
     }
