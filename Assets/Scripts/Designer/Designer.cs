@@ -430,6 +430,37 @@ public class Designer : MonoBehaviour
         }
     }
 
+    void DrawEdges()
+    {
+        foreach (Transform child in GameObject.Find("RightEdge").transform)
+            Destroy(child.gameObject);
+
+        foreach (Transform child in GameObject.Find("LeftEdge").transform)
+            Destroy(child.gameObject);
+
+        // corner is special
+        if (Pg.transform.GetChild(0).GetComponentInChildren<BaseFrontier>().type == 1)
+            CreateSlotEdge(2, true);
+        else
+            CreateSlotEdge(0, true);
+
+        if (Pg.transform.GetChild(N-1).GetComponentInChildren<BaseFrontier>().type == 1)
+            CreateSlotEdge(2, false);
+        else
+            CreateSlotEdge(0, false);
+
+
+        for (int j = 1; j < M; j++) 
+        {
+            int type = Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type;
+            CreateSlotEdge(type, true);
+
+            type = Pg.transform.GetChild(j * N + N - 1).GetComponentInChildren<BaseFrontier>().type;
+            CreateSlotEdge(type, false);
+        }
+
+    }
+
     public void ResetField()
     {
         Pg = GameObject.Find("Playground");
@@ -486,11 +517,14 @@ public class Designer : MonoBehaviour
             N = N - 1;
 
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
+
+            DrawEdges();
         }
         else
         {
             Debug.Log("Impossible de réduire");
         }
+
     }
 
     public void IncreaseWidth()
@@ -516,6 +550,8 @@ public class Designer : MonoBehaviour
             N = N + 1;
 
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
+
+            DrawEdges();
         }
         else
         {
@@ -540,16 +576,15 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().M = M - 1;
             M = M - 1;
 
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
-
+ 
             int type = Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type;
 
             if (type <= 2) //Beach
             {
                 Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 2;
-                Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 4;
+               // Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 4;
             }
-            else
+            //else
                 Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 5;
 
             type = Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type;
@@ -557,9 +592,9 @@ public class Designer : MonoBehaviour
             if (type <= 2) //Beach
             {
                 Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 2;
-                Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 4;
+               // Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 4;
             }
-            else
+            //else
                 Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 5;
 
 
@@ -568,7 +603,9 @@ public class Designer : MonoBehaviour
             Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
             Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
 
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
+            DrawEdges();
         }
         else
         {
@@ -597,8 +634,7 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().M = M + 1;
             M = M + 1;
 
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
-
+ 
             j = M - 1;
             int type = Pg.transform.GetChild((j - 2) * N).GetComponentInChildren<BaseFrontier>().type;
 
@@ -626,9 +662,9 @@ public class Designer : MonoBehaviour
             Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
             Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
 
-            CreateSlotEdge(4, true);
-            CreateSlotEdge(4, false);
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().InitializePlayground();
 
+            DrawEdges();
         }
         else
         {
@@ -657,18 +693,11 @@ public class Designer : MonoBehaviour
 
         Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().type = 2;
 
-        if (j == M - 2)
-            Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 4;
-        else
-            Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().type = 3;
-
         Pg.transform.GetChild(i + (j - 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
         Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
         Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
 
-        GameObject edge = GameObject.Find(left ? "LeftEdge" : "RightEdge"); ;
-        ChangeSlotEdgeImage(edge.transform.GetChild(j-1).gameObject, 1);
-        ChangeSlotEdgeImage(edge.transform.GetChild(j).gameObject, 2);
+        DrawEdges();
     }
 
     public void DecreaseBeach(bool left)
@@ -702,9 +731,11 @@ public class Designer : MonoBehaviour
         Pg.transform.GetChild(i + j * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
         Pg.transform.GetChild(i + (j + 1) * N).GetComponentInChildren<BaseFrontier>().ChangeSlotImage();
 
-        GameObject edge = GameObject.Find(left ? "LeftEdge" : "RightEdge");
-        ChangeSlotEdgeImage(edge.transform.GetChild(j-1).gameObject, 2);
-        ChangeSlotEdgeImage(edge.transform.GetChild(j).gameObject, 4);
+        DrawEdges();
+
+        //GameObject edge = GameObject.Find(left ? "LeftEdge" : "RightEdge");
+        //ChangeSlotEdgeImage(edge.transform.GetChild(j-1).gameObject, 2);
+        //ChangeSlotEdgeImage(edge.transform.GetChild(j).gameObject, 4);
         //ChangeSlotEdgeImage(edge.transform.GetChild(j+1).gameObject, 4);
 
     }

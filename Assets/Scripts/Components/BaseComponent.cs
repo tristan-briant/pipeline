@@ -485,12 +485,15 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         Vector3 initialPosition = transform.position;
         Vector3 finalPosition = newParent.position;
 
+        Debug.Log(transform.position);
+        Debug.Log(newParent.position);
+
         float t = 0;
 
         while (t<flightTime)
         {
-            t += Time.deltaTime;
             transform.position = (initialPosition * (flightTime - t) + finalPosition * t) / flightTime;
+            t += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
         
