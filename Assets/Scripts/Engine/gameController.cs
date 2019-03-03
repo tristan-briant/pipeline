@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour {
         currentLevel = LVM.currentLevel;
         Pg = GameObject.Find("Playground");
 
-        if (currentLevel > 0) // (0 mean level designer)
+        if (currentLevel > 0 && !LVM.designerScene) // (0 mean level designer)
         {
             GameObject.Find("MainCanvas").transform.Find("HeaderDesigner").gameObject.SetActive(false);
             GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(true);
@@ -62,15 +62,18 @@ public class GameController : MonoBehaviour {
             GameObject.Find("MainCanvas").transform.Find("HeaderDesigner").gameObject.SetActive(true);
             GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(false);
             GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(true);
-            Pg = GameObject.Find("Playground");
+            //Pg = GameObject.Find("Playground");
             LVM.designerMode = true;
             nextLevelText.gameObject.SetActive(false);
             levelText.gameObject.SetActive(false);
 
-            InitializePlayground();
+            if (currentLevel == 0)
+                InitializePlayground();
+            else
+                LoadLevel();
         }
 
-        InvokeRepeating("Evolution", 0.0f, 0.005f);
+        InvokeRepeating("Evolution", 0.0f, 0.01f);
 
     }
 
@@ -164,9 +167,9 @@ public class GameController : MonoBehaviour {
                     Vector3 v = bc.transform.localPosition;
                     v.z = 0;
                     bc.transform.localPosition = v;
-                    if (bc.mirror)
+                    /*if (bc.mirror)
                         bc.transform.localScale = new Vector3(-1, 1, 1);
-                    else
+                    else*/
                         bc.transform.localScale = new Vector3(1, 1, 1);
                     composants[i][j] = bc;
 
@@ -290,7 +293,7 @@ public class GameController : MonoBehaviour {
 
         float success = 0;
 
-        for (int n = 0; n < 1; n++)
+        for (int n = 0; n < 2; n++)
             success = Engine.OneStep1(composants);
 
         if (!HasSuccessComponent) success = 0; // Avoid to trigger win animation if no success component in the scene
@@ -367,10 +370,11 @@ public class GameController : MonoBehaviour {
 
     public void LoadLevel()
     {
-        string filename = LVM.getPlaygroundName(currentLevel);
+        string filename = LVM.GetPlaygroundName(currentLevel);
         GetComponent<Designer>().LoadFromRessources(filename);
 
-        FindObjectOfType<DeckManager>().DrawDeck();
+        //FindObjectOfType<DeckManager>().DrawDeck();
+        DeckHolder.GetComponentInChildren<DeckManager>().DrawDeck();
 
         if (currentLevel == 1)
             prevButton.gameObject.SetActive(false);

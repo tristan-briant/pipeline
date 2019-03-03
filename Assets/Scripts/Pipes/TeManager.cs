@@ -23,17 +23,11 @@ public class TeManager : BaseComponent
         i0 = i2 = i3 = f0 = f2 = f3 = 0;
     }
 
-    public override void Calcule_i_p(float[] p, float[] i,float alpha)
+    public override void Calcule_i_p(float[] p, float[] i,float dt)
     {
-
-        //float a = p[0], b = p[2], c = p[3];
-       /* float p0 = p[0], p1 = p[1], p2 = p[2], p3 = p[3];
-
-        i1 = i[0]; x_bulle1 -= 0.05f * i1; //// pour le dessin
-        i2 = i[2]; x_bulle2 += 0.05f * i2;
-        i3 = i[3]; x_bulle3 -= 0.05f * i3;*/
-
-        float p0 = p[0], p2 = p[2], p3 = p[3];
+        p0 = p[0];
+        p2 = p[2];
+        p3 = p[3];
 
 
         i0 = i[0]; x_bulle0 -= 0.05f * i0; //// pour le dessin
@@ -41,12 +35,12 @@ public class TeManager : BaseComponent
         i2 = i[2]; x_bulle2 += 0.05f * i2;
         i3 = i[3]; x_bulle3 -= 0.05f * i3;
 
-        q += (i[0] + i[2] + i[3]) * alpha; //q*=0.99;
+        q += (i[0] + i[2] + i[3]) * dt; //q*=0.99;
 
-        f0 += (p[0] - q) / L * alpha;
+        f0 += (p[0] - q) / L * dt;
         //f1 += (p[1] - q) / L * alpha;
-        f2 += (p[2] - q) / L * alpha;
-        f3 += (p[3] - q) / L * alpha;
+        f2 += (p[2] - q) / L * dt;
+        f3 += (p[3] - q) / L * dt;
 
         p[0] = (q / C + (i[0] - f0) * R);
         //p[1] = (q / C + (i[1] - f1) * R);
@@ -58,22 +52,7 @@ public class TeManager : BaseComponent
         i[2] = (f2 + (p2 - q / C) / R);
         i[3] = (f3 + (p3 - q / C) / R);
 
-        Pressure = Mathf.Clamp(0.5f * (p[0] + p[2] + p[3])/3.0f, -1f, 1f); ;
-
-        /*f1 += (p[0] - p[2]) / L * alpha;
-        f2 += (p[2] - p[3]) / L * alpha;
-        f3 += (p[3] - p[0]) / L * alpha;
-
-        p[0] = (q / C + (i[0] - f1 + f3) * R);
-        p[2] = (q / C + (i[2] - f2 + f1) * R);
-        p[3] = (q / C + (i[3] - f3 + f2) * R);
-
-        i[0] = (f1 - f3 + (a - q / C) / R);
-        i[2] = (f2 - f1 + (b - q / C) / R);
-        i[3] = (f3 - f2 + (c - q / C) / R);*/
-
-
-
+  
         Pressure = Mathf.Clamp(0.5f * q, -1f, 1f); ;
 
     }
@@ -100,9 +79,9 @@ public class TeManager : BaseComponent
 
     private void Update()
     {
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
-        water3.GetComponent<Image>().color = PressureColor(pin[3]);
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
+        water3.GetComponent<Image>().color = PressureColor(p3);
 
 
         //////////BUBBLE 0

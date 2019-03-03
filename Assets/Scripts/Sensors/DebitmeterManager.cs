@@ -27,6 +27,11 @@ public class DebitmeterManager : BaseComponent
 
     const float beta = 0.1f;
 
+    public override void Awake()
+    {
+        //ChangeParent(transform.parent);
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -47,6 +52,7 @@ public class DebitmeterManager : BaseComponent
         bubble.GetComponent<Animator>().SetFloat("speed", 0);
 
         configPanel = Resources.Load("ConfigPanel/ConfigDebimeter") as GameObject;
+
     }
 
 
@@ -100,7 +106,8 @@ public class DebitmeterManager : BaseComponent
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
-        float a = p[0], b = p[2];
+        p0 = p[0];
+        p2 = p[2];
 
         q += (i[0] + i[2]) * alpha;
         f += (p[0] - p[2]) / L * alpha;
@@ -108,8 +115,8 @@ public class DebitmeterManager : BaseComponent
         p[0] = (q / C + (i[0] - f) * R);
         p[2] = (q / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q / C) / R);
-        i[2] = (-f + (b - q / C) / R);
+        i[0] = (f + (p0 - q / C) / R);
+        i[2] = (-f + (p2 - q / C) / R);
 
         flux = (1 - beta) * flux + beta * f;
 
@@ -134,8 +141,8 @@ public class DebitmeterManager : BaseComponent
     {
 
         water.GetComponent<Image>().color = PressureColor(q / C);
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
 
         bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
 
@@ -167,7 +174,7 @@ public class DebitmeterManager : BaseComponent
         else
         {
             t_shine += Time.deltaTime;
-            alpha = 0.8f + 0.2f * Mathf.Cos(t_shine * 5.0f);
+            alpha = 0.5f + 0.2f * Mathf.Cos(t_shine * 5.0f);
         }
 
         shine.GetComponent<Image>().color = new Color(1, 1, 1, alpha);

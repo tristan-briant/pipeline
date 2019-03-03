@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditorInternal;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 
 [CustomEditor(typeof(ListLevel))]
@@ -13,9 +14,10 @@ public class LevelDataEditor : Editor
 
     private void OnEnable()
     {
-        list = new ReorderableList(serializedObject, serializedObject.FindProperty("names"));
-
-        list.elementHeightCallback =  (x) => { return height; } ;
+        list = new ReorderableList(serializedObject, serializedObject.FindProperty("names"))
+        {
+            elementHeightCallback = (x) => { return height; }
+        };
 
         list.drawElementCallback =
         (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -29,12 +31,27 @@ public class LevelDataEditor : Editor
 
             string path = element.stringValue.Replace(".txt", "");
 
-            Texture texture = Resources.Load<Texture>(path);
-      
+            Texture texture = Resources.Load<Texture>("Levels/" + path);
+
             if (texture)
                 EditorGUI.DrawPreviewTexture(
-                    new Rect(rect.x + 160, rect.y, height-5, height-5),//EditorGUIUtility.singleLineHeight),
-                texture);
+                    new Rect(rect.x + 160, rect.y, height - 5, height - 5), texture);
+
+            if (GUI.Button(new Rect(rect.x + 260, rect.y, 50, 2*EditorGUIUtility.singleLineHeight), "Load"))
+            {
+                LevelManager LVM = FindObjectOfType<LevelManager>();
+                LVM.designerScene = true;
+                LVM.currentLevel = index + 1;
+                
+                SceneManager.LoadScene("LevelScene");
+            }
+
+            if (GUI.Button(new Rect(rect.x + 300, rect.y + EditorGUIUtility.singleLineHeight + 30, 
+                40, EditorGUIUtility.singleLineHeight), "Save"))
+            {
+                Designer designer = FindObjectOfType<Designer>();
+                designer.SaveToResources(element.stringValue);
+            }
 
 
         };
@@ -44,6 +61,8 @@ public class LevelDataEditor : Editor
         {
             EditorGUI.LabelField(rect, "Levels names");
         };
+
+
     }
 
     public override void OnInspectorGUI()
@@ -51,7 +70,16 @@ public class LevelDataEditor : Editor
         serializedObject.Update();
         list.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
+
+        DrawDefaultInspector();
+
+        if (GUILayout.Button("Save List"))
+         {
+            (serializedObject.targetObject as ListLevel).Save();
+         }
     }
+
+
 
     public static Texture2D LoadPNG(string filePath)
     {

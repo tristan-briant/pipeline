@@ -23,7 +23,7 @@ public class IntroManager : MonoBehaviour {
         transform.localPosition = new Vector3(0, 0, 0);
        
         /// Prepare intro if any
-        string levelName = LVM.getPlaygroundName(LVM.currentLevel);
+        string levelName = LVM.GetPlaygroundName(LVM.currentLevel);
         Object obj = Resources.Load("Intro/" + levelName + "_intro", typeof(GameObject));
 
         if (obj == null)

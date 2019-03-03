@@ -105,6 +105,20 @@ public class Designer : MonoBehaviour
     }
 
 
+    public void SaveToResources(string path)
+    {
+        path.Replace(".txt", "");
+
+        SaveToString();
+        Debug.Log("Saving " + path);
+        StreamWriter sr = File.CreateText("Assets/Resources/Levels/" + path + ".txt");
+        sr.Write(PGdata);
+        sr.Close();
+        sr.Dispose();
+
+        MakeThumb("Assets/Resources/Levels/" + path + ".png");
+    }
+
     public void SaveToString(bool reset=false)
     {
         PGdata = "";
@@ -293,7 +307,8 @@ public class Designer : MonoBehaviour
 
     public void LoadFromRessources(string filename)
     {
-        PGdata = Resources.Load<TextAsset>("Levels/" + filename).ToString();
+        Debug.Log(filename);
+        PGdata = Resources.Load<TextAsset>("Levels/" + filename.Replace(".txt", "")).ToString();
         LoadFromString();
     }
 

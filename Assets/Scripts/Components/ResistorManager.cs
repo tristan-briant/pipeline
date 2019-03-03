@@ -32,22 +32,22 @@ public class ResistorManager : BaseComponent {
     }
 
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
 
-        float a = p[0], b = p[2];
+        p0 = p[0];
+        p2 = p[2];
 
-        q += (i[0] + i[2]) * alpha;
-        //f+=alpha*(p[0]-p[2])/L;
+        q += (i[0] + i[2]) / C * dt;
         f = (i[0] - i[2]) / 2;
 
-        p[0] = (q / C + (i[0]) * Res * 0.5f);
-        p[2] = (q / C + (i[2]) * Res * 0.5f);
+        p[0] = (q + i[0] * Res * 0.5f);
+        p[2] = (q + i[2] * Res * 0.5f);
 
-        i[0] = (+(a - q / C) / Res * 2);
-        i[2] = (+(b - q / C) / Res * 2);
+        i[0] = (p0 - q) / Res * 2;
+        i[2] = (p2 - q) / Res * 2;
 
-        x_bulle -= 0.05f * f;
+        //x_bulle -= 0.05f * f;
 
     }
 
@@ -100,9 +100,9 @@ public class ResistorManager : BaseComponent {
     
     private void Update()
     {
-        water.GetComponent<Image>().color = PressureColor(q / C);
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water.GetComponent<Image>().color = PressureColor(q);
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
 
         bubble.GetComponent<Animator>().SetFloat("speed", - SpeedAnim());
 

@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour {
     public bool hacked = false;
     public bool designerMode = false;
     public bool designerScene = false;
+    public string levelPath;
 
     public float Volume = 0.5f;
     public string language = "english";
@@ -82,7 +83,7 @@ public class LevelManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
             instanceRef = this;
             LoadPlaygroundList();
-            levelMax = playgroundName.Count;
+            //levelMax = playgroundName.Count;
         }
         else
         {
@@ -90,6 +91,11 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
+    public int LevelMax()
+    {
+        ListLevel list = GetComponent<ListLevel>();
+        return list.names.Count;
+    }
 
     public void LoadPlaygroundList()
     {
@@ -119,12 +125,14 @@ public class LevelManager : MonoBehaviour {
     }
     
 
-    public string getPlaygroundName(int level) { 
+    public string GetPlaygroundName(int level) {
         // Return the complete name (with path in Ressources) of the prefab playground
         // level start at 1  
 
-        if( 0 < level && level <= playgroundName.Count )
-            return playgroundName[level - 1];
+        ListLevel list = GetComponent<ListLevel>();
+
+        if( 0 < level && level <= list.names.Count )
+            return list.names[level - 1];
         else
             return "";
 

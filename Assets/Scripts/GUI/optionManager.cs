@@ -8,7 +8,6 @@ public class optionManager : MonoBehaviour {
     LevelManager LVM;
 
 	void Awake () {
-        //gameObject.SetActive(false);
         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
     }
@@ -39,13 +38,17 @@ public class optionManager : MonoBehaviour {
         LVM.ResetGame();
     }
 
+    bool firstTime = true;
+
     public void SetVolume() {
+        Debug.Log("bip");
         float vol = GameObject.Find("SliderVolume").GetComponent<Slider>().normalizedValue;
         PlayerPrefs.SetFloat("Volume", vol);
         LVM.Volume = vol;
         AudioListener.volume = LVM.Volume;
         AudioSource bip=GetComponent<AudioSource>();
-        if(!bip.isPlaying) bip.Play();
+        if(!bip.isPlaying && !firstTime) bip.Play();
+        firstTime = false;
     }
 
 }

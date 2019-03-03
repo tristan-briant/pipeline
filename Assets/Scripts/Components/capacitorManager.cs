@@ -39,23 +39,21 @@ public class capacitorManager : BaseComponent {
         f = f0 = f2 = 0;
     }
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        float a = p[0], b = p[2];
+        p0 = p[0];
+        p2 = p[2];
 
         q +=  (i[0] + i[2]);
-        //f+=alpha*(p[0]-p[2])/Lin;
         q0 += i[0];
         q2 +=  i[2];
 
-        //f=(i[0]-i[2])/2;
-        //pin = a; pout = b;
-
+   
         p[0] =  (q/C + q0/Cin);
         p[2] =  (q/C + q2/Cin);
 
-        i[0] =  (+(a - q/C - q0/Cin) / R);
-        i[2] = (+(b - q/C - q2/Cin) / R);
+        i[0] =  (+(p0 - q/C - q0/Cin) / R);
+        i[2] = (+(p2 - q/C - q2/Cin) / R);
 
         //i[1]=i[3]=0;
         //i[1] = p[1] / Rground;
@@ -66,14 +64,11 @@ public class capacitorManager : BaseComponent {
 
         f0 = i[0];
         f2 = i[2];
-        //x_bulle -= 0.05f * f;
-
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 3);
+        i[1] = i[3] = 0;
     }
 
     protected override void Start()
@@ -104,8 +99,8 @@ public class capacitorManager : BaseComponent {
     {
         waterIn0.GetComponent<Image>().color = PressureColor(q0/Cin+q/C);
         waterIn2.GetComponent<Image>().color = PressureColor(q2 / Cin + q / C);
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
 
         float xMax = 32f;
         //xp = Mathf.Clamp((q2-q0)/Cin*xMax, -xMax,xMax);
@@ -113,14 +108,14 @@ public class capacitorManager : BaseComponent {
         piston.transform.localPosition= new Vector3(xp,0,0);
 
         waterIn2.GetComponent<Image>().fillAmount = 0.6f + 0.4f*xp/xMax;
-        spring1.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax*0.4f, 1);
+        spring1.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
         spring2.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
         spring3.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
         spring4.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
 
 
-        bubble0.GetComponent<Animator>().SetFloat("speed", f0 / fMinBubble);
-        bubble2.GetComponent<Animator>().SetFloat("speed", f2 / fMinBubble);
+        bubble0.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f0));
+        bubble2.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f2));
 
     }
 }

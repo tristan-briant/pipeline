@@ -50,7 +50,7 @@ public class MenuManager : MonoBehaviour{
             Destroy(child.gameObject);
 
 
-        for (int i = 1; i <= LVM.levelMax; i++)
+        for (int i = 1; i <= LVM.LevelMax(); i++)
         {
             GameObject go;
 
@@ -81,6 +81,7 @@ public class MenuManager : MonoBehaviour{
     {
         LVM.currentLevel = levelNumber;
         LVM.scrollViewHight = levelList.transform.localPosition.y;
+        LVM.designerScene = false;
         SceneManager.LoadScene("LevelScene");
     }
   

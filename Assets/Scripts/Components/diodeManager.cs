@@ -18,82 +18,54 @@ public class diodeManager : BaseComponent {
         q0 = q2 = 0;
     }
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        float a = p[0], b = p[2];
+        p0 = p[0];
+        p2 = p[2];
 
+        q0 += (i[0] - f) / C * dt;
+        q2 += (i[2] + f) / C * dt;
 
-        q0 +=  (i[0]) / C * alpha;
-        q2 += (i[2]) / C * alpha;
-        f += (p[0] - p[2]) / L * alpha;
-  
+        f += (p[0] - p[2]) / L * dt;
 
-        if (q0 < q2)
-        {
-            q = (q0 + q2) / 2;
-
-            q0 = q;
-            q2 = q;
-        }
+        if (f <= 0)
+            q0 = q2 = (q0 + q2) / 2;
         else
-        {
             f = 0;
-        }
+
         p[0] = (q0 + (i[0] - f) * R);
         p[2] = (q2 + (i[2] + f) * R);
 
-
-        i[0] =  (f + (a - q0) / R);
-        i[2] =  (-f + (b - q2) / R);
-
-        x_bulle -= 0.05f * f;
+        i[0] = (f + (p0 - q0) / R);
+        i[2] = (-f + (p2 - q2) / R);
 
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 3);
+        i[1] = i[3] = 0;
     }
 
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
         piston = transform.Find("Piston").gameObject;
         bubble = transform.Find("Bubble").gameObject;
     }
 
     private void Update()
     {
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
 
         xp = 0.9f * xp + 0.1f * Mathf.Clamp(-f, 0, 0.1f);
 
 
         piston.transform.localPosition = new Vector3(xp*100, 0, 0);
 
-        if (Mathf.Abs(f) > 0.01f)
-        {
- 
-            float x_max = 0.5f - r_bulle;
-
-            if (x_bulle > x_max) x_bulle = -x_max;
-            if (x_bulle < -x_max) x_bulle = x_max;
-
-
-            bubble.transform.localPosition = new Vector3(x_bulle * 100, 0, 0);
-            float scale = Mathf.Max(Mathf.Abs(2 * x_bulle), 0.5f);
-            bubble.transform.localScale = new Vector3(scale, scale, 1);
-            bubble.SetActive(true);
-        }
-        else
-        {
-            bubble.SetActive(false);
-        }
-
+        bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
 
     }
 }

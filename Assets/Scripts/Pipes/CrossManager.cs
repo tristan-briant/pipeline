@@ -28,7 +28,10 @@ public class CrossManager : BaseComponent
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
 
-        float p0 = p[0], p1 = p[1], p2 = p[2], p3 = p[3];
+        p0 = p[0];
+        p1 = p[1];
+        p2 = p[2];
+        p3 = p[3];
 
 
         i0 = i[0]; x_bulle0 -= 0.05f * i0; //// pour le dessin
@@ -80,10 +83,10 @@ public class CrossManager : BaseComponent
     private void Update()
     {
         water.GetComponent<Image>().color = PressureColor(q);
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water1.GetComponent<Image>().color = PressureColor(pin[1]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
-        water3.GetComponent<Image>().color = PressureColor(pin[3]);
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water1.GetComponent<Image>().color = PressureColor(p1);
+        water2.GetComponent<Image>().color = PressureColor(p2);
+        water3.GetComponent<Image>().color = PressureColor(p3);
 
         float xmax = 0.5f - r_bulle;
         //////////BUBBLE 0

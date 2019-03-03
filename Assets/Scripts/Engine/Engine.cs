@@ -8,7 +8,7 @@ public class Engine  {
     static float[][] pression;
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
-    const float dt = 0.1f; // 0.05f pour oneStep1
+    const float dt = 0.1f; // 0.1f pour oneStep1
     const float alpha = 0.2f; // 0.2f
 
     //const float dt = 0.005f;
@@ -204,21 +204,41 @@ public class Engine  {
             //fail += composants[0][k].fail;
         }
 
-
-        for (int k = 1; k < N - 1; k++)
+        if (time % 2 == 0)
         {
-            for (int l = 1; l < M - 1; l++)
+            for (int k = 1; k < N - 1; k++)
             {
-                currant_in(k - 1, l - 1, pression, intensite, pp, ii);
-                RotateCurrant(composants[k][l].dir, pp, ii);
-                composants[k][l].Calcule_i_p(pp, ii, dt);
-                RotateCurrant((4 - composants[k][l].dir) % 4, pp, ii);
-                currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
+                for (int l = 1; l < M - 1; l++)
+                {
+                    currant_in(k - 1, l - 1, pression, intensite, pp, ii);
+                    RotateCurrant(composants[k][l].dir, pp, ii);
+                    composants[k][l].Calcule_i_p(pp, ii, dt);
+                    RotateCurrant((4 - composants[k][l].dir) % 4, pp, ii);
+                    currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
 
-                success = success * composants[k][l].success;
-                //fail += composants[k][l].fail;
+                    success = success * composants[k][l].success;
+                    //fail += composants[k][l].fail;
+                }
             }
         }
+        else
+        {
+            for (int k = N - 2; k > 0; k--)
+            {
+                for (int l = M - 2; l > 0; l--)
+                {
+                    currant_in(k - 1, l - 1, pression, intensite, pp, ii);
+                    RotateCurrant(composants[k][l].dir, pp, ii);
+                    composants[k][l].Calcule_i_p(pp, ii, dt);
+                    RotateCurrant((4 - composants[k][l].dir) % 4, pp, ii);
+                    currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
+
+                    success = success * composants[k][l].success;
+                    //fail += composants[k][l].fail;
+                }
+            }
+        }
+
 
         if (fail > 0) return -1;
 
@@ -408,11 +428,11 @@ public class Engine  {
                     pp[0] = pression[N - 2][2 * (l - 1) + 1];
                 else
                 {
-                    Engine.currant_in(k - 1, l - 1, pression, intensite, pp, ii);
-                    Engine.RotateCurrant(composants[k][l].dir, pp, ii);
+                    currant_in(k - 1, l - 1, pression, intensite, pp, ii);
+                    RotateCurrant(composants[k][l].dir, pp, ii);
                 }
                 //Debug.Log("composant " + k + "   " + l);
-                composants[k][l].Set_i_p(pp, ii);
+                //composants[k][l].Set_i_p(pp, ii);
             }
         }
     }

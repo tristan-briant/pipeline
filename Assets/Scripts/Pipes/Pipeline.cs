@@ -9,13 +9,11 @@ using System;
 public class Pipeline : BaseComponent { 
 
     GameObject water0,water2,bubble;
-    float x_bulle = 0;
-    //float r_bulle=0.1f;
-
+ 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-
-        float a = p[0], b = p[2];
+        p0 = p[0];
+        p2 = p[2];
 
         q += (i[0] + i[2]) * dt; 
         f += (p[0] - p[2]) / L * dt;
@@ -23,19 +21,16 @@ public class Pipeline : BaseComponent {
         p[0] = (q / C + (i[0] - f) * R);
         p[2] = (q / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q / C) / R);
-        i[2] = (-f + (b - q / C) / R);
+        i[0] = (f + (p0 - q / C) / R);
+        i[2] = (-f + (p2 - q / C) / R);
 
-
-
-        x_bulle -= 0.05f * f;
         Pressure = Mathf.Clamp(0.25f * (p[0] + p[2]), -1f, 1f); ;
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 3);
+        i[1] = 0;
+        i[3] = 0;
     }
 
     protected override void Start()
@@ -50,8 +45,8 @@ public class Pipeline : BaseComponent {
 
     private void Update()
     {
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
 
 
         bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
@@ -69,33 +64,6 @@ public class Pipeline : BaseComponent {
             audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
 
         }
-
-        /*if (Mathf.Abs(f) > fMinBubble)
-        {
-            //if (x_bulle < -0.5f + d_bulle * 0.5f) { x_bulle = 0.5f - d_bulle * 0.5f; }
-            //if (x_bulle > 0.5f - d_bulle * 0.5f) { x_bulle = -0.5f + d_bulle * 0.5f; }
-
-            float x_max = 0.5f - r_bulle;
-
-            if (x_bulle > x_max) x_bulle = -x_max;
-            if (x_bulle < -x_max) x_bulle = x_max;
-
-            
-            bubble.transform.localPosition =new Vector3(x_bulle*100,0,0);
-            bubble.SetActive(true);
-
-            
-            if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying) {
-                int r = UnityEngine.Random.Range(0, 3);
-                audios[3 + r].Play();
-            }
-            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
-
-        }
-        else
-        {
-            bubble.SetActive(false);
-        }*/
 
     }
 

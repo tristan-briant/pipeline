@@ -65,6 +65,8 @@ public class OuletManager : BaseFrontier
          i[0] = (f + (a - q / C) / (rin * 0.5f));
          ii = (-f + (pset - q / C) / (rin * 0.5f));
          */
+
+        p0 = p[0];
         f = i[0]; //for bubble animation
         
     }
@@ -113,7 +115,7 @@ public class OuletManager : BaseFrontier
         if (water)
             water.GetComponent<Image>().color = PressureColor(ppset);
         if (water0)
-            water0.GetComponent<Image>().color = PressureColor(pin[0]);
+            water0.GetComponent<Image>().color = PressureColor(p0);
         
 
         if (bubble)

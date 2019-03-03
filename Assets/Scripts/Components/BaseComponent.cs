@@ -13,6 +13,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected float[] qq = { 0, 0, 0, 0 };
     protected float[] ff = { 0, 0, 0, 0 };
     protected GameObject configPanel;
+    protected float p0, p1, p2, p3;
 
     public int dir=0;
     protected float R = 1f, L = 1f, C =1f, Rground = 50;
@@ -65,7 +66,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     { // donne la convention de pression
         float PMAX = 1.0f;
 
-        Color max = new Color(0, 1.0f, 1.0f);  // p=2
+        Color max = new Color(0.3f, .80f, 0.80f);  // p=2
         //Color zero = new Color(0, 0.0f / 255, 00.0f / 255); //
         Color zero = new Color(0, 100.0f/255, 140.0f/255);  // p=0
         Color min = new Color(150.0f/255, 75.0f/255, 120.0f/255);  // p=-2
@@ -462,7 +463,18 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     protected float SpeedAnim()
     {
-        return Mathf.Atan(f) / fMinBubble;
+        if (!float.IsNaN(f))
+            return Mathf.Atan(f) / fMinBubble;
+        else
+            return 0;
+    }
+
+    protected float SpeedAnim(float flux)
+    {
+        if (!float.IsNaN(flux))
+            return Mathf.Atan(flux) / fMinBubble;
+        else
+            return 0;
     }
 
     public void ChangeParent(Transform newParent) // set new parent and change sorting layer
