@@ -129,7 +129,39 @@ public class GameController : MonoBehaviour {
         Debug.Log(" W :" + width + " H  " + height);
         Debug.Log(" N :" + N + " M  " + M);
 
-        float wx = width / (100f * N);
+        float wx= width / (100f * N);
+
+        bool trivialEdge = true;
+        if (!LVM.designerMode)
+        {
+            for (int j = 1; j < M - 1; j++)
+            {
+                int i = 0;
+                GameObject slot = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
+                BaseComponent bc = slot.GetComponentInChildren<BaseComponent>();
+                if (!bc.name.Contains("Wall"))
+                {
+                    trivialEdge = false;
+                    break;
+                }
+            }
+            for (int j = 1; j < M - 1; j++)
+            {
+                int i = N-1;
+                GameObject slot = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
+                BaseComponent bc = slot.GetComponentInChildren<BaseComponent>();
+                if (!bc.name.Contains("Wall"))
+                {
+                    Debug.Log(bc.name);
+                    trivialEdge = false;
+                    //break;
+                }
+            }
+
+            if(trivialEdge)
+                wx = width / (100f * (N-1.5f));
+        }
+
         float wy = height / (100f * M);
 
         float wc = Mathf.Min(wx, wy);
@@ -293,7 +325,7 @@ public class GameController : MonoBehaviour {
 
         float success = 0;
 
-        for (int n = 0; n < 2; n++)
+        for (int n = 0; n < 4; n++)
             success = Engine.OneStep1(composants);
 
         if (!HasSuccessComponent) success = 0; // Avoid to trigger win animation if no success component in the scene

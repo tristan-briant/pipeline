@@ -13,14 +13,22 @@ public class TransistorManager : BaseComponent
     float q1, q2, q3, q11, q22;
     float i11, i22;
     public float xp;
-    public float Gain = 10;
+    public float gain = 10;
+    public float Gain { get => gain; set => gain = value; }
     float g, f1, f2 = 0, f3, f13 = 0;
     float threshold = 0.02f;
     //float fthreshold = 0.05f;
     public bool NPN = true;
+
+
     //float Rin=100;
     //float q12 = 0;//, q13 = 0;
     //public bool mirror=false;
+
+    override public void Awake()
+    {
+        configPanel = Resources.Load("ConfigPanel/ConfigTransistor") as GameObject;
+    }
 
     public  void Calcule_i_p_new(float[] p, float[] i, float dt)
     {
@@ -68,7 +76,7 @@ public class TransistorManager : BaseComponent
             //f13 = f1 = f3 = 0;
         }
 
-        f13 = Mathf.Clamp(f13, 0, Gain * f2);
+        f13 = Mathf.Clamp(f13, 0, gain * f2);
 
         p[1] = (q1 / C + (i[1] - f13) * R);
         p[2] = (q2 / C + (i[2] - f2) * R);
@@ -225,7 +233,7 @@ public class TransistorManager : BaseComponent
         }
 
         f1 += (p[1] - q) / L * dt;
-        f1 = Mathf.Clamp(f1, 0, Gain * f2);
+        f1 = Mathf.Clamp(f1, 0, gain * f2);
 
         f3 += (p[3] - q) / L * dt;
 
@@ -301,7 +309,7 @@ public class TransistorManager : BaseComponent
                 f13 = 0;
             }
 
-            f13 = Mathf.Clamp(f13, 0, Gain * f2);
+            f13 = Mathf.Clamp(f13, 0, gain * f2);
 
             p[1] = (q1 / C + (i[1] - f13) * R);
             p[2] = (q2 / C + (i[2] - f2 ) * R);
@@ -339,7 +347,7 @@ public class TransistorManager : BaseComponent
                 f13 = 0;
             }
 
-            f13 = Mathf.Clamp(f13, 0 , Gain * f2);
+            f13 = Mathf.Clamp(f13, 0 , gain * f2);
 
             p[1] = (q1 / C + (i[1] - f2 - f13) * R);
             p[2] = (q2 / C + (i[2] + f2 ) * R);

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class TeManager : BaseComponent
 {
 
-    GameObject water0, water2, water3, bubble0, bubble2, bubble3;
+    GameObject water0, water2, water3, bubble20, bubble23, bubble03;
     float x_bulle0 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
     float f0,  f2, f3;
     float i0 = 0,  i2 = 0, i3 = 0;
@@ -67,14 +67,24 @@ public class TeManager : BaseComponent
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
-        water3 = this.transform.Find("Water3").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
+        water3 = transform.Find("Water3").gameObject;
 
-        bubble0 = this.transform.Find("Bubble0").gameObject;
-        bubble2 = this.transform.Find("Bubble2").gameObject;
-        bubble3 = this.transform.Find("Bubble3").gameObject;
+        bubble20 = transform.Find("Bubble20").gameObject;
+        bubble23 = transform.Find("Bubble23").gameObject;
+        bubble03 = transform.Find("Bubble03/Bubble").gameObject;
 
+    }
+
+    float flux(float f1, float f2) {
+        if ((f1 > 0 && f2 > 0) || (f1 < 0 && f2 < 0))
+            return 0;
+
+        if (Mathf.Abs(f1) < Mathf.Abs(f2))
+            return f1;
+        else
+            return -f2;
     }
 
     private void Update()
@@ -83,7 +93,11 @@ public class TeManager : BaseComponent
         water2.GetComponent<Image>().color = PressureColor(p2);
         water3.GetComponent<Image>().color = PressureColor(p3);
 
+        bubble20.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f2, f0));
+        bubble23.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f2, f3));
+        bubble03.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f0, f3));
 
+        /*
         //////////BUBBLE 0
         if (Mathf.Abs(i0) > fMinBubble)
         {
@@ -143,7 +157,7 @@ public class TeManager : BaseComponent
         {
             bubble3.SetActive(false);
         }
-
+        */
     }
 
 }

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CrossManager : BaseComponent
 {
 
-    GameObject water, water0, water1, water2, water3, bubble0, bubble1, bubble2, bubble3;
+    GameObject water, water0, water1, water2, water3, bubble20, bubble23, bubble03, bubble13, bubble21, bubble01;
     float x_bulle0 = 0.5f, x_bulle1 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
     float f0, f1, f2, f3;
     float i0 = 0, i1 = 0, i2 = 0, i3 = 0;
@@ -72,100 +72,111 @@ public class CrossManager : BaseComponent
         water1 = this.transform.Find("Water1").gameObject;
         water2 = this.transform.Find("Water2").gameObject;
         water3 = this.transform.Find("Water3").gameObject;
-
-        bubble0 = this.transform.Find("Bubble0").gameObject;
-        bubble1 = this.transform.Find("Bubble1").gameObject;
-        bubble2 = this.transform.Find("Bubble2").gameObject;
-        bubble3 = this.transform.Find("Bubble3").gameObject;
+        
+        bubble20 = transform.Find("Bubble20").gameObject;
+        bubble23 = transform.Find("Bubble23").gameObject;
+        bubble03 = transform.Find("Bubble03/Bubble").gameObject;
+        bubble13 = transform.Find("Bubble13/Bubble").gameObject;
+        bubble21 = transform.Find("Bubble21/Bubble").gameObject;
+        bubble01 = transform.Find("Bubble01/Bubble").gameObject;
 
     }
 
     private void Update()
     {
-        water.GetComponent<Image>().color = PressureColor(q);
+        water.GetComponent<Image>().color = PressureColor(q/C);
         water0.GetComponent<Image>().color = PressureColor(p0);
         water1.GetComponent<Image>().color = PressureColor(p1);
         water2.GetComponent<Image>().color = PressureColor(p2);
         water3.GetComponent<Image>().color = PressureColor(p3);
 
-        float xmax = 0.5f - r_bulle;
-        //////////BUBBLE 0
-        if (Mathf.Abs(i0) > fMinBubble)
-        {
-           
-            if (x_bulle0 > xmax) x_bulle0 = -xmax;
-            if (x_bulle0 < -xmax) x_bulle0 = xmax;
+        bubble20.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f2, f0));
+        bubble23.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f2, f3));
+        bubble03.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f0, f3));
+        bubble13.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f1, f3));
+        bubble21.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f2, f1));
+        bubble01.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f0, f1));
 
 
-            if (x_bulle0 > 0)
-            {
-                bubble0.transform.localPosition = new Vector3( x_bulle0 * 100, 0, 0);
-                bubble0.SetActive(true);
-            }
-            else bubble0.SetActive(false);
-        }
-        else
-        {
-            bubble0.SetActive(false);
-        }
+        /*
+                float xmax = 0.5f - r_bulle;
+                //////////BUBBLE 0
+                if (Mathf.Abs(i0) > fMinBubble)
+                {
 
-        //////////BUBBLE 1
-        if (Mathf.Abs(i1) > fMinBubble)
-        {
-            if (x_bulle1 > xmax) x_bulle1 = -xmax;
-            if (x_bulle1 < -xmax) x_bulle1 = xmax;
+                    if (x_bulle0 > xmax) x_bulle0 = -xmax;
+                    if (x_bulle0 < -xmax) x_bulle0 = xmax;
 
 
-            if (x_bulle1 < 0)
-            {
-                bubble1.transform.localPosition = new Vector3(0, -x_bulle1 * 100, 0);
-                bubble1.SetActive(true);
-            }
-            else bubble1.SetActive(false);
-        }
-        else
-        {
-            bubble1.SetActive(false);
-        }
+                    if (x_bulle0 > 0)
+                    {
+                        bubble0.transform.localPosition = new Vector3( x_bulle0 * 100, 0, 0);
+                        bubble0.SetActive(true);
+                    }
+                    else bubble0.SetActive(false);
+                }
+                else
+                {
+                    bubble0.SetActive(false);
+                }
 
-        //////////BUBBLE 2
-        if (Mathf.Abs(i2) > fMinBubble)
-        {
-            if (x_bulle2 > xmax) x_bulle2 = -xmax;
-            if (x_bulle2 < -xmax) x_bulle2 = xmax;
-
-
-            if (x_bulle2 < 0)
-            {
-                bubble2.transform.localPosition = new Vector3(x_bulle2 * 100, 0, 0);
-                bubble2.SetActive(true);
-            }
-            else bubble2.SetActive(false);
-        }
-        else
-        {
-            bubble2.SetActive(false);
-        }
-
-        //////////BUBBLE 3
-        if (Mathf.Abs(i3) > fMinBubble)
-        {
-            if (x_bulle3 > xmax) x_bulle3 = -xmax;
-            if (x_bulle3 < -xmax) x_bulle3 = xmax;
+                //////////BUBBLE 1
+                if (Mathf.Abs(i1) > fMinBubble)
+                {
+                    if (x_bulle1 > xmax) x_bulle1 = -xmax;
+                    if (x_bulle1 < -xmax) x_bulle1 = xmax;
 
 
-            if (x_bulle3 > 0)
-            {
-                bubble3.transform.localPosition = new Vector3(0,-x_bulle3 * 100, 0);
-                bubble3.SetActive(true);
-            }
-            else bubble3.SetActive(false);
-        }
-        else
-        {
-            bubble3.SetActive(false);
-        }
-        
+                    if (x_bulle1 < 0)
+                    {
+                        bubble1.transform.localPosition = new Vector3(0, -x_bulle1 * 100, 0);
+                        bubble1.SetActive(true);
+                    }
+                    else bubble1.SetActive(false);
+                }
+                else
+                {
+                    bubble1.SetActive(false);
+                }
+
+                //////////BUBBLE 2
+                if (Mathf.Abs(i2) > fMinBubble)
+                {
+                    if (x_bulle2 > xmax) x_bulle2 = -xmax;
+                    if (x_bulle2 < -xmax) x_bulle2 = xmax;
+
+
+                    if (x_bulle2 < 0)
+                    {
+                        bubble2.transform.localPosition = new Vector3(x_bulle2 * 100, 0, 0);
+                        bubble2.SetActive(true);
+                    }
+                    else bubble2.SetActive(false);
+                }
+                else
+                {
+                    bubble2.SetActive(false);
+                }
+
+                //////////BUBBLE 3
+                if (Mathf.Abs(i3) > fMinBubble)
+                {
+                    if (x_bulle3 > xmax) x_bulle3 = -xmax;
+                    if (x_bulle3 < -xmax) x_bulle3 = xmax;
+
+
+                    if (x_bulle3 > 0)
+                    {
+                        bubble3.transform.localPosition = new Vector3(0,-x_bulle3 * 100, 0);
+                        bubble3.SetActive(true);
+                    }
+                    else bubble3.SetActive(false);
+                }
+                else
+                {
+                    bubble3.SetActive(false);
+                }
+                */
     }
 
 }

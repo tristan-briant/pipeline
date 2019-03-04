@@ -137,19 +137,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public virtual void Calcule_i_p_blocked(float[] p, float[] i, float dt, int index)
     {
-        //float a = p[index];
-        /* p[index] = i[index] * Rground;
-         i[index] = a / Rground;*/
-
-        //p[index] *= 0.99f;
-        //i[index] = 0;
-
-        /*
-        qq[index] += i[index]*dt; 
-        p[index] = qq[index] / C;
-        i[index] = (+(a  - qq[index] / C) / R); 
-        */
-
         i[index] = 0;
     }
 
@@ -259,7 +246,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (eventData.dragging) return;
          
-        if ((Time.time - clickStart) > 0.5f)  // Long click
+        if ((Time.time - clickStart) > 0.25f)  // Long click
         {
             if(IsLongClickable())
                 OnLongClick();
@@ -365,16 +352,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void Drop()
     {
         itemBeingDragged = null;
-        transform.localScale = Vector3.one;//transform.localScale / 1.2f;
+        transform.localScale = Vector3.one;
 
-        //GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-        if (endParent==null && startParent) //retour au point de départ 
+        if (endParent == null && startParent) //retour au point de départ 
         {
-            //DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
-                                                                  /* Destroyimmediate et pas destroy simple sinon present jusqu'à la fin du frame et populatecomposant fail et le trouve toujours  */
-
-            //ChangeParent(startParent);
             StartCoroutine(FlightToFinalPosition(startParent));
         }
 
@@ -382,22 +363,14 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         { // on échange
             if (endParent == startParent)
             {
-                StartCoroutine(FlightToFinalPosition(endParent));
-                //DestroyImmediate(startParent.GetChild(1).gameObject); //On enlève le composant vide qui a été placé au début du drag 
-                //transform.SetParent(endParent);
-                //ChangeParent(endParent);
-                //gc.PopulateComposant();
+                StartCoroutine(FlightToFinalPosition(endParent,0.05f));
             }
             else
             {
                 Transform c = endParent.GetChild(1);
                 if (c.GetComponent<BaseComponent>().IsEmpty())
                 {
-                    StartCoroutine(FlightToFinalPosition(endParent));
-                    /*DestroyImmediate(c.gameObject);
-                    //transform.SetParent(endParent);
-                    ChangeParent(endParent);
-                    gc.PopulateComposant();*/
+                    StartCoroutine(FlightToFinalPosition(endParent,0.05f));
                 }
                 else
                 {
@@ -409,7 +382,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
                         StartCoroutine(c.GetComponent<BaseComponent>().FlightToFinalPosition(startParent));
 
-                        StartCoroutine(FlightToFinalPosition(endParent));
+                        StartCoroutine(FlightToFinalPosition(endParent, 0.05f));
 
                     }
                     else // retour à la case départ
@@ -431,13 +404,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             {
                 if (endParent.GetChild(1).GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
                 {
-                    StartCoroutine(FlightToFinalPosition(endParent));
-
-                    //DestroyImmediate(endParent.GetChild(1).gameObject);
-                    //transform.SetParent(endParent);
-                    //ChangeParent(endParent);
-                    
-
+                    StartCoroutine(FlightToFinalPosition(endParent, 0.05f));
                 }
                 else
                 {
@@ -477,6 +444,24 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             return 0;
     }
 
+    protected float SpeedAnim(float f1, float f2)
+    {
+        float flux;
+        if ((f1 > 0 && f2 > 0) || (f1 < 0 && f2 < 0))
+            flux = 0;
+        else
+        {
+            if (Mathf.Abs(f1) < Mathf.Abs(f2))
+                flux = f1;
+            else
+                flux = -f2;
+        }
+        if (!float.IsNaN(flux))
+            return Mathf.Atan(flux) / fMinBubble;
+        else
+            return 0;
+    }
+
     public void ChangeParent(Transform newParent) // set new parent and change sorting layer
     {
         transform.SetParent(newParent);
@@ -492,7 +477,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
        
     }
 
-    public IEnumerator FlightToFinalPosition(Transform newParent,float flightTime=0.1f, bool cleanNewParent=true)
+    public IEnumerator FlightToFinalPosition(Transform newParent,float flightTime=0.2f, bool cleanNewParent=true)
     {
         Vector3 initialPosition = transform.position;
         Vector3 finalPosition = newParent.position;

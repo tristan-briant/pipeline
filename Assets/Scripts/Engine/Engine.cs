@@ -8,8 +8,11 @@ public class Engine  {
     static float[][] pression;
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
-    const float dt = 0.1f; // 0.1f pour oneStep1
-    const float alpha = 0.2f; // 0.2f
+    const float dt = 0.05f; // 0.1f pour oneStep1
+    const float alpha = 0.1f; // 0.2f
+
+    //dt=0.1 alpha = 0.2 attention Resistor = 40 max !
+    //dt=0.05 alpha = 0.1 nickel
 
     //const float dt = 0.005f;
     //const float alpha = 0.1f;
