@@ -7,66 +7,73 @@ using UnityEngine.UI;
 public class ValveManager : BaseComponent {
 
     GameObject water0, water2, bubble,tubeOpen,tubeClosed;
-    public float x_bulle = 0;
-    float r_bulle = 0.1f;
+    //public float x_bulle = 0;
+    //float r_bulle = 0.1f;
     public bool open=false;
-    float q1=0, q2=0;
+    float q0=0, q2=0;
     public float openTime=4.0f;
 
     public override void Reset_i_p()
     {
         base.Reset_i_p();
-        q1 = q2 = 0;
+        q0 = q2 = 0;
     }
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
+        p0 = p[0];
+        p2 = p[2];
+        
+        //q0 += i[0] * dt;
+        //q2 += i[2] * dt;
 
-        float a = p[0], b = p[2];
-        /*if (countDown > 0)
-            open = true;
-        else
-            open = false;*/
-
-        q1 += (i[0])* alpha;
-        q2 += (i[2]) * alpha;
-        f += (p[0] - p[2]) / L * alpha;
-
+        q0 += (i[0] - f) / C * dt;
+        q2 += (i[2] + f) / C * dt;
+        f += (p[0] - p[2]) / L * dt;
 
         if (open)
-        {
-            q = (q1 + q2) / 2;
-
-            q1 = q;
-            q2 = q;
-        }
+            q0 = q2 = (q0 + q2) / 2;
         else
-        {
             f = 0;
-        }
-        p[0] = (q1 / C + (i[0] - f) * R);
+
+        p[0] = (q0 / C + (i[0] - f) * R);
         p[2] = (q2 / C + (i[2] + f) * R);
 
-        i[0] = (f + (a - q1 / C) / R);
-        i[2] = (-f + (b - q2 / C) / R);
+        i[0] = (f + (p0 - q0) / R);
+        i[2] = (-f + (p2 - q2) / R);
 
-        Calcule_i_p_blocked(p, i, alpha, 1);
-        Calcule_i_p_blocked(p, i, alpha, 3);
+    }
 
-
-        x_bulle -= 0.05f * f;
-
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        i[1] = i[3] = 0;
     }
 
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
 
-        bubble = this.transform.Find("Bubble").gameObject;
-        tubeOpen = this.transform.Find("TubeOpen").gameObject;
-        tubeClosed = this.transform.Find("TubeClosed").gameObject;
+        bubble = transform.Find("Bubble").gameObject;
+        tubeOpen = transform.Find("TubeOpen").gameObject;
+        tubeClosed = transform.Find("TubeClosed").gameObject;
+    }
+
+
+    public void TriggerStart()
+    {
+        Debug.Log("message reçu");
+        open = true;
+        tubeOpen.SetActive(true);
+        tubeClosed.SetActive(false);
+    }
+
+    public void TriggerEnd()
+    {
+        open = false;
+        tubeOpen.SetActive(false);
+        tubeClosed.SetActive(true);
     }
 
     IEnumerator countDown() {
@@ -77,41 +84,16 @@ public class ValveManager : BaseComponent {
 
     private void Update()
     {
-        if (trigged) {
+        /*if (trigged) {
             trigged = false;
             open = true;
             StartCoroutine(countDown());
-        }
+        }*/
 
-        water0.GetComponent<Image>().color = PressureColor(pin[0]);
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
-
-        if (!open) {
-            tubeOpen.SetActive(false);
-            tubeClosed.SetActive(true);
-        }
-        else
-        {
-            tubeOpen.SetActive(true);
-            tubeClosed.SetActive(false);
-        }
-
-        if (Mathf.Abs(f) > 0.01f)
-        {
-
-            float x_max = 0.5f - r_bulle;
-
-            if (x_bulle > x_max) x_bulle = -x_max;
-            if (x_bulle < -x_max) x_bulle = x_max;
-
-
-            bubble.transform.localPosition = new Vector3(x_bulle * 100, 0, 0);
-            bubble.SetActive(true);
-        }
-        else
-        {
-            bubble.SetActive(false);
-        }
+        water0.GetComponent<Image>().color = PressureColor(p0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
+        
+        bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
 
     }
 }

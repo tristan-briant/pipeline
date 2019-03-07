@@ -48,7 +48,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
         NewComponent.transform.localPosition = Vector3.zero;
         NewComponent.transform.localScale = Vector3.one * 1.2f;
-        NewComponent.GetComponent<BaseComponent>().dir = 0;
+        //NewComponent.GetComponent<BaseComponent>().dir = 0;
         NewComponent.GetComponent<BaseComponent>().destroyable = true;
         NewComponent.transform.localRotation = Quaternion.Euler(0, 0, 0);
 

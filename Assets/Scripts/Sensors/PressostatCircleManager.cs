@@ -10,7 +10,6 @@ public class PressostatCircleManager : BaseComponent {
    
     //Vector3 arrowStartPosition;
     float t_shine = 0;
-    Animator animator;
 
     public float setPointHigh;
     public float setPointLow;
@@ -56,10 +55,14 @@ public class PressostatCircleManager : BaseComponent {
         i[0] = i[1] = i[3] = 0;
     }
 
+    public override void Awake()
+    {
+        success = 0;
+    }
 
     protected override void Start()
     {
-
+       
         cadranMin = transform.Find("Gauge/Cadran Min").gameObject;
         cadranMax = transform.Find("Gauge/Cadran Max").gameObject;
 
@@ -70,12 +73,11 @@ public class PressostatCircleManager : BaseComponent {
         gauge = transform.Find("Gauge").gameObject;
         connector = transform.Find("Connector").gameObject;
 
+        base.Start();
         success = 0;
         
-        shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+        //shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         configPanel = Resources.Load("ConfigPanel/ConfigPressostat") as GameObject;
-
-        base.Start();
     }
 
     public override void Rotate()
@@ -117,9 +119,6 @@ public class PressostatCircleManager : BaseComponent {
         arrow.transform.localRotation = Quaternion.Euler(0, 0, -(2 * rate - 1) * angleMax);
 
         angle = -(2 * rate - 1) * angleMax;
-
-        //animator.Play("Pressostat-Gauge",0,rate);
-        //animator.SetFloat("rate", rate);
 
         cadranMax.GetComponent<Image>().fillAmount = -(2 * rateL - 1) * 150 / 360 + 0.5f;
         cadranMin.GetComponent<Image>().fillAmount = -(2 * rateH - 1) * 150 / 360 + 0.5f;

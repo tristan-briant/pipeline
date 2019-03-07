@@ -74,12 +74,13 @@ public class PressostatManager : BaseComponent {
         animator = GetComponent<Animator>();
         //animator.Play("Pressostat-Gauge", 0, 0.5f);
         animator.SetFloat("rate", 0.5f);
-        success = 0;
-        
+      
         shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         configPanel = Resources.Load("ConfigPanel/ConfigPressostat") as GameObject;
 
         base.Start();
+        success = 0;
+  
     }
 
     public override void Rotate()

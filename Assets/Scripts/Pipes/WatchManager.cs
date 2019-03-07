@@ -7,27 +7,33 @@ using UnityEngine.EventSystems;
 public class WatchManager : BaseComponent {
 
     protected Animation Animation;
-    public float timeOut=4.0f;
+    public float timeOut = 4.0f;
+    public float TimeOut { get => timeOut; set => timeOut = value; }
 
-    override public void Awake()
+    protected override void Start()
     {
-        Animation = GetComponent<Animation>();
-        Animation["WatchAnimation"].speed = 4 / timeOut;
+        base.Start();
+        configPanel = Resources.Load("ConfigPanel/ConfigWatch") as GameObject;
     }
 
     public override void OnClick()
     {
         audios[2].Play();
+        Animation = GetComponent<Animation>();
+        Animation["WatchAnimation"].speed = 4 / timeOut;
         Animation.Play("WatchAnimation");
 
-        broadcastTrigger();
+        GameObject.Find("Playground").BroadcastMessage("TriggerStart", SendMessageOptions.DontRequireReceiver);
+        GameObject.Find("CanvasDragged").BroadcastMessage("TriggerStart", SendMessageOptions.DontRequireReceiver);
+
+        Invoke("EndTrig", timeOut);
+    
     }
 
-
-    public void broadcastTrigger() {
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Triggerable")) {
-            go.transform.GetComponent<BaseComponent>().trigged=true;
-        }
+    void EndTrig()
+    {
+        GameObject.Find("Playground").BroadcastMessage("TriggerEnd", SendMessageOptions.DontRequireReceiver);
+        GameObject.Find("CanvasDragged").BroadcastMessage("TriggerEnd", SendMessageOptions.DontRequireReceiver);
 
     }
     
