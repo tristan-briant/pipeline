@@ -10,7 +10,7 @@ public class Designer : MonoBehaviour
 
     const int MaxSize = 8;
     const int MinSize = 3;
-    public int N, M;
+    static public int N, M;
 
     public GameObject Pg;
 
@@ -81,12 +81,6 @@ public class Designer : MonoBehaviour
         string imagePath = "amazingPath.png";
         File.WriteAllBytes(Application.persistentDataPath + Path.DirectorySeparatorChar + imagePath, bytes);
 
-        Debug.Log("done");
-
-        //Tell unity to delete the texture, by default it seems to keep hold of it and memory crashes will occur after too many screenshots.
-        //DestroyObject(texture);
-
-
     }
 
     //[ContextMenu("SaveToFile")]
@@ -105,6 +99,30 @@ public class Designer : MonoBehaviour
     }
 
 
+    static public void SaveToPrefs()
+    {
+        
+        LevelManager lvm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+
+        if (lvm.currentLevel == 0 || lvm.designerScene)
+        {
+            if (LevelManager.designerMode)
+                SaveToString();
+
+            PlayerPrefs.SetString("SandBox", PGdata);
+        }
+        Debug.Log(PGdata);
+
+    }
+
+    static public void LoadFromPrefs()
+    {
+        if (PlayerPrefs.HasKey("SandBox")){
+            PGdata = PlayerPrefs.GetString("SandBox");
+            LoadFromString();
+        }
+    }
+
     public void SaveToResources(string path)
     {
         path.Replace(".txt", "");
@@ -119,15 +137,18 @@ public class Designer : MonoBehaviour
         MakeThumb("Assets/Resources/Levels/" + path + ".png");
     }
 
-    public void SaveToString(bool reset=false)
+    static public void SaveToString(bool reset=false)
     {
+        GameObject PG = GameObject.Find("Playground");
+
         PGdata = "";
         PlaygroundParameters parameters = FindObjectOfType<PlaygroundParameters>();
         PGdata = JsonUtility.ToJson(parameters) + "\n";
 
         GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
-        foreach (Transform slot in deck.transform)
+        Transform deck = gc.GetComponent<GameController>().Deck.transform;
+
+        foreach (Transform slot in deck)
         {
             BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
             if (component != null && component.name != "" && !reset)
@@ -142,7 +163,7 @@ public class Designer : MonoBehaviour
             }
         }
 
-        foreach (Transform slot in Pg.transform)
+        foreach (Transform slot in PG.transform)
         {
             BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
             if (component != null && component.name != "")
@@ -159,8 +180,7 @@ public class Designer : MonoBehaviour
             }
 
         }
-
-        Debug.Log(PGdata);
+        
     }
 
     void ClearPlayground()
@@ -192,17 +212,19 @@ public class Designer : MonoBehaviour
     }
 
     [ContextMenu("LoadFromString")]
-    public void LoadFromString()
+    static public void LoadFromString()
     {
         if (PGdata == null) return;
 
+        GameObject PG = GameObject.Find("Playground");
+
         PGdata = PGdata.Replace("\r", ""); //clean up string
 
-        Pg = GameObject.Find("Playground");
-        int count = Pg.transform.childCount;
+        PG = GameObject.Find("Playground");
+        int count = PG.transform.childCount;
         for (int i = 0; i < count; i++)        // On retire tout
         {
-            Transform child = Pg.transform.GetChild(0);
+            Transform child = PG.transform.GetChild(0);
             DestroyImmediate(child.gameObject);
         }
 
@@ -224,9 +246,9 @@ public class Designer : MonoBehaviour
 
 
         GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
+        Transform deck = gc.GetComponent<GameController>().Deck.transform;
 
-        foreach (Transform slotDeck in deck.transform)
+        foreach (Transform slotDeck in deck)
         {
             if (slotDeck.transform.childCount > 0)
             {
@@ -239,9 +261,9 @@ public class Designer : MonoBehaviour
         string[] tokens = PGdata.Split('\n');
 
         int k = 0;
-        JsonUtility.FromJsonOverwrite(tokens[k++], Pg.GetComponent<PlaygroundParameters>()); //k=0 puis 1  
+        JsonUtility.FromJsonOverwrite(tokens[k++], PG.GetComponent<PlaygroundParameters>()); //k=0 puis 1  
 
-        foreach (Transform slotDeck in deck.transform)
+        foreach (Transform slotDeck in deck)
         {
             string prefab = tokens[k++];
             
@@ -258,40 +280,40 @@ public class Designer : MonoBehaviour
         }
 
 
-        N = Pg.GetComponent<PlaygroundParameters>().N;
-        M = Pg.GetComponent<PlaygroundParameters>().M;
+        N = PG.GetComponent<PlaygroundParameters>().N;
+        M = PG.GetComponent<PlaygroundParameters>().M;
 
-        Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
+        PG.GetComponent<GridLayoutGroup>().constraintCount = N;
 
-        GameObject slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 1, tokens[k++]);
-        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, true);
+        GameObject slot = CreateSlot(PG, "Field/SlotCorner", tokens[k++], 1, tokens[k++]);
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type+1, true);      //type + 1
 
         for (int i = 1; i < N - 1; i++)
         {
-            CreateSlot(Pg, "Field/SlotWall", tokens[k++], 0, tokens[k++]);
+            CreateSlot(PG, "Field/SlotWall", tokens[k++], 0, tokens[k++]);
         }
 
-        slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 0, tokens[k++]);
-        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, false);
+        slot = CreateSlot(PG, "Field/SlotCorner", tokens[k++], 0, tokens[k++]);
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type+1, false);      //type + 1
 
         for (int j = 1; j < M - 1; j++)
         {
-            slot = CreateSlot(Pg, "Field/SlotWall", tokens[k++], 1, tokens[k++]);
+            slot = CreateSlot(PG, "Field/SlotWall", tokens[k++], 1, tokens[k++]);
             CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, true);
 
-            for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotComponent", tokens[k++], 0, tokens[k++]); //empty component
+            for (int i = 1; i < N - 1; i++) CreateSlot(PG, "Field/SlotComponent", tokens[k++], 0, tokens[k++]); //empty component
 
-            slot = CreateSlot(Pg, "Field/SlotWall", tokens[k++], 3, tokens[k++]);
+            slot = CreateSlot(PG, "Field/SlotWall", tokens[k++], 3, tokens[k++]);
             CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, false);
 
         }
 
-        slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 2, tokens[k++]);
+        slot = CreateSlot(PG, "Field/SlotCorner", tokens[k++], 2, tokens[k++]);
         CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, true);
 
-        for (int i = 1; i < N - 1; i++) CreateSlot(Pg, "Field/SlotWall", tokens[k++], 2, tokens[k++]);
+        for (int i = 1; i < N - 1; i++) CreateSlot(PG, "Field/SlotWall", tokens[k++], 2, tokens[k++]);
 
-        slot = CreateSlot(Pg, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
+        slot = CreateSlot(PG, "Field/SlotCorner", tokens[k++], 3, tokens[k++]);
         CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type, false);
 
 
@@ -326,7 +348,7 @@ public class Designer : MonoBehaviour
     }
     
 
-    GameObject CreateSlotFrontier(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, int type)
+    static GameObject CreateSlotFrontier(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, int type)
     {
         GameObject slot = Instantiate(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
@@ -357,7 +379,7 @@ public class Designer : MonoBehaviour
         return slot;
     }
 
-    GameObject CreateSlotComponent(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
+    static GameObject CreateSlotComponent(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir)
     {
         GameObject slot = Instantiate(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
@@ -378,7 +400,7 @@ public class Designer : MonoBehaviour
     }
     
 
-    GameObject CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, string data)
+    static GameObject CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, string data)
     {
         GameObject slot = Instantiate(Resources.Load(PrefabSlotPath, typeof(GameObject))) as GameObject;
         slot.transform.SetParent(PlayGround.transform);
@@ -404,15 +426,14 @@ public class Designer : MonoBehaviour
                 component.GetComponent<BaseComponent>().dir = dir;  //override frontier direction in case it is in the wrong way
             }
 
-            bool designerMode = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designerMode;
-
-            component.GetComponent<BaseComponent>().destroyable = designerMode;
+           
+            component.GetComponent<BaseComponent>().destroyable = LevelManager.designerMode;
         }
         return slot;
 
     }
 
-    void CreateSlotEdge(int type,bool onTheLeft)
+    static void CreateSlotEdge(int type,bool onTheLeft)
     {
         Transform edge;
         GameObject slot = Instantiate(Resources.Load("Field/SlotEdge", typeof(GameObject))) as GameObject;
@@ -428,7 +449,7 @@ public class Designer : MonoBehaviour
         ChangeSlotEdgeImage(slot, type);
     }
 
-    public void ChangeSlotEdgeImage(GameObject slot, int type)
+    static public void ChangeSlotEdgeImage(GameObject slot, int type)
     {
         Sprite[] sprites = Resources.LoadAll<Sprite>("Field/AtlasEdge");
 
@@ -763,18 +784,10 @@ public class Designer : MonoBehaviour
     {
         playMode = !playMode;
 
-        if(playMode)
-            designerElements = GameObject.FindGameObjectsWithTag("DesignerUI");
-
-        foreach (GameObject go in designerElements)
-        {
-            go.SetActive(!playMode);
-        }
-
-        GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().designerMode = !playMode;
+        LevelManager.designerMode = !playMode;
 
         GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        Transform deck = gc.GetComponent<GameController>().DeckHolder.transform.GetChild(0);
+        Transform deck = gc.Deck.transform;
 
         deck.GetComponent<DeckManager>().DrawDeck();
 
@@ -782,6 +795,10 @@ public class Designer : MonoBehaviour
         { //Go in playMode
             SaveToString();
             GetComponentInChildren<Text>().text = "Designer Mode";
+            GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(false);
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
+                go.SetActive(false);
+           
             deck.parent.gameObject.SetActive(true);
             LoadFromString();
         }
@@ -789,6 +806,7 @@ public class Designer : MonoBehaviour
         { //Go in designer mode
             LoadFromString();
             GetComponentInChildren<Text>().text = "Play Mode";
+            GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(true);
             deck.parent.gameObject.SetActive(false);
         }
 

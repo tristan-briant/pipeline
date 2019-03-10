@@ -24,7 +24,19 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected float fail = 0;
     protected const float fMinBubble = 0.05f;
     private float pressure;
-    public float Pressure { get => pressure; set => pressure = value; }
+    public float Pressure
+    {
+        get => pressure;
+        set
+        {
+
+            if (float.IsNaN(pressure))
+            {
+                pressure = 0;
+            }
+            else pressure = value;
+        }
+    }
     public bool destroyable=true;
     public bool isSuccess = false;
     public bool locked = false;
@@ -111,10 +123,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public virtual void Constraint(float[] p, float[] i, float dt)
     {
         // Put constraint here as i blocked or p imposed
-        for (int k = 0; k < 4; k++)
-        {
-            Calcule_i_p_blocked(p, i, dt, k);
-        }
+        i[0] = i[1] = i[2] = i[3];
     }
 
     public virtual void Reset_i_p()
@@ -129,10 +138,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public virtual void Calcule_i_p(float[] p, float[] i,float dt)
     {
-        for(int k = 0; k < 4; k++)
-        {
-            Calcule_i_p_blocked(p, i, dt, k);
-        }
     }
 
     public virtual void Calcule_i_p_blocked(float[] p, float[] i, float dt, int index)
@@ -161,7 +166,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         if (name.Contains("Empty")) return false;
 
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
+        bool designerMode =  LevelManager.designerMode;
         if (locked && !designerMode) return false;
 
         return true;
@@ -171,7 +176,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (dragged) return false;
 
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
+        bool designerMode = LevelManager.designerMode;
         return designerMode;
     }
 
@@ -180,7 +185,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (dragged) return false;
         if (itemBeingDragged != null) return false;
 
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
+        bool designerMode = LevelManager.designerMode;
 
         if (locked && !designerMode) return false;
 
@@ -200,9 +205,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     bool IsDestroyable()
     {
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
-
-        if (designerMode) return true;
+        if (LevelManager.designerMode) return true;
 
         if (locked) return false;
 
@@ -221,7 +224,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     bool IsMovable()
     {
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
+        bool designerMode = LevelManager.designerMode;
 
         if (designerMode)
             return true;
@@ -239,7 +242,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnPointerDown(PointerEventData eventData)
     {
         clickStart = Time.time;
-        Debug.Log(name);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -354,9 +356,13 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         itemBeingDragged = null;
         transform.localScale = Vector3.one;
 
-        if (endParent == null && startParent) //retour au point de départ 
+        if (endParent == null)
         {
-            StartCoroutine(FlightToFinalPosition(startParent));
+            if(IsDestroyable() || startParent==null)
+                StartCoroutine(DestroyComponent());
+            else
+                StartCoroutine(FlightToFinalPosition(startParent));
+            
         }
 
         if (endParent && startParent)
@@ -394,7 +400,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
         }
 
-        if (endParent && startParent == null) { //provient du designer
+        if (endParent && startParent == null)
+        { //provient du designer
             if (name.Contains("Rock"))
             {
                 endParent.GetChild(1).GetComponent<BaseComponent>().ToggleLocked();
@@ -408,24 +415,19 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
                 }
                 else
                 {
-                    Destroy(gameObject); // if not delete self
+                    StartCoroutine(DestroyComponent());
                 }
             }
         }
 
-        if (endParent == null && startParent == null) { //Designer + coup dans l'eau
+        /*if (endParent == null && startParent == null) { //Designer + coup dans l'eau
             Destroy(gameObject);
             return;
-        }
-
-        //transform.localPosition = Vector3.zero;
-        //transform.localScale = Vector3.one;
-
+        }*/
+        
         dragged = false;
         startParent = endParent = null;
-
-        //gc.PopulateComposant();
-        //audios[1].Play();
+        
     }
 
     protected float SpeedAnim()
@@ -446,6 +448,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     protected float SpeedAnim(float f1, float f2)
     {
+        if (float.IsNaN(f1) || float.IsNaN(f2))
+            return 0;
+
         float flux;
         if ((f1 > 0 && f2 > 0) || (f1 < 0 && f2 < 0))
             flux = 0;
@@ -471,19 +476,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             foreach (Canvas c in GetComponentsInChildren<Canvas>())
                 c.sortingLayerName = canvasParent.sortingLayerName;
         }
-
-        //transform.localPosition = Vector3.zero;
-        //transform.localScale = Vector3.one;
-       
     }
 
     public IEnumerator FlightToFinalPosition(Transform newParent,float flightTime=0.2f, bool cleanNewParent=true)
     {
         Vector3 initialPosition = transform.position;
         Vector3 finalPosition = newParent.position;
-
-        Debug.Log(transform.position);
-        Debug.Log(newParent.position);
 
         float t = 0;
 
@@ -514,5 +512,26 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         gc.PopulateComposant();
         audios[1].Play();
+    }
+
+    public IEnumerator DestroyComponent(float flightTime = 0.3f)
+    {
+
+        Vector3 initialScale = transform.localScale;
+        float initialRotation = transform.rotation.eulerAngles.z;
+
+
+        float t = 0;
+
+        while (t < flightTime)
+        {
+            transform.localScale = (initialScale * (flightTime - t) ) / flightTime;
+            transform.rotation = Quaternion.Euler(0,0,initialRotation + 360*  t / flightTime) ;
+            t += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        Destroy(gameObject);
+
     }
 }

@@ -18,7 +18,6 @@ public class CategorySelection : MonoBehaviour {
 
     public void Toggle()
     {
-        //ShowComponent();
         Transform parent = buttons[0].transform.parent;
         foreach (Transform child in parent.transform)  // disable All
             child.gameObject.SetActive(false);

@@ -7,8 +7,8 @@ public class diodeManager : BaseComponent {
 
     GameObject water0, water2, bubble;
     GameObject piston;
-    public float x_bulle = 0;
-    float r_bulle = 0.1f;
+    //public float x_bulle = 0;
+    //float r_bulle = 0.1f;
     float q0, q2;
     public float xp;
 

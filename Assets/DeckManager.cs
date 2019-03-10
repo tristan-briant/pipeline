@@ -14,7 +14,7 @@ public class DeckManager : MonoBehaviour
 
     public void DrawDeck()
     {
-        bool designerMode = GameObject.Find("LevelManager").GetComponent<LevelManager>().designerMode;
+        bool designerMode =LevelManager.designerMode;
 
         if (designerMode)
         {
@@ -44,10 +44,9 @@ public class DeckManager : MonoBehaviour
             }
 
             if (count == 0)
-            {
                 gameObject.SetActive(false);
-                Debug.Log(count);
-            }
+            else
+                gameObject.SetActive(true);
 
             text.gameObject.SetActive(false);
 

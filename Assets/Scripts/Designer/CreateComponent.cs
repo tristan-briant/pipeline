@@ -76,9 +76,13 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
     {
         if(designermode && transform.childCount == 0)
         {
+            Debug.Log(BaseComponent.itemBeingDragged.name);
+
             if (BaseComponent.itemBeingDragged.GetComponent<BaseComponent>().isFrontiers) return;
             if (BaseComponent.itemBeingDragged.name.Contains("Empty")) return;
+            if (BaseComponent.itemBeingDragged.name.Contains("Rock")) return;
 
+ 
             //GameObject c = Instantiate(BaseComponent.itemBeingDragged);
             PrefabComponentPath = BaseComponent.itemBeingDragged.GetComponent<BaseComponent>().PrefabPath;
 

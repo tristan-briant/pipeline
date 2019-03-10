@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.IO;
 
 public class GameController : MonoBehaviour {
 
@@ -28,8 +27,7 @@ public class GameController : MonoBehaviour {
     protected bool paused = false;
 
     public LevelManager LVM;
-    public GameObject PgHolder; //The "playground Holder" 
-    public GameObject DeckHolder; // The Deck
+    public GameObject Deck; // The Deck
     GameObject Pg; //The "playground" from which are determined N and M 
 
     bool firstPopulate = true;
@@ -51,8 +49,9 @@ public class GameController : MonoBehaviour {
             GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(true);
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
                 go.SetActive(false);
-            LVM.designerMode = false;
-            DeckHolder.SetActive(true);
+            LevelManager.designerMode = false;
+            Deck.SetActive(true);
+            Deck.transform.parent.gameObject.SetActive(true);
 
  
             LoadLevel();
@@ -63,12 +62,15 @@ public class GameController : MonoBehaviour {
             GameObject.Find("MainCanvas").transform.Find("HeaderLevel").gameObject.SetActive(false);
             GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(true);
             //Pg = GameObject.Find("Playground");
-            LVM.designerMode = true;
+            LevelManager.designerMode = true;
             nextLevelText.gameObject.SetActive(false);
             levelText.gameObject.SetActive(false);
 
             if (currentLevel == 0)
+            {
+                Designer.LoadFromPrefs();
                 InitializePlayground();
+            }
             else
                 LoadLevel();
         }
@@ -117,8 +119,6 @@ public class GameController : MonoBehaviour {
         winText.SetActive(false);
     }
 
-
-
     [ContextMenu("Resize Playground")]
     public void ResizePlayGround()
     {
@@ -126,13 +126,13 @@ public class GameController : MonoBehaviour {
         RectTransform objectRectTransform = go.GetComponent<RectTransform>();
         float width = objectRectTransform.rect.width;
         float height = objectRectTransform.rect.height;
-        Debug.Log(" W :" + width + " H  " + height);
-        Debug.Log(" N :" + N + " M  " + M);
+        //Debug.Log(" W :" + width + " H  " + height);
+        //Debug.Log(" N :" + N + " M  " + M);
 
         float wx= width / (100f * N);
 
         bool trivialEdge = true;
-        if (!LVM.designerMode)
+        if (! LevelManager.designerMode)
         {
             for (int j = 1; j < M - 1; j++)
             {
@@ -318,8 +318,6 @@ public class GameController : MonoBehaviour {
         firstPopulate = false;
     }
 
-
-
     void Evolution()
     {
 
@@ -330,7 +328,7 @@ public class GameController : MonoBehaviour {
 
         if (!HasSuccessComponent) success = 0; // Avoid to trigger win animation if no success component in the scene
 
-        if (!LVM.designerMode)
+        if (!LevelManager.designerMode)
         {
 
             if (success >= 1 && BaseComponent.itemBeingDragged == null && !gameOver)
@@ -363,9 +361,6 @@ public class GameController : MonoBehaviour {
             nextButton.gameObject.SetActive(true);
         }
     }
-
-
-
 
     IEnumerator LoseAnimation()
     {
@@ -405,15 +400,14 @@ public class GameController : MonoBehaviour {
         string filename = LVM.GetPlaygroundName(currentLevel);
         GetComponent<Designer>().LoadFromRessources(filename);
 
-        //FindObjectOfType<DeckManager>().DrawDeck();
-        DeckHolder.GetComponentInChildren<DeckManager>().DrawDeck();
+        Deck.GetComponent<DeckManager>().DrawDeck();
 
         if (currentLevel == 1)
             prevButton.gameObject.SetActive(false);
         else
             prevButton.gameObject.SetActive(true);
 
-        if (currentLevel < LVM.levelMax && ( LVM.LevelIsCompleted(currentLevel) || LVM.hacked) )
+        if (currentLevel < LVM.LevelMax() && (LVM.LevelIsCompleted(currentLevel) || LVM.hacked))
             nextButton.gameObject.SetActive(true);
         else
             nextButton.gameObject.SetActive(false);
@@ -421,10 +415,7 @@ public class GameController : MonoBehaviour {
         levelText.gameObject.SetActive(true);
         levelText.text = levelText.GetComponent<languageManager>().GetText() + currentLevel;
         nextLevelText.gameObject.SetActive(false);
-
-
     }
-
 
 
     void LateUpdate () {
@@ -447,7 +438,9 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void BackToMenu() {
+    public void BackToMenu()
+    {    
+        Designer.SaveToPrefs();
         SceneManager.LoadScene(0);
     }
 

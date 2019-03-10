@@ -2,29 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System;
 
 
 public class Pipeline : BaseComponent { 
 
     GameObject water0,water2,bubble;
- 
+
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
         p0 = p[0];
         p2 = p[2];
 
-        q += (i[0] + i[2]) * dt; 
-        f += (p[0] - p[2]) / L * dt;
+        q += (i[0] + i[2]) / C * dt;
+        f += (p0 - p2) / L * dt;
 
-        p[0] = (q / C + (i[0] - f) * R);
-        p[2] = (q / C + (i[2] + f) * R);
+        p[0] = (q + (i[0] - f) * R);
+        p[2] = (q + (i[2] + f) * R);
 
-        i[0] = (f + (p0 - q / C) / R);
-        i[2] = (-f + (p2 - q / C) / R);
-
-        Pressure = Mathf.Clamp(0.25f * (p[0] + p[2]), -1f, 1f); ;
+        i[0] = (f + (p0 - q) / R);
+        i[2] = (-f + (p2 - q) / R);
+        
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
@@ -45,26 +42,11 @@ public class Pipeline : BaseComponent {
 
     private void Update()
     {
+        Pressure = Mathf.Clamp(0.25f * (p0 + p2), -1f, 1f);
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
-
-
+        
         bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
-
-
-
-        if (Mathf.Abs(f) > fMinBubble)
-        {
-          
-            if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
-            {
-                int r = UnityEngine.Random.Range(0, 3);
-                audios[3 + r].Play();
-            }
-            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
-
-        }
-
     }
 
 }

@@ -8,14 +8,10 @@ public class TeManager : BaseComponent
 {
 
     GameObject water0, water2, water3, bubble20, bubble23, bubble03;
-    float x_bulle0 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
+    //float x_bulle0 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
     float f0,  f2, f3;
     float i0 = 0,  i2 = 0, i3 = 0;
 
-    //public float x_bulle = 0;
-    float r_bulle = 0.1f;
-    //float f=0;
-    //float[] pin = new float[4];
 
     public override void Reset_i_p()
     {
@@ -30,10 +26,10 @@ public class TeManager : BaseComponent
         p3 = p[3];
 
 
-        i0 = i[0]; x_bulle0 -= 0.05f * i0; //// pour le dessin
+        //i0 = i[0]; //x_bulle0 -= 0.05f * i0; //// pour le dessin
         //i1 = i[1]; x_bulle1 += 0.05f * i1; 
-        i2 = i[2]; x_bulle2 += 0.05f * i2;
-        i3 = i[3]; x_bulle3 -= 0.05f * i3;
+        //i2 = i[2]; //x_bulle2 += 0.05f * i2;
+        //i3 = i[3]; //x_bulle3 -= 0.05f * i3;
 
         q += (i[0] + i[2] + i[3]) * dt; //q*=0.99;
 
@@ -60,7 +56,6 @@ public class TeManager : BaseComponent
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        //Calcule_i_p_blocked(p, i, dt, 1);
         i[1] = 0;
     }
 
@@ -77,7 +72,7 @@ public class TeManager : BaseComponent
 
     }
 
-    float flux(float f1, float f2) {
+    /*float Flux(float f1, float f2) {
         if ((f1 > 0 && f2 > 0) || (f1 < 0 && f2 < 0))
             return 0;
 
@@ -85,7 +80,7 @@ public class TeManager : BaseComponent
             return f1;
         else
             return -f2;
-    }
+    }*/
 
     private void Update()
     {
@@ -97,67 +92,6 @@ public class TeManager : BaseComponent
         bubble23.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f2, f3));
         bubble03.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f0, f3));
 
-        /*
-        //////////BUBBLE 0
-        if (Mathf.Abs(i0) > fMinBubble)
-        {
-            float xmax = 0.5f - r_bulle;
-            if (x_bulle0 > xmax) x_bulle0 = -xmax;
-            if (x_bulle0 < -xmax) x_bulle0 = xmax;
-
-
-            if (x_bulle0 > 0)
-            {
-                bubble0.transform.localPosition = new Vector3(x_bulle0 * 100, 0, 0);
-                bubble0.SetActive(true);
-            }
-            else bubble0.SetActive(false);
-        }
-        else
-        {
-            bubble0.SetActive(false);
-        }
-
-        //////////BUBBLE 2
-        if (Mathf.Abs(i2) > fMinBubble)
-        {
-            float xmax = 0.5f - r_bulle;
-            if (x_bulle2 > xmax) x_bulle2 = -xmax;
-            if (x_bulle2 < -xmax) x_bulle2 = xmax;
-
-
-            if (x_bulle2 < 0)
-            {
-                bubble2.transform.localPosition = new Vector3(x_bulle2 * 100, 0, 0);
-                bubble2.SetActive(true);
-            }
-            else bubble2.SetActive(false);
-        }
-        else
-        {
-            bubble2.SetActive(false);
-        }
-
-        //////////BUBBLE 3
-        if (Mathf.Abs(i3) > fMinBubble)
-        {
-            float xmax = 0.5f - r_bulle;
-            if (x_bulle3 > xmax) x_bulle3 = -xmax;
-            if (x_bulle3 < -xmax) x_bulle3 = xmax;
-
-
-            if (x_bulle3 > 0.1)
-            {
-                bubble3.transform.localPosition = new Vector3(0,-x_bulle3 * 100, 0);
-                bubble3.SetActive(true);
-            }
-            else bubble3.SetActive(false);
-        }
-        else
-        {
-            bubble3.SetActive(false);
-        }
-        */
     }
 
 }

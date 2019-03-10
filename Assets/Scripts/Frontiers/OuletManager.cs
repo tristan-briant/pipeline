@@ -144,6 +144,18 @@ public class OuletManager : BaseFrontier
                 success = Mathf.Clamp(success - 10 * Time.deltaTime/ timeSuccess, 0, 1);
         }
 
+        if (Mathf.Abs(f) > fMinBubble)
+        {
+
+            if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
+            {
+                int r = UnityEngine.Random.Range(0, 3);
+                audios[3 + r].Play();
+            }
+            audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
+
+        }
+
 
     }
 

@@ -359,26 +359,8 @@ public class TransistorManager : BaseComponent
 
         }
            
-        Calcule_i_p_blocked(p, i, dt, 0);
-
-        const float r = 0.1f;
-
-        /*if (NPN)
-        {
-            x_bulle2 += 0.05f * f2;
-            x_bulle1 += 0.05f * f13;
-            xp = (1 - r) * xp + r * Mathf.Clamp(+f2, 0, 0.1f);
-        }
-        else
-        {
-            x_bulle2 += 0.05f * f2;
-            x_bulle1 += 0.05f * f13;
-            if (g > threshold)
-                xp = (1 - r) * xp + r * Mathf.Clamp(+f2, 0, 0.1f);
-            else
-                xp = (1 - r) * xp;
-        }
-
+        
+        /*
         if (mirror)
         {
             float e = p[0];

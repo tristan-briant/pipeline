@@ -7,7 +7,7 @@ using System.IO;
 
 public class LevelManager : MonoBehaviour {
 
-    private static LevelManager instanceRef;
+    private static LevelManager instance;
 
     public int currentLevel;
     public int completedLevel;
@@ -15,7 +15,7 @@ public class LevelManager : MonoBehaviour {
     public float scrollViewHight = 0;
     public bool FirstLaunch=true;
     public bool hacked = false;
-    public bool designerMode = false;
+    static public bool designerMode = false;
     public bool designerScene = false;
     public string levelPath;
 
@@ -78,16 +78,17 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        if (instanceRef == null)
+        if (instance == null)
         {
             DontDestroyOnLoad(gameObject);
-            instanceRef = this;
-            LoadPlaygroundList();
+            instance = this;
+            //LoadPlaygroundList();
             //levelMax = playgroundName.Count;
         }
         else
         {
             DestroyImmediate(gameObject);
+            //Destroy(gameObject);
         }
     }
 
@@ -97,30 +98,30 @@ public class LevelManager : MonoBehaviour {
         return list.names.Count;
     }
 
-    public void LoadPlaygroundList()
+    /*public void LoadPlaygroundList()
     {
         string names = Resources.Load<TextAsset>("Levels/PlaygroundList").ToString();
         names = names.Replace("\r", ""); //clean up string 
         playgroundName = new List<string>(names.Split('\n'));
-    }
+    }*/
 
     public bool LevelIsCompleted(int i) {
         if (i < 1) return true; // level 0 alway completed
-        string s = PlayerPrefs.GetString("Level-" + playgroundName[i-1]);
+        string s = PlayerPrefs.GetString("Level-" + GetPlaygroundName(i));
         if (s == "completed") return true;
         return false;
     }
 
     public void ResetGame() {
         for (int i = 1; i <= levelMax; i++) {
-            PlayerPrefs.SetString("Level-" + playgroundName[i-1],"");
+            PlayerPrefs.SetString("Level-" + GetPlaygroundName(i), "");
         }
     }
 
     public void LevelCompleted(int i)
     {
         if (i < 1) return;
-        PlayerPrefs.SetString("Level-" + playgroundName[i-1], "completed");
+        PlayerPrefs.SetString("Level-" + GetPlaygroundName(i), "completed");
         PlayerPrefs.Save();
     }
     
@@ -131,7 +132,7 @@ public class LevelManager : MonoBehaviour {
 
         ListLevel list = GetComponent<ListLevel>();
 
-        if( 0 < level && level <= list.names.Count )
+        if( 1 <= level && level <= list.names.Count )
             return list.names[level - 1];
         else
             return "";
