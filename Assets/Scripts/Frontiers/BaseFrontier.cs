@@ -35,8 +35,11 @@ public class BaseFrontier : BaseComponent {
 
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
-        Calcule_i_p_blocked(p, i, alpha, 0);
     }
 
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        i[0] = 0;
+    }
 
 }

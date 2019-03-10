@@ -14,36 +14,27 @@ public class ElbowManager : BaseComponent {
         p3 = p[3];
 
         q += (i[2] + i[3]) /C * dt;
-        f += (p[2] - p[3]) / L * dt;
+        f += (p2 - p3) / L * dt;
 
         p[2] = (q + (i[2] - f) * R);
         p[3] = (q + (i[3] + f) * R);
 
         i[2] = (f + (p2 - q) / R);
         i[3] = (-f + (p3 - q) / R);
-
-      
-
-       
-
  
-        if (float.IsNaN(f))
-            f = 0;
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 0);
-
+        i[0] = i[1] = 0;
     }
 
     protected override void Start()
     {
         base.Start();
-        water2 = this.transform.Find("Water2").gameObject;
-        water3 = this.transform.Find("Water3").gameObject;
-        bubble = this.transform.Find("Bubble").gameObject;
+        water2 = transform.Find("Water2").gameObject;
+        water3 = transform.Find("Water3").gameObject;
+        bubble = transform.Find("Bubble").gameObject;
        
         bubble.gameObject.SetActive(true);
         bubble.GetComponent<Animator>().SetFloat("speed", 0);
@@ -57,8 +48,7 @@ public class ElbowManager : BaseComponent {
         water3.GetComponent<Image>().color = PressureColor(p3);
         
         bubble.GetComponent<Animator>().SetFloat("speed", SpeedAnim());
-
-      
+        
     }
 
 }
