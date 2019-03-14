@@ -70,9 +70,7 @@ public class PressostatManager : BaseComponent {
         shine = transform.Find("Shine").gameObject;
         value = transform.Find("Value").gameObject;
 
-
         animator = GetComponent<Animator>();
-        //animator.Play("Pressostat-Gauge", 0, 0.5f);
         animator.SetFloat("rate", 0.5f);
       
         shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
@@ -122,9 +120,8 @@ public class PressostatManager : BaseComponent {
         float rateH = Mathf.Clamp((setPointHigh - PMin) / (PMax-PMin) , 0, 1);
         float rateL = Mathf.Clamp((setPointLow - PMin) / (PMax - PMin) , 0, 1);
 
-        Vector3 pos= new Vector3(0, rate* 55.3f, 0);
+        //Vector3 pos= new Vector3(0, rate* 55.3f, 0);
 
-        //animator.Play("Pressostat-Gauge",0,rate);
         animator.SetFloat("rate", rate);
 
         cadranMax.GetComponent<Image>().fillAmount = rateH;

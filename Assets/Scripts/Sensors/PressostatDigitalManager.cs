@@ -7,158 +7,172 @@ public class PressostatDigitalManager : BaseComponent
 {
 
 
-    GameObject water, water2, bubble, red, green, arrow, shine;
-    public float x_bulle = 0;
-    //float r_bulle = 0.1f;
-    public float setPointHigh, setPointLow, PMax, PMin;
-    Vector3 arrowStartPosition;
-    float t_shine = 0;
-    public int mode = 0;
-    float SPH, SPL, successSpeed;
-    public float periode = 2, phase = 0;
-    public float time;
+    GameObject water, water2, timer;// //red, green, arrow, shine;
+    GameObject[] red = new GameObject[4];
+    GameObject[] green = new GameObject[4];
+    public bool[] setPoint = { false, true, false, true };
+    bool[] successes = { false, false, false, false };
+    float PMax=1, PMin=0;
+    public float periode = 16;
 
-    void calculateSetPoint()
+
+    public bool[] SetPoint { get => setPoint; set { setPoint = value; InitializePanel(); } }
+
+
+    override public void Awake()
     {
-        float mean, tolerance;
-        switch (mode)
-        {
-            case 0:
-                SPH = setPointHigh;
-                SPL = setPointLow;
-                successSpeed = 0.005f;
-                break;
-            case 1:
-                time = ((Time.time % periode)/periode + phase / 360.0f)%1; // Normalized time 0->1 for a periode
-                if (0.15f < time && time < 0.35f)
-                {
-                    mean = 1;
-                    tolerance = 0.3f;
-                }
-                else if (0.65f < time && time < 0.85f)
-                {
-                    mean = 0;
-                    tolerance = 0.3f;
-                }
-                else
-                {
-                    mean = 0.5f;
-                    tolerance = 1;
-                }
-                
-
-                SPL = mean - tolerance;
-                SPH = mean + tolerance;
-                successSpeed = 0.01f / periode / 2;
-                break;
-            
-
-        }
-    }
-
-
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
-    {
-        float b = p[2];
-
-        q += (i[2]) * alpha; //q*=0.99;
-        f += (p[0] - p[2]) / L * 0;
-
-        //p[0] = (1-alpha)*p[0] + alpha*( q + (i[0]-f)*R);
-        p[2] = (q / C + (i[2] + f) * R);
-
-        //i[0] = (1-alpha)*i[0] + alpha*( f + (a-q)/R);
-        i[2] = (-f + (b - q / C) / R);
-
-        //i[0]=i[1]=i[3]=0;
-        i[0] = p[0] / Rground;
-        i[1] = p[1] / Rground;
-        i[3] = p[3] / Rground;
-
-
-        calculateSetPoint();
-        if (SPL < q / C && q / C < SPH && itemBeingDragged == null) 
-            success = Mathf.Clamp(success + successSpeed, 0, 1);
-        else
-            success = Mathf.Clamp(success - 0.05f, 0, 1);
-
+        InitializePanel();
     }
 
     protected override void Start()
     {
         base.Start();
-        water = this.transform.Find("Water").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        water = transform.Find("Water").gameObject;
+        water2 = transform.Find("Water2").gameObject;
+        timer = transform.Find("Timer").gameObject;
 
-        arrow = this.transform.Find("Arrow").gameObject;
-        shine = this.transform.Find("Shine").gameObject;
-        red = this.transform.Find("Red").gameObject;
-        green = this.transform.Find("Green").gameObject;
+        for (int i = 0; i < 4; i++)
+        {
+            red[i] = transform.Find("Red" + (i + 1)).gameObject;
+            green[i] = transform.Find("Green" + (i + 1)).gameObject;
+        }
 
-        arrowStartPosition = new Vector3(7.6f, -19.14f, 0);// arrow.transform.localPosition;
         success = 0;
+        configPanel = Resources.Load("ConfigPanel/ConfigPressostatDigital") as GameObject;
+    }
+
+    public void InitializePanel()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            transform.Find("Red" + (i + 1)).gameObject.SetActive(!setPoint[i]);
+            transform.Find("Green" + (i + 1)).gameObject.SetActive(setPoint[i]);
+        }
+    }
+
+    protected void UpdatePanel()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            red[i].transform.GetChild(0).gameObject.SetActive(successes[i]);
+            green[i].transform.GetChild(0).gameObject.SetActive(successes[i]);
+        }
+    }
+
+    protected void ClearPanel()
+    {
+
+        for (int i = 0; i < 4; i++)
+        {
+            successes[i] = false;
+            red[i].transform.GetChild(0).gameObject.SetActive(false);
+            green[i].transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        success = 1;
+    }
+
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
+    {
+        p2 = p[2];
+        C = 0.05f;
+        R = 1;
+        q += i[2] / C * dt;
+        q *= 0.99f;
+       
+        p[2] = q  + i[2] * R;
+        i[2] = (p2 - q) / R;
+
+    }
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        Calcule_i_p_blocked(p, i, dt, 0);
+        Calcule_i_p_blocked(p, i, dt, 1);
+        Calcule_i_p_blocked(p, i, dt, 3);
     }
 
 
+    int step = 0; // 0 à 
     private void Update()
     {
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
+        water2.GetComponent<Image>().color = PressureColor(p2);
 
-        float rate = Mathf.Clamp((q / C - PMin) / (PMax - PMin), 0, 1);
+        float rate = Mathf.Clamp((q - PMin) / (PMax - PMin) * 0.5f + 0.25f, 0, 1);
 
-        Vector3 pos = new Vector3(0, rate * 55.3f, 0);
-        arrow.transform.localPosition = arrowStartPosition + pos;
-        water.GetComponent<Image>().fillAmount = (1 - 0.9f * rate);
+        GetComponent<Animator>().SetFloat("rate", rate);
 
-        float alpha;
+        if (itemBeingDragged) ClearPanel();
 
-        if (success < 1)
-        {
-            alpha = success;
-            t_shine = 0;
-        }
-        else
-        {
-            t_shine += Time.deltaTime;
-            alpha = 0.8f + 0.2f * Mathf.Cos(t_shine * 5.0f);
-
-        }
-
-        shine.GetComponent<Image>().color = new Color(1, 1, 1, alpha);
-
-       
-
-        switch (mode)
+        switch (step)
         {
             case 0:
-                if (SPL > 0.5f)
-                {
-                    red.SetActive(false);
-                    green.SetActive(true);
-                }
-                if (SPH < 0.5f)
-                {
-                    red.SetActive(true);
-                    green.SetActive(false);
-                }
+                ClearPanel();
+                timer.GetComponent<Animator>().SetInteger("step", 0);
+                success = 0;
+                step++;
                 break;
             case 1:
-                time = ((Time.time % periode) / periode + phase / 360.0f) % 1; // Normalized time 0->1 for a periode
-                if ( time < 0.5f)
+                if (8 * (Time.time / periode % 1) > 1)
                 {
-                    red.SetActive(false);
-                    green.SetActive(true);
+                    if (((setPoint[0] ? 1 : -1 )* (q - 0.5f)) > 0) successes[0]=true;
+                    UpdatePanel();
+                    step++;
                 }
-                else
+                break;
+            case 2:
+                if (8 * (Time.time / periode % 1) > 2)
                 {
-                    red.SetActive(true);
-                    green.SetActive(false);
+                    timer.GetComponent<Animator>().SetInteger("step", 1);
+                    step++;
                 }
+                break;
+            case 3:
+                if (8 * (Time.time / periode % 1) > 3)
+                {
+                    if (((setPoint[1] ? 1 : -1 )* (q - 0.5f)) > 0) successes[1] = true;
+                    UpdatePanel();
+                    step++;
+                }
+                break;
+            case 4:
+                if (8 * (Time.time / periode % 1) > 4)
+                {
+                    timer.GetComponent<Animator>().SetInteger("step", 2);
+                    step++;
+                }
+                break;
+            case 5:
+                if (8 * (Time.time / periode % 1) > 5)
+                {
+                    if ((setPoint[2] ? 1 : -1) * (q - 0.5f) > 0) successes[2] = true;
+                    UpdatePanel();
+                    step++;
+                }
+                break;
+            case 6:
+                if (8 * (Time.time / periode % 1) > 6)
+                {
+                    timer.GetComponent<Animator>().SetInteger("step", 3);
+                    step++;
+                }
+                break;
+            case 7:
+                if (8 * (Time.time / periode % 1) > 7)
+                {
+                    if ((setPoint[3] ? 1 : -1) * (q - 0.5f) > 0) successes[3] = true;
+                    UpdatePanel();
+                    step++;
+                }
+                break;
+            case 8:
+                if (successes[0] && successes[1] && successes[2] && successes[3])
+                    success = 1;
+                if (8 * (Time.time / periode % 1) < 1) step = 0;
                 break;
         }
 
 
-
-        }
+    }
 
 }

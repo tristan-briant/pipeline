@@ -86,12 +86,12 @@ public class InletDigitalManager : BaseFrontier
     protected override void Start()
     {
         base.Start();
-        water = this.transform.Find("Water").gameObject;
-        water0 = this.transform.Find("Water0").gameObject;
+        water = transform.Find("Water").gameObject;
+        water0 = transform.Find("Water0").gameObject;
 
-        arrow = this.transform.Find("Arrow").gameObject;
-        red = this.transform.Find("Red").gameObject;
-        green = this.transform.Find("Green").gameObject;
+        arrow = transform.Find("Arrow").gameObject;
+        red = transform.Find("Red").gameObject;
+        green = transform.Find("Green").gameObject;
 
         if (jelly)
         {

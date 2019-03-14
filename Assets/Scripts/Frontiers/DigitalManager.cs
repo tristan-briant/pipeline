@@ -59,21 +59,8 @@ public class DigitalManager : BaseFrontier
 
     }
 
-    float pp = 0;
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        /*
-            if (Mathf.Abs(i[0]) < Imax)
-            {
-                pp = 0.01f * ppset + 0.99f * pp;
-                p[0] = pp;
-            }
-            else
-            {
-                pp = 0.01f * p[0] + 0.99f * pp;
-                i[0] = Mathf.Clamp(i[0], -Imax, Imax);
-            }
-      */
     }
 
     protected override void Start()
