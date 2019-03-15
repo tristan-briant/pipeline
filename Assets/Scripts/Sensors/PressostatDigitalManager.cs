@@ -87,9 +87,7 @@ public class PressostatDigitalManager : BaseComponent
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 0);
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 3);
+        i[0] = i[1] = i[3] = 0;
     }
 
 
@@ -98,7 +96,7 @@ public class PressostatDigitalManager : BaseComponent
     {
         water2.GetComponent<Image>().color = PressureColor(p2);
 
-        float rate = Mathf.Clamp((q - PMin) / (PMax - PMin) * 0.5f + 0.25f, 0, 1);
+        float rate = Mathf.Clamp((q - PMin) / (PMax - PMin) * 0.5f + 0.25f, 0, 0.99f);
 
         GetComponent<Animator>().SetFloat("rate", rate);
 

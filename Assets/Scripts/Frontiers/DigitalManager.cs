@@ -34,17 +34,23 @@ public class DigitalManager : BaseFrontier
         }
     }
 
- 
+    public bool[] setPoint = { false, true, false, true };
+    public bool[] SetPoint { get => setPoint; set { setPoint = value; InitializePanel(); } }
 
-    GameObject water=null, water0=null, arrow=null, bubble=null, red, green ,value;
-    public float periode = 4;
+
+    GameObject water =null, water0=null, arrow=null, bubble=null, value, timer;
+    GameObject[] red = new GameObject[4];
+    GameObject[] green = new GameObject[4];
+
+    [SerializeField]
+    protected float periode = 8;  
     public float Periode { get => periode; set => periode = value; }
 
  
     float ppset;
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        if (Time.time / periode % 1 > 0.5f)
+        if ( setPoint[ Mathf.FloorToInt( 4 * (Time.time / periode % 1 )) ] )
             ppset = pset;
         else
             ppset = 0f;
@@ -63,6 +69,36 @@ public class DigitalManager : BaseFrontier
     {
     }
 
+    public void InitializePanel()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            transform.Find("Red" + (i + 1)).gameObject.SetActive(!setPoint[i]);
+            transform.Find("Green" + (i + 1)).gameObject.SetActive(setPoint[i]);
+        }
+    }
+
+    protected void UpdatePanel()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            red[i].transform.GetChild(0).gameObject.SetActive(i == step-1);
+            green[i].transform.GetChild(0).gameObject.SetActive(i == step-1);
+        }
+    }
+
+    protected void ClearPanel()
+    {
+
+        for (int i = 0; i < 4; i++)
+        {
+            red[i].transform.GetChild(0).gameObject.SetActive(false);
+            green[i].transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        success = 1;
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -76,8 +112,17 @@ public class DigitalManager : BaseFrontier
         if (transform.Find("Bubble"))
             bubble = transform.Find("Bubble").gameObject;
 
-        red = transform.Find("Red").gameObject;
-        green = transform.Find("Green").gameObject;
+        /*red = transform.Find("Red").gameObject;
+        green = transform.Find("Green").gameObject;*/
+
+        timer = transform.Find("Panel/Timer").gameObject;
+
+        for (int i = 0; i < 4; i++)
+        {
+            red[i] = transform.Find("Red" + (i + 1)).gameObject;
+            green[i] = transform.Find("Green" + (i + 1)).gameObject;
+        }
+
         value = transform.Find("Value").gameObject;
 
         if (isSuccess)
@@ -86,6 +131,9 @@ public class DigitalManager : BaseFrontier
         R = 0.1f;
         C = 1f;
     }
+
+
+    int step = 0; // 0 à 4
 
     private void Update()
     {
@@ -98,8 +146,6 @@ public class DigitalManager : BaseFrontier
 
         bool isGreen = Time.time / periode % 1 < 0.5;
 
-        red.SetActive(!isGreen);
-        green.SetActive(isGreen);
         value.GetComponent<Text>().text = f.ToString("F2");
 
 
@@ -111,14 +157,47 @@ public class DigitalManager : BaseFrontier
                 arrow.GetComponent<Animator>().SetBool("Negative", false);
         }
 
-        if (isSuccess)
+        switch (step)
         {
-            const float timeSuccess = 4.0f;
-            if (f > 0.2f)
-                success = Mathf.Clamp(success + Time.deltaTime / timeSuccess, 0, 1);
-            else
-                success = Mathf.Clamp(success - 10 * Time.deltaTime / timeSuccess, 0, 1);
+            case 0:
+                timer.GetComponent<Animator>().SetInteger("step", 0);
+                step++;
+                UpdatePanel();
+                break;
+            case 1:
+                if (4 * (Time.time / periode % 1) > 1)
+                {
+                    timer.GetComponent<Animator>().SetInteger("step", 1);
+                    step++;
+                    UpdatePanel();
+                }
+                break;
+            case 2:
+                if (4 * (Time.time / periode % 1) > 2)
+                {
+                    timer.GetComponent<Animator>().SetInteger("step", 2);
+                    step++;
+                    UpdatePanel();
+                }
+                break;
+            case 3:
+                if (4 * (Time.time / periode % 1) > 3)
+                {
+                    timer.GetComponent<Animator>().SetInteger("step", 3);
+                    step++;
+                    UpdatePanel();
+                }
+                break;
+            case 4:
+                if (4 * (Time.time / periode % 1) < 1)
+                    step = 0;
+                break;
+
         }
+
+
+
+
 
         if (Mathf.Abs(f) > fMinBubble)
         {
@@ -131,6 +210,9 @@ public class DigitalManager : BaseFrontier
             audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
 
         }
+
+
+
 
 
     }
