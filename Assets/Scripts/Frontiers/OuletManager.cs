@@ -36,7 +36,7 @@ public class OuletManager : BaseFrontier
 
  
 
-    GameObject water=null, water0=null, arrow=null, bubble=null, moulin;
+    GameObject water=null, water0=null, arrow=null, bubble=null, moulin, successValue;
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
     Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
@@ -45,7 +45,69 @@ public class OuletManager : BaseFrontier
     public float Periode { get => periode; set => periode = value; }
     public bool Periodic { get => periodic; set => periodic = value; }
 
- 
+
+    override public bool IsSuccess { get => isSuccess; set { isSuccess = value; InitializeValue(); } }
+
+    protected override void Start()
+    {
+        base.Start();
+        if (transform.Find("Water"))
+            water = transform.Find("Water").gameObject;
+        if (transform.Find("Water0"))
+            water0 = transform.Find("Water0").gameObject;
+
+        if (transform.Find("Arrow"))
+            arrow = transform.Find("Arrow").gameObject;
+        if (transform.Find("Bubble"))
+            bubble = transform.Find("Bubble").gameObject;
+        if (transform.Find("Moulin"))
+            moulin = transform.Find("Moulin").gameObject;
+
+        if (isSuccess)
+            success = 0;
+        configPanel = Resources.Load("ConfigPanel/ConfigInlet") as GameObject;
+
+        if (transform.Find("ValueHolder/SuccessValue"))
+            successValue = transform.Find("ValueHolder/SuccessValue").gameObject;
+
+        InitializeValue();
+    }
+
+    void InitializeValue()
+    {
+        success = 0;
+        if (successValue)
+        {
+            if (IsSuccess)
+            {
+                successValue.SetActive(true);
+            }
+            else
+                successValue.SetActive(false);
+        }
+        Rotate();
+    }
+
+    public override void Rotate()
+    {
+        
+        Transform holder = transform.Find("ValueHolder");
+        if (holder)
+        {
+            holder.rotation = Quaternion.identity;
+            if (dir == 1)
+                holder.localRotation = Quaternion.Euler(0, 0, -90f);
+            else
+                holder.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+
+
+            if (dir == 3)
+                holder.localScale = new Vector3(-1, 1, 1);
+            else
+                holder.localScale = new Vector3(1, 1, 1);
+        }
+    }
+
     float ppset;
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
@@ -53,18 +115,6 @@ public class OuletManager : BaseFrontier
             ppset = pset * Mathf.Sin(2 * Mathf.PI * Time.time / periode);
         else
             ppset = pset;
-
-        /* float a = p[0];
-
-         q += (i[0] + ii) * alpha;
-         f = 0;
-
-         p[0] = (q / C + (i[0] - f) * rin * 0.5f);
-         //p[2] = (q / C + (i[2] + f) * R);
-
-         i[0] = (f + (a - q / C) / (rin * 0.5f));
-         ii = (-f + (pset - q / C) / (rin * 0.5f));
-         */
 
         p0 = p[0];
         f = i[0]; //for bubble animation
@@ -89,26 +139,7 @@ public class OuletManager : BaseFrontier
         }
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        if (transform.Find("Water"))
-            water = transform.Find("Water").gameObject;
-        if (transform.Find("Water0"))
-            water0 = transform.Find("Water0").gameObject;
-
-        if (transform.Find("Arrow"))
-            arrow = transform.Find("Arrow").gameObject;
-        if (transform.Find("Bubble"))
-            bubble = transform.Find("Bubble").gameObject;
-        if (transform.Find("Moulin"))
-            moulin = transform.Find("Moulin").gameObject;
-
-        if (isSuccess)
-            success = 0;
-        configPanel = Resources.Load("ConfigPanel/ConfigInlet") as GameObject;
-
-    }
+ 
 
     private void Update()
     {
@@ -117,9 +148,11 @@ public class OuletManager : BaseFrontier
         if (water0)
             water0.GetComponent<Image>().color = PressureColor(p0);
         
-
         if (bubble)
             bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
+
+        if(successValue)
+            successValue.GetComponent<SuccessValueManager>().value = success;
 
 
         if (arrow)

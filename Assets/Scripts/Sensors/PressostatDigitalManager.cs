@@ -7,7 +7,7 @@ public class PressostatDigitalManager : BaseComponent
 {
 
 
-    GameObject water, water2, timer;// //red, green, arrow, shine;
+    GameObject water, water2, timer, successValue;// //red, green, arrow, shine;
     GameObject[] red = new GameObject[4];
     GameObject[] green = new GameObject[4];
     public bool[] setPoint = { false, true, false, true };
@@ -30,15 +30,21 @@ public class PressostatDigitalManager : BaseComponent
         water = transform.Find("Water").gameObject;
         water2 = transform.Find("Water2").gameObject;
         timer = transform.Find("Timer").gameObject;
+        successValue = transform.Find("SuccessValue").gameObject;
 
         for (int i = 0; i < 4; i++)
         {
             red[i] = transform.Find("Red" + (i + 1)).gameObject;
             green[i] = transform.Find("Green" + (i + 1)).gameObject;
         }
-
+        IsSuccess = true;
         success = 0;
         configPanel = Resources.Load("ConfigPanel/ConfigPressostatDigital") as GameObject;
+    }
+
+    public override void Rotate()
+    {
+        dir = 0;
     }
 
     public void InitializePanel()
@@ -50,12 +56,21 @@ public class PressostatDigitalManager : BaseComponent
         }
     }
 
+    public override void ResetSuccess()
+    {
+        ClearPanel();
+    }
+
     protected void UpdatePanel()
     {
+        success = 0;
         for (int i = 0; i < 4; i++)
         {
             red[i].transform.GetChild(0).gameObject.SetActive(successes[i]);
             green[i].transform.GetChild(0).gameObject.SetActive(successes[i]);
+
+            if (successes[i])
+                success += 0.25f;
         }
     }
 
@@ -63,13 +78,9 @@ public class PressostatDigitalManager : BaseComponent
     {
 
         for (int i = 0; i < 4; i++)
-        {
             successes[i] = false;
-            red[i].transform.GetChild(0).gameObject.SetActive(false);
-            green[i].transform.GetChild(0).gameObject.SetActive(false);
-        }
 
-        success = 1;
+        UpdatePanel();
     }
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
@@ -100,6 +111,8 @@ public class PressostatDigitalManager : BaseComponent
 
         GetComponent<Animator>().SetFloat("rate", rate);
 
+        successValue.GetComponent<SuccessValueManager>().value = success;
+
         if (itemBeingDragged) ClearPanel();
 
         switch (step)
@@ -113,7 +126,7 @@ public class PressostatDigitalManager : BaseComponent
             case 1:
                 if (8 * (Time.time / periode % 1) > 1)
                 {
-                    if (((setPoint[0] ? 1 : -1 )* (q - 0.5f)) > 0) successes[0]=true;
+                    if (((setPoint[0] ? 1 : -1 )* (q - 0.5f)) > 0.2f) successes[0]=true;
                     UpdatePanel();
                     step++;
                 }
@@ -128,7 +141,7 @@ public class PressostatDigitalManager : BaseComponent
             case 3:
                 if (8 * (Time.time / periode % 1) > 3)
                 {
-                    if (((setPoint[1] ? 1 : -1 )* (q - 0.5f)) > 0) successes[1] = true;
+                    if (((setPoint[1] ? 1 : -1 )* (q - 0.5f)) > 0.2f) successes[1] = true;
                     UpdatePanel();
                     step++;
                 }
@@ -143,7 +156,7 @@ public class PressostatDigitalManager : BaseComponent
             case 5:
                 if (8 * (Time.time / periode % 1) > 5)
                 {
-                    if ((setPoint[2] ? 1 : -1) * (q - 0.5f) > 0) successes[2] = true;
+                    if ((setPoint[2] ? 1 : -1) * (q - 0.5f) > 0.2f) successes[2] = true;
                     UpdatePanel();
                     step++;
                 }
@@ -158,7 +171,7 @@ public class PressostatDigitalManager : BaseComponent
             case 7:
                 if (8 * (Time.time / periode % 1) > 7)
                 {
-                    if ((setPoint[3] ? 1 : -1) * (q - 0.5f) > 0) successes[3] = true;
+                    if ((setPoint[3] ? 1 : -1) * (q - 0.5f) > 0.2f) successes[3] = true;
                     UpdatePanel();
                     step++;
                 }
@@ -169,6 +182,7 @@ public class PressostatDigitalManager : BaseComponent
                 if (8 * (Time.time / periode % 1) < 1) step = 0;
                 break;
         }
+
 
 
     }

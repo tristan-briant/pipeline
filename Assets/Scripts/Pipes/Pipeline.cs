@@ -42,7 +42,7 @@ public class Pipeline : BaseComponent {
 
     private void Update()
     {
-        Pressure = Mathf.Clamp(0.25f * (p0 + p2), -1f, 1f);
+        SetPressure(Mathf.Clamp(0.25f * (p0 + p2), -1f, 1f));
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
         

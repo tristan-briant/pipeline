@@ -24,7 +24,8 @@ public class DeckManager : MonoBehaviour
                 slot.gameObject.SetActive(true);
                 slot.GetComponent<CreateComponent>().designermode = true;
             }
-            text.gameObject.SetActive(true);
+            //text.gameObject.SetActive(true);
+            transform.parent.Find("Toggle").gameObject.SetActive(true);
         }
         else
         {
@@ -44,13 +45,26 @@ public class DeckManager : MonoBehaviour
             }
 
             if (count == 0)
-                gameObject.SetActive(false);
+                ShowDeck(false);
             else
-                gameObject.SetActive(true);
+                ShowDeck(true);
 
-            text.gameObject.SetActive(false);
+            transform.parent.Find("Toggle").gameObject.SetActive(false);
+
+            //text.gameObject.SetActive(false);
 
         }
     }
 
+    public void ShowDeck(bool visible=true)
+    {
+        transform.parent.parent.parent.GetComponent<Animator>().SetBool("visible", visible);
+    }
+
+
+    public void ToggleShowDeck()
+    {
+        bool visible = transform.parent.parent.parent.GetComponent<Animator>().GetBool("visible");
+        transform.parent.parent.parent.GetComponent<Animator>().SetBool("visible", !visible);
+    }
 }

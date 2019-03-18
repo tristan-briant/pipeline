@@ -19,7 +19,7 @@ public class TouchManager : MonoBehaviour , IPointerDownHandler, IPointerUpHandl
    
 
     float startPressTime;
-
+    bool longclick;
 
  
     void Awake()
@@ -31,6 +31,7 @@ public class TouchManager : MonoBehaviour , IPointerDownHandler, IPointerUpHandl
     public void OnPointerDown(PointerEventData eventData)
     {
         pressing = true;
+        longclick = false;
         startPressTime = Time.time;
         OnClick.Invoke();
 
@@ -42,10 +43,10 @@ public class TouchManager : MonoBehaviour , IPointerDownHandler, IPointerUpHandl
 
    public void OnPointerUp(PointerEventData eventData)
     {
-        if (Time.time > startPressTime + longPressDuration) //Long click
+        /*if (Time.time > startPressTime + longPressDuration) //Long click
         {
             OnLongClick.Invoke();
-        }
+        }*/
         pressing = false;
     }
 
@@ -54,6 +55,12 @@ public class TouchManager : MonoBehaviour , IPointerDownHandler, IPointerUpHandl
         if (pressing && (Time.time > startPressTime + longPressDuration)) //continuous press
         {
             OnLongPress.Invoke();
+
+            if (!longclick)
+            {
+                OnLongClick.Invoke();
+                longclick = true;
+            }
         }
     }
 }

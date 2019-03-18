@@ -42,7 +42,7 @@ public class ElbowManager : BaseComponent {
 
     private void Update()
     {
-        Pressure = Mathf.Clamp(0.25f * (p2 + p3), -1f, 1f);
+        SetPressure(Mathf.Clamp(0.25f * (p2 + p3), -1f, 1f));
 
         water2.GetComponent<Image>().color = PressureColor(p2);
         water3.GetComponent<Image>().color = PressureColor(p3);

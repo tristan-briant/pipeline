@@ -20,27 +20,28 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected float fluxMinSound =0.01f;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
-    [System.NonSerialized] public float success = 1;
+    [NonSerialized] public float success = 1;
     protected float fail = 0;
     protected const float fMinBubble = 0.05f;
-    private float pressure;
-    public float Pressure
-    {
-        get => pressure;
-        set
-        {
 
-            if (float.IsNaN(pressure))
+    private float[] pressure= new float[4];
+    public void SetPressure(float value, int index=0)
+    {
+            if (float.IsNaN(value))
             {
-                pressure = 0;
+                pressure[index] = 0;
             }
-            else pressure = value;
-        }
+            else pressure[index] = value;
     }
+    public float GetPressure(int index = 0) { return pressure[index]; }
+
     public bool destroyable=true;
     public bool isSuccess = false;
     public bool locked = false;
     public bool Locked { get => locked; set { locked = value; SetLocked(); } }
+
+    virtual public bool IsSuccess { get => isSuccess; set => isSuccess = value; }
+
     public bool dir_locked = false;
     public bool mirror = false;
     public bool isFrontiers=false;
@@ -57,7 +58,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     protected virtual void Start()
     {
-        success = 1;
+        success = 0;
         gc = (GameController)GameObject.Find("GameController").GetComponent(typeof(GameController)); //find the game engine
 
         parameters = transform.GetComponentInParent<PlaygroundParameters>();
@@ -73,6 +74,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         Rotate();
         SetLocked();
     }
+
+ 
 
     protected Color PressureColor(float p)
     { // donne la convention de pression
@@ -116,14 +119,13 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         {
             p[k] = Mathf.Clamp(p[k], -10, 10);
             i[k] = Mathf.Clamp(i[k], -10, 10);
-
         }
     }
 
     public virtual void Constraint(float[] p, float[] i, float dt)
     {
         // Put constraint here as i blocked or p imposed
-        i[0] = i[1] = i[2] = i[3];
+        i[0] = i[1] = i[2] = i[3] = 0;
     }
 
     public virtual void Reset_i_p()
@@ -238,30 +240,48 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
     }
 
-    float clickStart;
+    //float clickStart;
+    float longPressDuration = 0.3f;
+    bool pressing = false;
+    float startPressTime;
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        clickStart = Time.time;
+        startPressTime = Time.time;
+        pressing = true;
+    }
+
+    protected virtual void LateUpdate()
+    {
+        if (pressing && (Time.time > startPressTime + longPressDuration)) //continuous press
+        {
+            if(IsLongClickable())
+                OnLongClick();
+
+            pressing = false;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         if (eventData.dragging) return;
-         
-        if ((Time.time - clickStart) > 0.25f)  // Long click
+
+        /*if ((Time.time - clickStart) > 0.25f)  // Long click
         {
             if(IsLongClickable())
                 OnLongClick();
             else
                 audios[1].Play();
         }
-        else
+        else*/
+        if ((Time.time < startPressTime + longPressDuration))
         {
             if(IsClickable())
                 OnClick();
             else
                 audios[1].Play();
         }
+        pressing = false;
     }
 
     public virtual void OnClick()
@@ -271,6 +291,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             dir = (dir + 1) % 4;
 
             Rotate();
+
+            foreach (BaseComponent bc in FindObjectsOfType<BaseComponent>())
+                bc.ResetSuccess();
 
             audios[0].Play();
         }
@@ -282,6 +305,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public virtual void OnLongClick()
     {
+        if (!IsLongClickable()) return;
+
+ 
         //Launch Config Panel
         foreach (ConfigPanel cp in FindObjectsOfType<ConfigPanel>())
             cp.Close();
@@ -295,15 +321,17 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         CP.transform.localPosition = Vector3.zero;
 
         RectTransform rect = CP.transform.GetComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(0, 300);
+        //rect.sizeDelta = new Vector2(0, 300);
         rect.anchoredPosition = new Vector2(0, 0);
 
     }
     
+    virtual public void ResetSuccess() {
+        success = 0;
+    }
+
     public static Transform startParent;
     public static Transform endParent;
-
-    //Transform canvas;
     public static GameObject itemBeingDragged;
 
     public virtual void BlockCurrant()
@@ -419,11 +447,6 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
                 }
             }
         }
-
-        /*if (endParent == null && startParent == null) { //Designer + coup dans l'eau
-            Destroy(gameObject);
-            return;
-        }*/
         
         dragged = false;
         startParent = endParent = null;
@@ -467,14 +490,17 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             return 0;
     }
 
-    public void ChangeParent(Transform newParent) // set new parent and change sorting layer
+    public void ChangeParent(Transform newParent,bool overrideSorting=true) // set new parent and change sorting layer
     {
         transform.SetParent(newParent);
         Canvas canvasParent = newParent.GetComponentInParent<Canvas>();
         if (canvasParent)
         {
             foreach (Canvas c in GetComponentsInChildren<Canvas>())
+            {
                 c.sortingLayerName = canvasParent.sortingLayerName;
+                c.overrideSorting = overrideSorting;
+            }
         }
     }
 
@@ -491,26 +517,31 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             t += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        
 
-        transform.SetParent(newParent);
+        ChangeParent(newParent);
+        /*transform.SetParent(newParent);
         Canvas canvasParent = newParent.GetComponentInParent<Canvas>();
         if (canvasParent)
         {
             foreach (Canvas c in GetComponentsInChildren<Canvas>())
                 c.sortingLayerName = canvasParent.sortingLayerName;
-        }
+        }*/
 
 
         transform.localPosition = Vector3.zero;
         transform.localScale = Vector3.one;
 
+ 
         if (cleanNewParent)
             DestroyImmediate(newParent.GetChild(1).gameObject);
 
-        transform.SetParent(newParent);
+        //transform.SetParent(newParent);
 
         gc.PopulateComposant();
+
+        if (newParent.GetComponent<SlotManager>().isSlotFrontier)
+            Rotate();
+
         audios[1].Play();
     }
 

@@ -23,7 +23,6 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         }
     }
 
-
     public void OnBeginDrag(PointerEventData eventData)
     {
 
@@ -41,9 +40,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
 
         NewComponent.GetComponent<BaseComponent>().enabled = true;
-        //Transform canvas = GameObject.Find("CanvasDragged").transform;//GameObjectWithTag("Playground").transform;
-        //NewComponent.transform.SetParent(canvas);
-
+ 
         NewComponent.GetComponent<BaseComponent>().ChangeParent(GameObject.Find("CanvasDragged").transform);
 
         NewComponent.transform.localPosition = Vector3.zero;
@@ -93,16 +90,26 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
             //EditorUtility.CopySerialized(BaseComponent.itemBeingDragged.GetComponent<BaseComponent>(), c.GetComponent<BaseComponent>());
 
             c.transform.SetParent(transform);
+
             c.transform.localPosition = Vector3.zero;
             c.transform.localRotation = Quaternion.identity;
             c.transform.localScale = 0.8f * Vector3.one;
             c.GetComponent<BaseComponent>().locked = false;
             c.GetComponent<BaseComponent>().enabled = false;
             c.GetComponent<BaseComponent>().StartCoroutine("Awake"); //usefull for elements that display value
-
+            c.GetComponent<BaseComponent>().ChangeParent(transform,false);
 
             Destroy(BaseComponent.itemBeingDragged.gameObject);
         }
 
+    }
+
+
+    public void InvokeConfig()
+    {
+        if (transform.childCount == 0)
+            return;
+
+        transform.GetChild(0).GetComponent<BaseComponent>().OnLongClick();
     }
 }

@@ -28,21 +28,21 @@
             "CanUseSpriteAtlas"="True"
         }
 
-        /*Stencil
+        Stencil
         {
             Ref [_Stencil]
             Comp [_StencilComp]
             Pass [_StencilOp]
             ReadMask [_StencilReadMask]
             WriteMask [_StencilWriteMask]
-        }*/
+        }
 
         Cull Off
         Lighting Off
         ZWrite Off
         ZTest [unity_GUIZTestMode]
         Blend SrcAlpha OneMinusSrcAlpha
-        //ColorMask [_ColorMask]
+        ColorMask [_ColorMask]
 
         Pass
         {

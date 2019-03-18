@@ -50,18 +50,20 @@ public class DigitalManager : BaseFrontier
     float ppset;
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        if ( setPoint[ Mathf.FloorToInt( 4 * (Time.time / periode % 1 )) ] )
-            ppset = pset;
+        if (setPoint[Mathf.FloorToInt(4 * (Time.time / periode % 1))])
+        {
+            ppset = 0.95f * ppset + 0.05f * (pset + 2 * R * f); // contreréaction pour atteindre pset en sortie
+        }
         else
             ppset = 0f;
 
         p0 = p[0];
 
-        f = Mathf.Clamp((ppset - q) / R, -Imax, Imax);  ;
+        f = Mathf.Clamp((ppset - q) / R, -Imax, Imax); ;
         q += (i[0] + f) / C * dt;
 
-        p[0] = (q + i[0] * R);
-        i[0] =  (p0 - q) / R;
+        p[0] = q + i[0] * R;
+        i[0] = (p0 - q) / R;
 
     }
 
@@ -95,8 +97,6 @@ public class DigitalManager : BaseFrontier
             red[i].transform.GetChild(0).gameObject.SetActive(false);
             green[i].transform.GetChild(0).gameObject.SetActive(false);
         }
-
-        success = 1;
     }
 
     protected override void Start()
@@ -112,9 +112,6 @@ public class DigitalManager : BaseFrontier
         if (transform.Find("Bubble"))
             bubble = transform.Find("Bubble").gameObject;
 
-        /*red = transform.Find("Red").gameObject;
-        green = transform.Find("Green").gameObject;*/
-
         timer = transform.Find("Panel/Timer").gameObject;
 
         for (int i = 0; i < 4; i++)
@@ -125,11 +122,11 @@ public class DigitalManager : BaseFrontier
 
         value = transform.Find("Value").gameObject;
 
-        if (isSuccess)
-            success = 0;
-        configPanel = Resources.Load("ConfigPanel/ConfigInlet") as GameObject;
-        R = 0.1f;
-        C = 1f;
+        configPanel = Resources.Load("ConfigPanel/ConfigInletDigital") as GameObject;
+
+        InitializePanel();
+        UpdatePanel();
+        R = 0.5f;
     }
 
 
@@ -196,25 +193,17 @@ public class DigitalManager : BaseFrontier
         }
 
 
-
-
-
         if (Mathf.Abs(f) > fMinBubble)
         {
 
             if (!audios[3].isPlaying && !audios[4].isPlaying && !audios[5].isPlaying)
             {
-                int r = UnityEngine.Random.Range(0, 3);
+                int r = Random.Range(0, 3);
                 audios[3 + r].Play();
             }
             audios[3].volume = audios[4].volume = audios[5].volume = Mathf.Abs(f) / fMinBubble * 0.1f;
 
         }
-
-
-
-
-
     }
 
 }

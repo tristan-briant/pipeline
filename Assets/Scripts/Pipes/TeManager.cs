@@ -49,7 +49,6 @@ public class TeManager : BaseComponent
         i[3] = (f3 + (p3 - q / C) / R);
 
   
-        Pressure = Mathf.Clamp(0.5f * q, -1f, 1f); ;
 
     }
 
@@ -84,6 +83,8 @@ public class TeManager : BaseComponent
 
     private void Update()
     {
+        SetPressure(Mathf.Clamp(0.5f * q, -1f, 1f));
+
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
         water3.GetComponent<Image>().color = PressureColor(p3);

@@ -799,7 +799,7 @@ public class Designer : MonoBehaviour
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
                 go.SetActive(false);
            
-            deck.parent.gameObject.SetActive(true);
+            //deck.parent.gameObject.SetActive(true);
             LoadFromString();
         }
         else
@@ -807,7 +807,7 @@ public class Designer : MonoBehaviour
             LoadFromString();
             GetComponentInChildren<Text>().text = "Play Mode";
             GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(true);
-            deck.parent.gameObject.SetActive(false);
+            //deck.parent.gameObject.SetActive(false);
         }
 
     }

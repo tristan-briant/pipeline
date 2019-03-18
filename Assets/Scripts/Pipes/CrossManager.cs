@@ -76,7 +76,7 @@ public class CrossManager : BaseComponent
 
     private void Update()
     {
-        Pressure = Mathf.Clamp(0.125f * (p0 + p1 + p2 + p3), -1f, 1f);
+        SetPressure(Mathf.Clamp(0.125f * (p0 + p1 + p2 + p3), -1f, 1f));
 
         water.GetComponent<Image>().color = PressureColor(q);
         water0.GetComponent<Image>().color = PressureColor(p0);

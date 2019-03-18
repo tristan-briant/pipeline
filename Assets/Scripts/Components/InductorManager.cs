@@ -19,6 +19,11 @@ public class InductorManager : BaseComponent
     public float Lin { get => lin; set => lin = value; }
     public float Rin { get => rin; set => rin = value; }
 
+    public override void Awake()
+    {
+        configPanel = Resources.Load("ConfigPanel/ConfigInductor") as GameObject;
+    }
+    
 
     protected override void Start()
     {
@@ -28,7 +33,6 @@ public class InductorManager : BaseComponent
         water = transform.Find("Water").gameObject;
 
         GetComponent<Animator>().SetFloat("speed", 0);
-        configPanel = Resources.Load("ConfigPanel/ConfigInductor") as GameObject;
     }
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)

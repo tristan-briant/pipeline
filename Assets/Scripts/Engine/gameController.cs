@@ -309,11 +309,6 @@ public class GameController : MonoBehaviour {
 
         }
 
-        HasSuccessComponent = false;
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < M; j++)
-                if (composants[i][j].isSuccess)
-                    HasSuccessComponent = true;
 
         firstPopulate = false;
     }
@@ -324,9 +319,11 @@ public class GameController : MonoBehaviour {
         float success = 0;
 
         for (int n = 0; n < 4; n++)
-            success = Engine.OneStep1(composants);
+            Engine.OneStep1(composants);
 
-        if (!HasSuccessComponent) success = 0; // Avoid to trigger win animation if no success component in the scene
+        //if (!HasSuccessComponent) success = 0; // Avoid to trigger win animation if no success component in the scene
+
+        success = Engine.SuccessValue(composants);
 
         if (!LevelManager.designerMode)
         {

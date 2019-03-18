@@ -16,8 +16,23 @@ public class PressostatCircleManager : BaseComponent {
     public float pMax=1;
     public float pMin=0;
 
-    public float SetPointHigh { get => setPointHigh; set => setPointHigh = value; }
-    public float SetPointLow { get => setPointLow; set => setPointLow = value; }
+    public float SetPointHigh {
+        get => setPointHigh;
+        set
+        {
+            if (value > setPointLow) { setPointHigh = value; isSuccess = true; }
+            else { setPointHigh = setPointLow; isSuccess = false; }
+        }
+    }
+    public float SetPointLow {
+        get => setPointLow;
+        set
+        {
+            if (value < setPointHigh) { setPointLow = value; isSuccess = true; }
+            else { setPointLow = setPointHigh; isSuccess = false; }
+        }
+      
+    }
     public float PMax { get => pMax; set => pMax = value; }
     public float PMin { get => pMin; set => pMin = value; }
 

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Dilation : MonoBehaviour
+public class Dilatation : MonoBehaviour
 {
     BaseComponent bc;
     Material material;
+    public int index = 0; // 
 
     protected void Start()
     {
@@ -19,6 +20,6 @@ public class Dilation : MonoBehaviour
 
     private void Update()
     {
-       material.SetFloat("_DilationCoefficent", bc.Pressure);
+       material.SetFloat("_DilationCoefficent", bc.GetPressure(index));
     }
 }

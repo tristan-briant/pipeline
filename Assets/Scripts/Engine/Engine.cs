@@ -148,16 +148,15 @@ public class Engine  {
     static float[] ii = new float[4];
 
 
-    public static float OneStep1(BaseComponent[][] composants)
+    public static void OneStep1(BaseComponent[][] composants)
     {
         time++;
 
         int N = composants.Length;
         int M = composants[0].Length;
-
-
-        float success = 1;
-        float fail = 0;
+        
+        //float success = 1;
+        //float fail = 0;
 
 
         for (int k = 1; k < N - 1; k++) //Border UP condition
@@ -168,7 +167,8 @@ public class Engine  {
             composants[k][0].Calcule_i_p(pp, ii,dt);
             pression[k - 1][0] = (1 - alpha) * pression[k - 1][0] + alpha * pp[0];
             intensite[k - 1][0] = (1 - alpha) * intensite[k - 1][0] + alpha * (-ii[0]);
-            success = success * composants[k][0].success;
+            //if(composants[k][0].isSuccess)
+            //    success = success * composants[k][0].success;
             //fail += composants[k][0].fail;
         }
 
@@ -180,7 +180,8 @@ public class Engine  {
 
             pression[k - 1][2 * M - 4] = (1 - alpha) * pression[k - 1][2 * M - 4] + alpha * pp[0];
             intensite[k - 1][2 * M - 4] = (1 - alpha) * intensite[k - 1][2 * M - 4] + alpha * ii[0];
-            success = success * composants[k][M - 1].success;
+            //if (composants[k][M - 1].isSuccess)
+            //    success = success * composants[k][M - 1].success;
             //fail += composants[k][M - 1].fail;
         }
 
@@ -192,7 +193,8 @@ public class Engine  {
             composants[N - 1][k].Calcule_i_p(pp, ii, dt);
             pression[N - 2][2 * (k - 1) + 1] = (1 - alpha) * pression[N - 2][2 * (k - 1) + 1] + alpha * pp[0];
             intensite[N - 2][2 * (k - 1) + 1] = (1 - alpha) * intensite[N - 2][2 * (k - 1) + 1] + alpha * (ii[0]);
-            success = success * composants[N - 1][k].success;
+            //if (composants[N - 1][k].isSuccess)
+            //    success = success * composants[N - 1][k].success;
             //fail += composants[N - 1][k].fail;
         }
 
@@ -203,7 +205,8 @@ public class Engine  {
             composants[0][k].Calcule_i_p(pp, ii, dt);
             pression[0][2 * (k - 1) + 1] = (1 - alpha) * pression[0][2 * (k - 1) + 1] + alpha * pp[0];
             intensite[0][2 * (k - 1) + 1] = (1 - alpha) * intensite[0][2 * (k - 1) + 1] + alpha * (-ii[0]);
-            success = success * composants[0][k].success;
+            //if (composants[0][k].isSuccess)
+            //    success = success * composants[0][k].success;
             //fail += composants[0][k].fail;
         }
 
@@ -218,8 +221,8 @@ public class Engine  {
                     composants[k][l].Calcule_i_p(pp, ii, dt);
                     RotateCurrant((4 - composants[k][l].dir) % 4, pp, ii);
                     currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
-
-                    success = success * composants[k][l].success;
+                    //if (composants[k][l].isSuccess)
+                    //    success = success * composants[k][l].success;
                     //fail += composants[k][l].fail;
                 }
             }
@@ -235,21 +238,41 @@ public class Engine  {
                     composants[k][l].Calcule_i_p(pp, ii, dt);
                     RotateCurrant((4 - composants[k][l].dir) % 4, pp, ii);
                     currant_update(k - 1, l - 1, pression, intensite, pp, ii, alpha);
-
-                    success = success * composants[k][l].success;
+                    //if (composants[k][l].isSuccess)
+                    //    success = success * composants[k][l].success;
                     //fail += composants[k][l].fail;
                 }
             }
         }
 
-
-        if (fail > 0) return -1;
-
         Constraint(composants);
-
-        return success;
+        
+       // return success;
         
 
+    }
+
+    public static float SuccessValue(BaseComponent[][] composants)
+    {
+        float success = 1;
+
+        int N = composants.Length;
+        int M = composants[0].Length;
+        int count = 0;
+
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < M; j++)
+                if (composants[i][j].isSuccess)
+                {
+                    count++;
+                    success = success * composants[i][j].success;
+                }
+
+
+        if (count > 0)
+            return success;
+        else
+            return 0;
     }
 
     public static float oneStep2(BaseComponent[][] composants)
@@ -353,7 +376,6 @@ public class Engine  {
 
         for (int k = 1; k < N - 1; k++) //Border UP condition
         {
-
             pp[0] = pression[k - 1][0];
             ii[0] = (-intensite[k - 1][0]);
             composants[k][0].Constraint(pp, ii, dt);
