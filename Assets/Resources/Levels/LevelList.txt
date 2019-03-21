@@ -7,3 +7,7 @@ pressostat
 diodes2
 resistor1
 resistor2
+ou-calbe
+ET-cable
+Pont2
+Pont1

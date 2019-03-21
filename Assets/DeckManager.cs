@@ -18,13 +18,13 @@ public class DeckManager : MonoBehaviour
 
         if (designerMode)
         {
-            gameObject.SetActive(true);
             foreach (Transform slot in transform)
             {
                 slot.gameObject.SetActive(true);
                 slot.GetComponent<CreateComponent>().designermode = true;
             }
-            //text.gameObject.SetActive(true);
+
+            transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("HideImmediate");
             transform.parent.Find("Toggle").gameObject.SetActive(true);
         }
         else
@@ -32,7 +32,7 @@ public class DeckManager : MonoBehaviour
             int count = 0;
             foreach (Transform slot in transform)
             {
-                if (slot.childCount == 0 || slot.GetChild(0).name.Contains("empty"))
+                if (slot.childCount == 1 || slot.GetChild(1).name.Contains("empty"))
                 {
                     slot.gameObject.SetActive(false);
                 }
@@ -44,27 +44,39 @@ public class DeckManager : MonoBehaviour
                 }
             }
 
-            if (count == 0)
-                ShowDeck(false);
-            else
-                ShowDeck(true);
+            transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("HideImmediate");
+            if (count > 0)
+                transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("Show");
+            
 
             transform.parent.Find("Toggle").gameObject.SetActive(false);
-
-            //text.gameObject.SetActive(false);
-
         }
+    }
+
+    private void ResetTrigger()
+    {
+        Animator anim = transform.parent.parent.parent.GetComponent<Animator>();
+        foreach (AnimatorControllerParameter param in anim.parameters)
+            anim.ResetTrigger(param.name);
+        
     }
 
     public void ShowDeck(bool visible=true)
     {
-        transform.parent.parent.parent.GetComponent<Animator>().SetBool("visible", visible);
+        ResetTrigger();
+
+        if (visible)
+            transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("Show"); 
+        else
+            transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("Hide");
     }
 
 
     public void ToggleShowDeck()
     {
-        bool visible = transform.parent.parent.parent.GetComponent<Animator>().GetBool("visible");
-        transform.parent.parent.parent.GetComponent<Animator>().SetBool("visible", !visible);
+        ResetTrigger();
+        //bool visible = transform.parent.parent.parent.GetComponent<Animator>().GetBool("visible");
+        //transform.parent.parent.parent.GetComponent<Animator>().SetBool("visible", !visible);
+        transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("Toggle");
     }
 }

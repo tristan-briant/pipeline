@@ -55,7 +55,7 @@ public class DigitalManager : BaseFrontier
             ppset = 0.95f * ppset + 0.05f * (pset + 2 * R * f); // contreréaction pour atteindre pset en sortie
         }
         else
-            ppset = 0f;
+            ppset = 0.95f * ppset + 0.05f * ( 2 * R * f); // contreréaction pour atteindre pset en sortie
 
         p0 = p[0];
 

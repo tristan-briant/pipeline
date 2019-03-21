@@ -367,13 +367,11 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnDrag(PointerEventData eventData)
     {
         Vector3 vec = Input.mousePosition;
-        //vec= Camera.main.ScreenToWorldPoint(vec);
         vec.z = 1.0f;
         transform.position = Camera.main.ScreenToWorldPoint(vec);
-        //transform.localPosition = vec;
     }
 
-    void IEndDragHandler.OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData)
     {
         // Happens after OnDrop
         Drop();
@@ -401,7 +399,16 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
             else
             {
-                Transform c = endParent.GetChild(1);
+                Transform c= endParent.GetChild(1);
+                c.GetComponent<BaseComponent>().enabled = true; //needed if on deck
+                /*if (!endParent.parent.name.Contains("Deck"))
+                    c = endParent.GetChild(1);
+                else
+                {
+                    c = endParent.GetChild(0);
+                    c.GetComponent<BaseComponent>().enabled=true;
+                }*/
+
                 if (c.GetComponent<BaseComponent>().IsEmpty())
                 {
                     StartCoroutine(FlightToFinalPosition(endParent,0.05f));
@@ -414,7 +421,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
                         c.GetComponent<BaseComponent>().ChangeParent(GameObject.Find("CanvasDragged").transform);
                         gc.PopulateComposant();
 
-                        StartCoroutine(c.GetComponent<BaseComponent>().FlightToFinalPosition(startParent));
+                        c.GetComponent<BaseComponent>().StartCoroutine(c.GetComponent<BaseComponent>().FlightToFinalPosition(startParent));
 
                         StartCoroutine(FlightToFinalPosition(endParent, 0.05f));
 
@@ -437,7 +444,13 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
             else
             {
-                if (endParent.GetChild(1).GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
+                Transform c=endParent.GetChild(1);
+                /*if (endParent.parent.name.Contains("Deck"))
+                    c = endParent.GetChild(0);
+                else
+                    c = endParent.GetChild(1);*/
+
+                if (c.GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
                 {
                     StartCoroutine(FlightToFinalPosition(endParent, 0.05f));
                 }
@@ -519,29 +532,28 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
 
         ChangeParent(newParent);
-        /*transform.SetParent(newParent);
-        Canvas canvasParent = newParent.GetComponentInParent<Canvas>();
-        if (canvasParent)
-        {
-            foreach (Canvas c in GetComponentsInChildren<Canvas>())
-                c.sortingLayerName = canvasParent.sortingLayerName;
-        }*/
-
 
         transform.localPosition = Vector3.zero;
         transform.localScale = Vector3.one;
 
- 
-        if (cleanNewParent)
-            DestroyImmediate(newParent.GetChild(1).gameObject);
 
-        //transform.SetParent(newParent);
+        if (cleanNewParent)
+        {
+            if (newParent.parent.name.Contains("Deck") && newParent.childCount == 2)
+                Destroy(newParent.GetChild(1).gameObject);
+            else
+                DestroyImmediate(newParent.GetChild(1).gameObject);
+        }
 
         gc.PopulateComposant();
 
-        if (newParent.GetComponent<SlotManager>().isSlotFrontier)
+        if (newParent.GetComponent<SlotManager>() && newParent.GetComponent<SlotManager>().isSlotFrontier)
             Rotate();
 
+        if (newParent.GetComponent<CreateComponent>())
+        {  // Slot of Deck !
+            newParent.GetComponent<CreateComponent>().PlaceComponent(gameObject);
+        }
         audios[1].Play();
     }
 

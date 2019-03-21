@@ -250,9 +250,9 @@ public class Designer : MonoBehaviour
 
         foreach (Transform slotDeck in deck)
         {
-            if (slotDeck.transform.childCount > 0)
+            if (slotDeck.transform.childCount > 1)
             {
-                Transform child = slotDeck.transform.GetChild(0);
+                Transform child = slotDeck.transform.GetChild(1);
                 DestroyImmediate(child.gameObject);
             }
         }
@@ -329,7 +329,6 @@ public class Designer : MonoBehaviour
 
     public void LoadFromRessources(string filename)
     {
-        Debug.Log(filename);
         PGdata = Resources.Load<TextAsset>("Levels/" + filename.Replace(".txt", "")).ToString();
         LoadFromString();
     }

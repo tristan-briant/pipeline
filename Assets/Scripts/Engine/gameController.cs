@@ -50,9 +50,6 @@ public class GameController : MonoBehaviour {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
                 go.SetActive(false);
             LevelManager.designerMode = false;
-            Deck.SetActive(true);
-            Deck.transform.parent.gameObject.SetActive(true);
-
  
             LoadLevel();
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEditor;
 
-public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler , IEndDragHandler, IDropHandler
+public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,IEndDragHandler  , IDropHandler
 {
     public bool designermode=false;
 
@@ -14,30 +14,33 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
     public void Start()
     {
-        if (transform.childCount > 0)
+        if (transform.childCount == 2)
         {
-            transform.GetChild(0).GetComponent<BaseComponent>().Awake();
-            transform.GetChild(0).GetComponent<BaseComponent>().enabled = false;
-            transform.GetChild(0).localPosition = Vector3.zero;
-            transform.GetChild(0).localScale = 0.8f * Vector3.one;
+            transform.GetChild(1).GetComponent<BaseComponent>().Awake();
+            transform.GetChild(1).GetComponent<BaseComponent>().enabled = false;
+            transform.GetChild(1).localPosition = Vector3.zero;
+            transform.GetChild(1).localScale = 0.8f * Vector3.one;
         }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-
-        if (transform.childCount == 0)
+        if (transform.childCount == 1)
         {
             eventData.pointerDrag = null;
             return;
         }
 
 
-        NewComponent = Instantiate(transform.GetChild(0).gameObject);
 
-        if (designermode) // To allow reodering or removing
-            Destroy(transform.GetChild(0).gameObject);
-
+        if (designermode)
+        { // To allow reodering or removing
+            NewComponent = transform.GetChild(1).gameObject;
+        }
+        else
+        {
+            NewComponent = Instantiate(transform.GetChild(1).gameObject);
+        }
 
         NewComponent.GetComponent<BaseComponent>().enabled = true;
  
@@ -49,29 +52,36 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         NewComponent.GetComponent<BaseComponent>().destroyable = true;
         NewComponent.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-
         BaseComponent.itemBeingDragged = NewComponent;
-        BaseComponent.startParent = null;
+        if (designermode)
+            BaseComponent.startParent = transform;
+        else
+            BaseComponent.startParent = null;
+
         BaseComponent.endParent = null;
+
     }
 
 
     public void OnDrag(PointerEventData eventData)
     {
-
-        Vector3 vec = Input.mousePosition;
+       NewComponent.GetComponent<BaseComponent>().OnDrag(eventData);
+       /* Vector3 vec = Input.mousePosition;
         vec.z = 1.0f;
-        NewComponent.transform.position = Camera.main.ScreenToWorldPoint(vec);
+        NewComponent.transform.position = Camera.main.ScreenToWorldPoint(vec);*/
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        NewComponent.GetComponent<BaseComponent>().Drop();
+        NewComponent.GetComponent<BaseComponent>().OnEndDrag(eventData); //Drop();
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        if(designermode && transform.childCount == 0)
+        Debug.Log("drop");
+        if (!designermode || !BaseComponent.itemBeingDragged) return;
+
+        if (transform.childCount == 1)
         {
             Debug.Log(BaseComponent.itemBeingDragged.name);
 
@@ -79,37 +89,42 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
             if (BaseComponent.itemBeingDragged.name.Contains("Empty")) return;
             if (BaseComponent.itemBeingDragged.name.Contains("Rock")) return;
 
- 
-            //GameObject c = Instantiate(BaseComponent.itemBeingDragged);
-            PrefabComponentPath = BaseComponent.itemBeingDragged.GetComponent<BaseComponent>().PrefabPath;
+            PlaceComponent(BaseComponent.itemBeingDragged);
 
-            GameObject c = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
-
-            string data = JsonUtility.ToJson(BaseComponent.itemBeingDragged.GetComponent<BaseComponent>());
-            JsonUtility.FromJsonOverwrite(data, c.GetComponent<BaseComponent>());
-            //EditorUtility.CopySerialized(BaseComponent.itemBeingDragged.GetComponent<BaseComponent>(), c.GetComponent<BaseComponent>());
-
-            c.transform.SetParent(transform);
-
-            c.transform.localPosition = Vector3.zero;
-            c.transform.localRotation = Quaternion.identity;
-            c.transform.localScale = 0.8f * Vector3.one;
-            c.GetComponent<BaseComponent>().locked = false;
-            c.GetComponent<BaseComponent>().enabled = false;
-            c.GetComponent<BaseComponent>().StartCoroutine("Awake"); //usefull for elements that display value
-            c.GetComponent<BaseComponent>().ChangeParent(transform,false);
-
-            Destroy(BaseComponent.itemBeingDragged.gameObject);
         }
+        else
+        {
+            BaseComponent.endParent = transform;
+        }
+    }
 
+    public void PlaceComponent(GameObject component)
+    {
+        PrefabComponentPath = component.GetComponent<BaseComponent>().PrefabPath;
+        GameObject c = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+
+        string data = JsonUtility.ToJson(component.GetComponent<BaseComponent>());
+        JsonUtility.FromJsonOverwrite(data, c.GetComponent<BaseComponent>());
+
+        c.transform.SetParent(transform);
+
+        c.transform.localPosition = Vector3.zero;
+        c.transform.localRotation = Quaternion.identity;
+        c.transform.localScale = 0.8f * Vector3.one;
+        c.GetComponent<BaseComponent>().locked = false;
+        c.GetComponent<BaseComponent>().enabled = false;
+        c.GetComponent<BaseComponent>().StartCoroutine("Awake"); //usefull for elements that display value
+        c.GetComponent<BaseComponent>().ChangeParent(transform, false);
+
+        Destroy(component);
     }
 
 
     public void InvokeConfig()
     {
-        if (transform.childCount == 0)
+        if (transform.childCount == 1)
             return;
 
-        transform.GetChild(0).GetComponent<BaseComponent>().OnLongClick();
+        transform.GetChild(1).GetComponent<BaseComponent>().OnLongClick();
     }
 }
