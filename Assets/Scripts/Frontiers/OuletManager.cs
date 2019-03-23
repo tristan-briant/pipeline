@@ -36,7 +36,7 @@ public class OuletManager : BaseFrontier
 
  
 
-    GameObject water=null, water0=null, arrow=null, bubble=null, moulin, successValue;
+    GameObject water=null, water0=null, arrow=null, bubble=null, moulin;
     public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
     Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
@@ -46,7 +46,7 @@ public class OuletManager : BaseFrontier
     public bool Periodic { get => periodic; set => periodic = value; }
 
 
-    override public bool IsSuccess { get => isSuccess; set { isSuccess = value; InitializeValue(); } }
+    override public bool IsSuccess { get => isSuccess; set { isSuccess = value; InitializeSuccess(); } }
 
     protected override void Start()
     {
@@ -67,14 +67,16 @@ public class OuletManager : BaseFrontier
             success = 0;
         configPanel = Resources.Load("ConfigPanel/ConfigInlet") as GameObject;
 
+        InitializeSuccess();
+    }
+
+    void InitializeSuccess()
+    {
+        GameObject successValue=null;
+
         if (transform.Find("ValueHolder/SuccessValue"))
             successValue = transform.Find("ValueHolder/SuccessValue").gameObject;
 
-        InitializeValue();
-    }
-
-    void InitializeValue()
-    {
         success = 0;
         if (successValue)
         {
@@ -150,10 +152,6 @@ public class OuletManager : BaseFrontier
         
         if (bubble)
             bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
-
-        if(successValue)
-            successValue.GetComponent<SuccessValueManager>().value = success;
-
 
         if (arrow)
         {

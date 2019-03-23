@@ -68,6 +68,6 @@ Frontiers/Wall
 Frontiers/Wall
 {"PrefabPath":"Frontiers/Wall","dir":2,"destroyable":true,"isSuccess":false,"locked":true,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":4}
 Frontiers/OutLetForest
-{"PrefabPath":"Frontiers/OutLetForest","dir":2,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":4,"pset":0.0,"imax":12.300000190734864,"jelly":false,"periodic":false,"periode":2.0}
+{"PrefabPath":"Frontiers/OutLetForest","dir":2,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":4,"pset":0.0,"imax":12.300000190734864,"jelly":false,"periodic":false,"periode":2.0}
 Frontiers/Corner
 {"PrefabPath":"Frontiers/Corner","dir":2,"destroyable":true,"isSuccess":false,"locked":true,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":5}

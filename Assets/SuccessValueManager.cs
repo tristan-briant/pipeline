@@ -10,10 +10,19 @@ public class SuccessValueManager : MonoBehaviour
     const float scoreSpeed = 2;
 
     float score = 0;
+    protected BaseComponent component;
+    protected Animator animator;
+
+    private void Start()
+    {
+        component = GetComponentInParent<BaseComponent>();
+        animator = GetComponent<Animator>();
+    }
 
     void Update()
     {
-        
+        value = component.success;
+
         if (score < value)
         {
             score += Time.deltaTime * scoreSpeed;
@@ -25,8 +34,15 @@ public class SuccessValueManager : MonoBehaviour
             if (score < 0) score = 0;
         }
 
+        if (score == 1)
+            animator.SetTrigger("success");
+        else
+        {
+            animator.ResetTrigger("success");
+            animator.SetFloat("value", score);
+        }
+
+
         transform.GetComponent<Text>().text = Mathf.RoundToInt(score * 100) + "%";
-        transform.GetComponent<Text>().fontSize = (int)(10 + 20 * score);
-        transform.localScale = Vector3.one * (1 + score * 0.2f * Mathf.Cos(1.5f * Mathf.PI * Time.time));
     }
 }

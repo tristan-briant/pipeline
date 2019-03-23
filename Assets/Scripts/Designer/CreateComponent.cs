@@ -18,6 +18,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         {
             transform.GetChild(1).GetComponent<BaseComponent>().Awake();
             transform.GetChild(1).GetComponent<BaseComponent>().enabled = false;
+            transform.GetChild(1).GetComponent<BaseComponent>().ChangeParent(transform);
             transform.GetChild(1).localPosition = Vector3.zero;
             transform.GetChild(1).localScale = 0.8f * Vector3.one;
         }
@@ -78,24 +79,13 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("drop");
         if (!designermode || !BaseComponent.itemBeingDragged) return;
+        if (BaseComponent.itemBeingDragged.GetComponent<BaseComponent>().isFrontiers) return;
+        if (BaseComponent.itemBeingDragged.name.Contains("Empty")) return;
+        if (BaseComponent.itemBeingDragged.name.Contains("Rock")) return;
 
-        if (transform.childCount == 1)
-        {
-            Debug.Log(BaseComponent.itemBeingDragged.name);
+        BaseComponent.endParent = transform;
 
-            if (BaseComponent.itemBeingDragged.GetComponent<BaseComponent>().isFrontiers) return;
-            if (BaseComponent.itemBeingDragged.name.Contains("Empty")) return;
-            if (BaseComponent.itemBeingDragged.name.Contains("Rock")) return;
-
-            PlaceComponent(BaseComponent.itemBeingDragged);
-
-        }
-        else
-        {
-            BaseComponent.endParent = transform;
-        }
     }
 
     public void PlaceComponent(GameObject component)

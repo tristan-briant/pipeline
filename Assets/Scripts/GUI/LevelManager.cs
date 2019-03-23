@@ -35,47 +35,7 @@ public class LevelManager : MonoBehaviour {
 
     List<string> playgroundName;
 
-    /*List<string> playgroundName = new List<string>()
-    {
-        "Pg 0",
-        "Pg 0b",
-        "playground1",
-        "playground2",
-        "Pg 3 DBM",
-        "Pg jelly0",
-        "Pg double DBM",
-        "playground3",
-        "PG bonus1",
-        "Pg 4 pressostats",  //10
-		"Pg 1P2R",
-		"PG res parallele 3",
-        "Pg jelly1",
-        "Pg double DBM2",
-        "Pg Rampe tension",
-        "PG DBM+PST",
-       "PG Capa1",
-        "PG Capa2",  
-        "Pg jelly2",  
-        "PG Capa3", //20
-        "PG Capa4",
-        "PG LC1",
-        "PG bonus2",          
-        "PG LC2",
-        "PG LC3",
-        "PG LC4",
-        "PG Diode1",
-        "PG Diode Capa",
-        "PG Diode2",
-        "PG D demi pont", //30
-        "PG Transistor0a",
-        "PG Transistor0b",
-        "PG Transistor1",
-        "PG TransistorNot",
-        "PG TransistorNot PNP"
-    };
-
-   */
-
+  
     private void Awake()
     {
         if (instance == null)

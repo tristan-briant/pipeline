@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
-    public int N, M; // size of the playground
+    public static int N, M; // size of the playground
 
     float[][] deltai;
     float[][] deltap;
 
-    public BaseComponent[][] composants;
+    public static BaseComponent[][] composants;
     //public BaseComponent vide;
     public BaseComponent videFrontier;
     public BaseFrontier[] borders;
@@ -28,9 +28,9 @@ public class GameController : MonoBehaviour {
 
     public LevelManager LVM;
     public GameObject Deck; // The Deck
-    GameObject Pg; //The "playground" from which are determined N and M 
+    static GameObject Pg; //The "playground" from which are determined N and M 
 
-    bool firstPopulate = true;
+    static bool firstPopulate = true;
 
     bool gameOver = false;
     bool fail = false;

@@ -7,7 +7,7 @@ public class PressostatDigitalManager : BaseComponent
 {
 
 
-    GameObject water, water2, timer, successValue;// //red, green, arrow, shine;
+    GameObject water, water2, timer;//, successValue;// //red, green, arrow, shine;
     GameObject[] red = new GameObject[4];
     GameObject[] green = new GameObject[4];
     public bool[] setPoint = { false, true, false, true };
@@ -30,7 +30,7 @@ public class PressostatDigitalManager : BaseComponent
         water = transform.Find("Water").gameObject;
         water2 = transform.Find("Water2").gameObject;
         timer = transform.Find("Timer").gameObject;
-        successValue = transform.Find("SuccessValue").gameObject;
+        //successValue = transform.Find("SuccessValue").gameObject;
 
         for (int i = 0; i < 4; i++)
         {
@@ -110,8 +110,6 @@ public class PressostatDigitalManager : BaseComponent
         float rate = Mathf.Clamp((q - PMin) / (PMax - PMin) * 0.5f + 0.25f, 0, 0.99f);
 
         GetComponent<Animator>().SetFloat("rate", rate);
-
-        successValue.GetComponent<SuccessValueManager>().value = success;
 
         if (itemBeingDragged) ClearPanel();
 

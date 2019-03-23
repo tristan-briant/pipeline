@@ -44,6 +44,7 @@ public class DeckManager : MonoBehaviour
                 }
             }
 
+            ResetTrigger();
             transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("HideImmediate");
             if (count > 0)
                 transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("Show");
@@ -60,6 +61,8 @@ public class DeckManager : MonoBehaviour
             anim.ResetTrigger(param.name);
         
     }
+
+
 
     public void ShowDeck(bool visible=true)
     {

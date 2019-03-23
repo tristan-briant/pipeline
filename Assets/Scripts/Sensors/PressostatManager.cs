@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class PressostatManager : BaseComponent {
 
 
-    GameObject water, water2, bubble, cadranMin, cadranMax, arrow, shine, tubeH, tubeV, value;
-   
-    //Vector3 arrowStartPosition;
+    GameObject water, water2, bubble, cadranMin, cadranMax, arrow, shine, tubeH, tubeV, gauge, value;
+
+    float successTime = 2.0f; //Time to obtain a success
     float t_shine = 0;
     Animator animator;
 
@@ -17,90 +17,119 @@ public class PressostatManager : BaseComponent {
     public float pMax=1;
     public float pMin=0;
 
-    public float SetPointHigh { get => setPointHigh; set => setPointHigh = value; }
-    public float SetPointLow { get => setPointLow; set => setPointLow = value; }
-    public float PMax { get => pMax; set => pMax = value; }
-    public float PMin { get => pMin; set => pMin = value; }
-
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
-    {
-        float b = p[2];
-        C = 0.05f;
-        R = 1;
-        q += (i[2])  * alpha;
-        q *=0.99f;
-        //f += (p[0] - p[2]) / L * 0;
-        //f = 0;
-
-        //p[0] = (1-alpha)*p[0] + alpha*( q + (i[0]-f)*R);
-        p[2] = q / C + i[2]  * R;
-
-        //i[0] = (1-alpha)*i[0] + alpha*( f + (a-q)/R);
-        i[2] =  (b - q / C) / R;
-
-
-
-        if ( setPointLow <q / C &&  q / C < setPointHigh  && itemBeingDragged == null)
-            success = Mathf.Clamp(success + 0.005f, 0, 1);
-        else
-            success = Mathf.Clamp(success - 0.05f, 0, 1);
-
-
+    public float SetPointHigh { get => setPointHigh; set { setPointHigh = value; DrawCadran(); } }
+    public float SetPointLow { get => setPointLow; set { setPointLow = value; DrawCadran(); } }
+    public float PMax {
+        get => pMax;
+        set {
+            if (pMax <= pMin) { pMax = pMin; isSuccess = false; }
+            else { pMax = value; isSuccess = true; }
+            DrawCadran();
+            InitializeSuccess();
+        }
     }
-
-    public override void Constraint(float[] p, float[] i, float dt)
-    {
-        Calcule_i_p_blocked(p, i, dt, 0);
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 3);
-    }
-
+    public float PMin { get => pMin; set { pMin = value; DrawCadran(); } }
 
     protected override void Start()
     {
-       
+
         tubeH = transform.Find("TubeH").gameObject;
         tubeV = transform.Find("TubeV").gameObject;
-        water = transform.Find("Water").gameObject;
         water2 = transform.Find("TubeH/Water2").gameObject;
 
-        cadranMin = transform.Find("Cadran Min").gameObject;
-        cadranMax = transform.Find("Cadran Max").gameObject;
+        water = transform.Find("Gauge/Water").gameObject;
+        cadranMin = transform.Find("Gauge/Cadran Min").gameObject;
+        cadranMax = transform.Find("Gauge/Cadran Max").gameObject;
 
-        shine = transform.Find("Shine").gameObject;
-        value = transform.Find("Value").gameObject;
+        gauge = transform.Find("Gauge").gameObject;
+
+        DrawCadran();
+
+        shine = transform.Find("Gauge/Shine").gameObject;
+        value = transform.Find("Gauge/Arrow/Value").gameObject;
 
         animator = GetComponent<Animator>();
         animator.SetFloat("rate", 0.5f);
-      
+
         shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         configPanel = Resources.Load("ConfigPanel/ConfigPressostat") as GameObject;
 
         base.Start();
+        InitializeSuccess();
+
         success = 0;
-  
+        C = 0.05f;
+
     }
 
+    void InitializeSuccess()
+    {
+        Transform successValue = transform.Find("Gauge/ValueHolder/SuccessValue");            
+       
+        if (successValue)
+        {
+            if (IsSuccess)
+            {
+                successValue.gameObject.SetActive(true);
+            }
+            else
+                successValue.gameObject.SetActive(false);
+        }
+
+        success = 0;
+        Rotate();
+    }
+
+
+    protected void DrawCadran()
+    {
+        float rateH = Mathf.Clamp((setPointHigh - PMin) / (PMax - PMin), 0, 1);
+        float rateL = Mathf.Clamp((setPointLow - PMin) / (PMax - PMin), 0, 1);
+
+        cadranMax.GetComponent<Image>().fillAmount = rateH;
+        cadranMin.GetComponent<Image>().fillAmount = rateL;
+    }
+
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
+    {
+        p2 = p[2];
+        
+        q += i[2] / C * dt;
+        q *= 0.99f;
+
+        p[2] = q + i[2] * R;
+        i[2] = (p2 - q) / R;
+    }
+
+    public override void Constraint(float[] p, float[] i, float dt)
+    {
+        i[0] = i[1] = i[3] = 0;
+    }
+    
     public override void Rotate()
     {
         switch (dir%4)
         {
             case 0:
+                gauge.transform.localPosition = new Vector3(2, 4, 0);
                 tubeH.SetActive(true);
                 tubeH.transform.localScale = new Vector3(1,1,1);
                 tubeV.SetActive(false);
                 break;
             case 1:
+                gauge.transform.localPosition = new Vector3(-2, 10, 0);
                 tubeV.SetActive(true);
                 tubeV.transform.localScale = new Vector3(1, 1, 1);
                 tubeH.SetActive(false);
                 break;
             case 2:
+                gauge.transform.localPosition = new Vector3(-20, 4, 0);
                 tubeH.SetActive(true);
                 tubeH.transform.localScale = new Vector3(-1, 1, 1);
                 tubeV.SetActive(false);
                 break;
             case 3:
+                gauge.transform.localPosition = new Vector3(2, -17, 0);
                 tubeV.SetActive(true);
                 tubeV.transform.localScale = new Vector3(1, -1, 1);
                 tubeH.SetActive(false);
@@ -112,23 +141,21 @@ public class PressostatManager : BaseComponent {
 
     private void Update()
     {
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
-        water.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        float rate = Mathf.Clamp((q / C - PMin) / (PMax - PMin), 0, 0.99f);
+        if (setPointLow < q && q < setPointHigh && itemBeingDragged == null)
+            success = Mathf.Clamp(success + Time.deltaTime/successTime, 0, 1);
+        else
+            success = Mathf.Clamp(success - 10 * Time.deltaTime / successTime, 0, 1);
 
-        float rateH = Mathf.Clamp((setPointHigh - PMin) / (PMax-PMin) , 0, 1);
-        float rateL = Mathf.Clamp((setPointLow - PMin) / (PMax - PMin) , 0, 1);
 
-        //Vector3 pos= new Vector3(0, rate* 55.3f, 0);
+        water2.GetComponent<Image>().color = PressureColor(p2);
+        water.GetComponent<Image>().color = PressureColor(p2);
 
+        float rate = Mathf.Clamp((q - PMin) / (PMax - PMin), 0, 0.99f);
         animator.SetFloat("rate", rate);
 
-        cadranMax.GetComponent<Image>().fillAmount = rateH;
-        cadranMin.GetComponent<Image>().fillAmount = rateL;
 
-
-        float v = Mathf.Round(20 * q/C) / 20;
+        float v = Mathf.Round(20 * q) / 20;
         value.GetComponent<Text>().text = v.ToString();
 
 

@@ -293,7 +293,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             Rotate();
 
             foreach (BaseComponent bc in FindObjectsOfType<BaseComponent>())
-                bc.ResetSuccess();
+                if(bc.enabled)
+                    bc.ResetSuccess();
+
 
             audios[0].Play();
         }
@@ -399,17 +401,11 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
             else
             {
-                Transform c= endParent.GetChild(1);
-                c.GetComponent<BaseComponent>().enabled = true; //needed if on deck
-                /*if (!endParent.parent.name.Contains("Deck"))
+                Transform c=null;
+                if (endParent.childCount > 1)
                     c = endParent.GetChild(1);
-                else
-                {
-                    c = endParent.GetChild(0);
-                    c.GetComponent<BaseComponent>().enabled=true;
-                }*/
-
-                if (c.GetComponent<BaseComponent>().IsEmpty())
+                
+                if (!c || c.GetComponent<BaseComponent>().IsEmpty())
                 {
                     StartCoroutine(FlightToFinalPosition(endParent,0.05f));
                 }
@@ -444,13 +440,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
             else
             {
-                Transform c=endParent.GetChild(1);
-                /*if (endParent.parent.name.Contains("Deck"))
-                    c = endParent.GetChild(0);
-                else
-                    c = endParent.GetChild(1);*/
-
-                if (c.GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
+                if (endParent.childCount == 1 || endParent.GetChild(1).GetComponent<BaseComponent>().IsDestroyable()) //erase if possible
                 {
                     StartCoroutine(FlightToFinalPosition(endParent, 0.05f));
                 }
@@ -545,6 +535,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
                 DestroyImmediate(newParent.GetChild(1).gameObject);
         }
 
+        gc = (GameController)GameObject.Find("GameController").GetComponent(typeof(GameController)); //find the game engine
         gc.PopulateComposant();
 
         if (newParent.GetComponent<SlotManager>() && newParent.GetComponent<SlotManager>().isSlotFrontier)
@@ -554,6 +545,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         {  // Slot of Deck !
             newParent.GetComponent<CreateComponent>().PlaceComponent(gameObject);
         }
+
+        audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
         audios[1].Play();
     }
 
