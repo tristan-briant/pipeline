@@ -10,11 +10,13 @@ public class capacitorManager : BaseComponent {
 
     float f0, f2;
     public float cin;
+    private float rin = 0.05f;
 
     float q0, q2;
     float xp;
 
     public float Cin { get => cin; set => cin = value; }
+    public float Rin { get => rin; set => rin = value; }
 
     public override void Awake()
     {
@@ -37,16 +39,16 @@ public class capacitorManager : BaseComponent {
         p0 = p[0];
         p2 = p[2];
 
-        q += (i[0] + i[2]) / C;
-        q0 += i[0] / Cin;
-        q2 += i[2] / Cin;
+        q += (i[0] + i[2]) / C * dt;
+        q0 += i[0] / cin * dt;
+        q2 += i[2] / cin * dt;
 
 
-        p[0] = (q + q0);
-        p[2] = (q + q2);
+        p[0] = (q + q0) + i[0] * rin;
+        p[2] = (q + q2) + i[2] * rin;
 
-        i[0] = (p0 - q - q0) / R;
-        i[2] = (p2 - q - q2) / R;
+        i[0] = (p0 - q - q0) / rin;
+        i[2] = (p2 - q - q2) / rin;
 
         f0 = i[0];
         f2 = i[2];

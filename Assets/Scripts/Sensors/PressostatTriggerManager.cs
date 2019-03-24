@@ -5,81 +5,53 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
-public class PressostatTriggerManager : BaseComponent {
+public class PressostatTriggerManager : PressostatManager {
 
-    GameObject water, water2, bubble, cadran2, cadran, arrow, shine;
-    public float x_bulle = 0;
-    //float r_bulle = 0.1f;
-    //public float setPointHigh, setPointLow, PMax, PMin;
-    public float setPoint, tolerance, PMax,PMin=0;
-    Vector3 arrowStartPosition, cadranStartPosition;
-    float t_shine = 0;
-    public float openTime = 4.0f;
-    public float Tau = 1;
-    bool activated = false;
-    //public new float f;
+    public float raiseTime = 2.0f;
+    public float RaiseTime { get => raiseTime; set => raiseTime = Mathf.Min(value, 1f); }
 
+    float tolerance = 0.1f;
 
-    public override void OnClick()
+    public override void Awake()
     {
-        //Do not rotate
+        symmetric = false;
     }
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    void CalculateSetPoints(float time)
     {
-        C = 1;
-        float b = p[2];
-
-        q += (i[2])  * alpha; //q*=0.99;
-        f += (p[0] - p[2]) / L * 0;
-
-        p[2] = (q / C + (i[2] + f) * R);
-
-        i[2] = (-f + (b - q / C) / R);
-
-        Calcule_i_p_blocked(p, i, alpha, 0);
-        Calcule_i_p_blocked(p, i, alpha, 1);
-        Calcule_i_p_blocked(p, i, alpha, 3);
-        
-
-        /*i[0] = p[0] / Rground;
-        i[1] = p[1] / Rground;
-        i[3] = p[3] / Rground;*/
-
-
-        if ( risingCurve(time)-tolerance/2 < q / C && q / C < risingCurve(time) + tolerance / 2 && itemBeingDragged == null && activated)
-            success = Mathf.Clamp(success + 0.01f/openTime/0.9f, 0, 1); //0.01=10ms with 90% tolerance
-        else
-            success = Mathf.Clamp(success - 0.05f, 0, 1);
-
-
+        setPointHigh = pMax * (time / raiseTime + tolerance);
+        setPointLow = pMax * (time / raiseTime - tolerance);
+        DrawCadran();
     }
 
-    protected override void Start()
+
+    public void TriggerStart()
     {
-        base.Start();
-        water = this.transform.Find("Water").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        Debug.Log("message reçu");
+        StartCoroutine(countDown());
+    }
 
-        cadran = this.transform.Find("Cadran").gameObject;
-        cadran2 = this.transform.Find("Cadran2").gameObject;
-
-        arrow = this.transform.Find("Arrow").gameObject;
-        shine = this.transform.Find("Shine").gameObject;
-
-        arrowStartPosition = arrow.transform.localPosition;
-        cadranStartPosition = cadran.transform.localPosition;
+    public void TriggerEnd()
+    {
+        StopCoroutine(countDown());
     }
 
     IEnumerator countDown() {
-        yield return new WaitForSeconds(openTime);
+        float time = 0;
 
-        activated = false;
+        while (true)
+        {
+            yield return new WaitForEndOfFrame();
+            time += Time.deltaTime;
+            CalculateSetPoints(time);
+        }
+        
     }
 
     float time=0;
 
-    private void Update()
+ 
+    /*private void Update()
     {
         if (trigged)
         {
@@ -134,11 +106,11 @@ public class PressostatTriggerManager : BaseComponent {
         }
 
         shine.GetComponent<Image>().color = new Color(1, 1, 1, alpha);
+        
+    }*/
 
-    }
-
-    float risingCurve(float t) {
+    /*float risingCurve(float t) {
         return setPoint*(1 - Mathf.Exp ( -t / Tau) );
-    }
+    }*/
 
 }

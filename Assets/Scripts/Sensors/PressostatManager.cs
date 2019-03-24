@@ -15,20 +15,38 @@ public class PressostatManager : BaseComponent {
     public float setPointHigh;
     public float setPointLow;
     public float pMax=1;
-    public float pMin=0;
+    //float pMin=0;
 
-    public float SetPointHigh { get => setPointHigh; set { setPointHigh = value; DrawCadran(); } }
-    public float SetPointLow { get => setPointLow; set { setPointLow = value; DrawCadran(); } }
+    public bool symmetric = true;
+    public bool Symmetric { get => symmetric; set { symmetric = value; DrawCadran(); } }
+
+
+    public float SetPointHigh { get => setPointHigh;
+        set
+        {
+            if (value <= SetPointLow) { setPointHigh = setPointLow; isSuccess = false; }
+            else { setPointHigh = value; isSuccess = true; }
+            DrawCadran();
+        }
+    }
+    public float SetPointLow { get => setPointLow;
+        set
+        {
+            if (value >= setPointHigh) { setPointLow = setPointHigh; isSuccess = false; }
+            else { setPointLow = value; isSuccess = true; }
+            DrawCadran();
+        }
+    }
+
     public float PMax {
         get => pMax;
         set {
-            if (pMax <= pMin) { pMax = pMin; isSuccess = false; }
-            else { pMax = value; isSuccess = true; }
+            pMax = Mathf.Max(value,0.1f);
             DrawCadran();
-            InitializeSuccess();
         }
     }
-    public float PMin { get => pMin; set { pMin = value; DrawCadran(); } }
+    public float PMin { get => symmetric ? -pMax : 0; }
+
 
     protected override void Start()
     {
@@ -48,38 +66,20 @@ public class PressostatManager : BaseComponent {
         shine = transform.Find("Gauge/Shine").gameObject;
         value = transform.Find("Gauge/Arrow/Value").gameObject;
 
-        animator = GetComponent<Animator>();
+        animator = transform.Find("Gauge").GetComponent<Animator>();
         animator.SetFloat("rate", 0.5f);
 
         shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         configPanel = Resources.Load("ConfigPanel/ConfigPressostat") as GameObject;
 
         base.Start();
-        InitializeSuccess();
 
         success = 0;
         C = 0.05f;
 
     }
 
-    void InitializeSuccess()
-    {
-        Transform successValue = transform.Find("Gauge/ValueHolder/SuccessValue");            
-       
-        if (successValue)
-        {
-            if (IsSuccess)
-            {
-                successValue.gameObject.SetActive(true);
-            }
-            else
-                successValue.gameObject.SetActive(false);
-        }
-
-        success = 0;
-        Rotate();
-    }
-
+  
 
     protected void DrawCadran()
     {

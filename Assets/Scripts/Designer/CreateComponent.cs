@@ -9,6 +9,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
     public bool designermode=false;
 
     public string PrefabComponentPath = "";
+    public float scale = 0.8f;
 
     GameObject NewComponent;
 
@@ -20,7 +21,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
             transform.GetChild(1).GetComponent<BaseComponent>().enabled = false;
             transform.GetChild(1).GetComponent<BaseComponent>().ChangeParent(transform);
             transform.GetChild(1).localPosition = Vector3.zero;
-            transform.GetChild(1).localScale = 0.8f * Vector3.one;
+            transform.GetChild(1).localScale = scale * Vector3.one;
         }
     }
 

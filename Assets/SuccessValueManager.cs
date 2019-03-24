@@ -6,21 +6,43 @@ using UnityEngine.UI;
 public class SuccessValueManager : MonoBehaviour
 {
 
-    public float value;
+    float value;
     const float scoreSpeed = 2;
 
     float score = 0;
     protected BaseComponent component;
     protected Animator animator;
+    bool valueVisible = false;
+    protected Text textValue;
 
     private void Start()
     {
         component = GetComponentInParent<BaseComponent>();
-        animator = GetComponent<Animator>();
+        animator = transform.Find("Value").GetComponent<Animator>();
+        textValue = transform.Find("Value").GetComponent<Text>();
+
+        textValue.gameObject.SetActive(false);
+        valueVisible = false;
     }
 
     void Update()
     {
+        if (!component.isSuccess || !component.enabled)
+        {
+            if(valueVisible)
+            {
+                textValue.gameObject.SetActive(false);
+                valueVisible = false;
+            }
+            return;
+        }
+
+        if (!valueVisible)
+        {
+            textValue.gameObject.SetActive(true);
+            valueVisible = true;
+        }
+
         value = component.success;
 
         if (score < value)
@@ -43,6 +65,6 @@ public class SuccessValueManager : MonoBehaviour
         }
 
 
-        transform.GetComponent<Text>().text = Mathf.RoundToInt(score * 100) + "%";
+        textValue.text = Mathf.RoundToInt(score * 100) + "%";
     }
 }
