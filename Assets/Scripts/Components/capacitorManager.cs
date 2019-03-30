@@ -10,18 +10,42 @@ public class capacitorManager : BaseComponent {
 
     float f0, f2;
     public float cin;
-    private float rin = 0.05f;
+    private float rin = 0.025f;
 
     float q0, q2;
     float xp;
 
-    public float Cin { get => cin; set => cin = value; }
+    public float Cin { get => cin / Engine.TimeFactor(); set { cin = value * Engine.TimeFactor(); UpdateValue(); } }
     public float Rin { get => rin; set => rin = value; }
 
     public override void Awake()
     {
         configPanel = Resources.Load("ConfigPanel/ConfigCapacity") as GameObject;
+        GetComponent<Animator>().SetFloat("position", 0.5f);
+        UpdateValue();
     }
+
+
+    protected override void Start()
+    {
+        base.Start();
+        waterIn0 = transform.Find("Tank/Water-in0").gameObject;
+        waterIn2 = transform.Find("Tank/Water-in2").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
+        spring1 = transform.Find("Tank/Spring1").gameObject;
+        spring2 = transform.Find("Tank/Spring2").gameObject;
+        spring3 = transform.Find("Tank/Spring3").gameObject;
+        spring4 = transform.Find("Tank/Spring4").gameObject;
+        piston = transform.Find("Tank/Piston").gameObject;
+        bubble0 = transform.Find("Tank/Mirror/Bubble0").gameObject;
+        bubble2 = transform.Find("Tank/Bubble2").gameObject;
+        bubble0.GetComponent<Animator>().SetFloat("speed", 0);
+        bubble2.GetComponent<Animator>().SetFloat("speed", 0);
+
+        UpdateValue();
+    }
+
 
     public override void Reset_i_p()
     {
@@ -40,8 +64,8 @@ public class capacitorManager : BaseComponent {
         p2 = p[2];
 
         q += (i[0] + i[2]) / C * dt;
-        q0 += i[0] / cin * dt;
-        q2 += i[2] / cin * dt;
+        q0 += i[0] / cin  / 2 * dt;
+        q2 += i[2] / cin /  2 * dt;
 
 
         p[0] = (q + q0) + i[0] * rin;
@@ -59,22 +83,31 @@ public class capacitorManager : BaseComponent {
         i[1] = i[3] = 0;
     }
 
-    protected override void Start()
+   
+
+    float Sature(float x) {
+        if (x > 0)
+            return x / (1 + x);
+        else
+            return x / (1 - x);
+    }
+
+    public override void Rotate()
     {
-        base.Start();
-        waterIn0 = transform.Find("Water-in0").gameObject;
-        waterIn2 = transform.Find("Water-in2").gameObject;
-        water0 = transform.Find("Water0").gameObject;
-        water2 = transform.Find("Water2").gameObject;
-        spring1 = transform.Find("Spring1").gameObject;
-        spring2 = transform.Find("Spring2").gameObject;
-        spring3 = transform.Find("Spring3").gameObject;
-        spring4 = transform.Find("Spring4").gameObject;
-        piston = transform.Find("Piston").gameObject;
-        bubble0 = transform.Find("Mirror/Bubble0").gameObject;
-        bubble2 = transform.Find("Bubble2").gameObject;
-        bubble0.GetComponent<Animator>().SetFloat("speed", 0);
-        bubble2.GetComponent<Animator>().SetFloat("speed", 0);
+        base.Rotate();
+        transform.Find("Value").rotation = Quaternion.identity;
+        //transform.Find("Value").localRotation = Quaternion.Euler(0, 0, -90 * dir);
+
+    }
+
+
+    public void UpdateValue() {
+
+        float size = Sature(0.5f * Cin);
+        GetComponent<Animator>().SetFloat("size",size);
+
+        GetComponentInChildren<Text>().text = (Mathf.Round(10 * Cin) / 10 ).ToString();
+        
     }
 
     private void Update()
@@ -84,15 +117,17 @@ public class capacitorManager : BaseComponent {
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
 
-        float xMax = 32f;
-        xp = xMax * Mathf.Atan((q2 - q0) * xMax * 0.1f) / 1.5f;
-        piston.transform.localPosition = new Vector3(xp, 0, 0);
+        //float xMax = 32f;
+        //xp = xMax * Mathf.Atan((q2 - q0) * xMax * 0.1f) / 1.5f;
+        /*piston.transform.localPosition = new Vector3(xp, 0, 0);
 
         waterIn2.GetComponent<Image>().fillAmount = 0.6f + 0.4f * xp / xMax;
         spring1.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
         spring2.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
         spring3.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
-        spring4.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
+        spring4.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);*/
+
+        GetComponent<Animator>().SetFloat("position", 0.5f*(1 + Sature((q2-q0)*2)));
 
 
         bubble0.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f0));

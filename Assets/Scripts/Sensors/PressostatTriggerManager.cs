@@ -7,14 +7,22 @@ using UnityEngine.EventSystems;
 
 public class PressostatTriggerManager : PressostatManager {
 
-    public float raiseTime = 2.0f;
-    public float RaiseTime { get => raiseTime; set => raiseTime = Mathf.Min(value, 1f); }
+    public float raiseTime = 5.0f;
+    public float RaiseTime { get => raiseTime; set => raiseTime = Mathf.Clamp(value, 1f, 20f); }
 
-    float tolerance = 0.1f;
+    float tolerance = 0.15f;
+    bool rising = false;
 
     public override void Awake()
     {
         symmetric = false;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        configPanel = Resources.Load("ConfigPanel/ConfigPressostatTrigger") as GameObject;
+        IsSuccess = true;
     }
 
     void CalculateSetPoints(float time)
@@ -29,11 +37,13 @@ public class PressostatTriggerManager : PressostatManager {
     {
         Debug.Log("message reçu");
         StartCoroutine(countDown());
+        rising = true;
     }
 
     public void TriggerEnd()
     {
         StopCoroutine(countDown());
+        rising = false;
     }
 
     IEnumerator countDown() {
@@ -48,9 +58,18 @@ public class PressostatTriggerManager : PressostatManager {
         
     }
 
-    float time=0;
+   
 
- 
+    override public void UpdateSuccess()
+    {
+        if (!rising || itemBeingDragged!=null)
+            success = 0;
+        else if (setPointLow < q && q < setPointHigh)
+            success = Mathf.Clamp01(success + Time.deltaTime / RaiseTime * 1.1f);
+
+
+    }
+
     /*private void Update()
     {
         if (trigged)

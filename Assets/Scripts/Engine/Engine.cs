@@ -8,14 +8,23 @@ public class Engine  {
     static float[][] pression;
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
-    const float dt = 0.05f; // 0.1f pour oneStep1
-    const float alpha = 0.1f; // 0.2f
+
+    public const float dt = 0.05f; // 0.1f pour oneStep1
+    public const float alpha = 0.1f; // 0.2f
+    public const float repetitionTime = 0.01f;
+    public const int repetitionStep = 4;
+    // number of step per second = repetionStep / repetitionTime
 
     //dt=0.1 alpha = 0.2 attention Resistor = 40 max !
     //dt=0.05 alpha = 0.1 nickel
 
     //const float dt = 0.005f;
     //const float alpha = 0.1f;
+
+    public static float TimeFactor()
+    {
+        return repetitionStep / repetitionTime * dt;
+    }
 
 
     public static void initialize_p_i(int N,int M)

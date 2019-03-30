@@ -72,7 +72,7 @@ public class GameController : MonoBehaviour {
                 LoadLevel();
         }
 
-        InvokeRepeating("Evolution", 0.0f, 0.01f);
+        InvokeRepeating("Evolution", 0.0f, Engine.repetitionTime);
 
     }
 
@@ -315,7 +315,7 @@ public class GameController : MonoBehaviour {
 
         float success = 0;
 
-        for (int n = 0; n < 4; n++)
+        for (int n = 0; n < Engine.repetitionStep; n++)
             Engine.OneStep1(composants);
 
         //if (!HasSuccessComponent) success = 0; // Avoid to trigger win animation if no success component in the scene

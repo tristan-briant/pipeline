@@ -66,7 +66,8 @@ public class PressostatManager : BaseComponent {
         shine = transform.Find("Gauge/Shine").gameObject;
         value = transform.Find("Gauge/Arrow/Value").gameObject;
 
-        animator = transform.Find("Gauge").GetComponent<Animator>();
+        //animator = transform.Find("Gauge").GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         animator.SetFloat("rate", 0.5f);
 
         shine.GetComponent<Image>().color = new Color(1, 1, 1, 0);
@@ -138,15 +139,18 @@ public class PressostatManager : BaseComponent {
        
     }
 
+    public virtual void UpdateSuccess()
+    {
+        if (setPointLow < q && q < setPointHigh && itemBeingDragged == null)
+            success = Mathf.Clamp(success + Time.deltaTime / successTime, 0, 1);
+        else
+            success = Mathf.Clamp(success - 10 * Time.deltaTime / successTime, 0, 1);
+    }
 
     private void Update()
     {
-
-        if (setPointLow < q && q < setPointHigh && itemBeingDragged == null)
-            success = Mathf.Clamp(success + Time.deltaTime/successTime, 0, 1);
-        else
-            success = Mathf.Clamp(success - 10 * Time.deltaTime / successTime, 0, 1);
-
+        UpdateSuccess();
+        animator.SetFloat("success",success);
 
         water2.GetComponent<Image>().color = PressureColor(p2);
         water.GetComponent<Image>().color = PressureColor(p2);
@@ -157,23 +161,6 @@ public class PressostatManager : BaseComponent {
 
         float v = Mathf.Round(20 * q) / 20;
         value.GetComponent<Text>().text = v.ToString();
-
-
-        float alpha;
-
-        if (success < 1)
-        {
-            alpha = success;
-            t_shine = 0;
-        }
-        else
-        {
-            t_shine += Time.deltaTime;
-            alpha = 0.8f + 0.2f * Mathf.Cos(t_shine * 5.0f);
-
-        }
-
-        shine.GetComponent<Image>().color = new Color(1, 1, 1, alpha);
 
     }
 

@@ -19,7 +19,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         {
             transform.GetChild(1).GetComponent<BaseComponent>().Awake();
             transform.GetChild(1).GetComponent<BaseComponent>().enabled = false;
-            transform.GetChild(1).GetComponent<BaseComponent>().ChangeParent(transform);
+            transform.GetChild(1).GetComponent<BaseComponent>().ChangeParent(transform,false);
             transform.GetChild(1).localPosition = Vector3.zero;
             transform.GetChild(1).localScale = scale * Vector3.one;
         }
@@ -63,7 +63,6 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         BaseComponent.endParent = null;
 
     }
-
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -110,6 +109,13 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         Destroy(component);
     }
 
+    public void OnEnable()
+    {
+        if (transform.childCount == 2)
+        {
+            transform.GetChild(1).GetComponent<BaseComponent>().Awake();
+        }
+    }
 
     public void InvokeConfig()
     {
