@@ -12,6 +12,10 @@ public class BaseFrontier : BaseComponent {
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
     }
 
+    public override void Rotate()
+    {
+    }
+
     public void GetValueFromSlot()
     {
         type = GetComponentInParent<SlotManager>().type;
