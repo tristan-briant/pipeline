@@ -36,7 +36,7 @@ Components/Empty
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Sensors/Debimeter
-{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":0.3499999940395355,"setPointLow":0.1499999612569809,"mode":0,"periode":2.0,"phase":0.0}
+{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":0.3499999940395355,"setPointLow":0.1499999612569809,"symmetric":false,"mode":0,"periode":2.0,"phase":0.0}
 Frontiers/OutLetForest
 {"PrefabPath":"Frontiers/OutLetForest","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":3,"pset":0.0,"imax":1.0000001192092896,"jelly":false,"periodic":false,"periode":2.0}
 Frontiers/Wall
@@ -46,7 +46,7 @@ Components/Empty
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Sensors/Debimeter
-{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":1.0499998331069947,"setPointLow":0.7500000596046448,"mode":0,"periode":2.0,"phase":0.0}
+{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":1.1999996900558472,"setPointLow":0.800000011920929,"symmetric":false,"mode":0,"periode":2.0,"phase":0.0}
 Frontiers/OutLetForest
 {"PrefabPath":"Frontiers/OutLetForest","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":4,"pset":0.0,"imax":1.0,"jelly":false,"periodic":false,"periode":2.0}
 Frontiers/Wall
@@ -56,7 +56,7 @@ Components/Empty
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Sensors/Debimeter
-{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":0.6000003814697266,"setPointLow":0.3999999761581421,"mode":0,"periode":2.0,"phase":0.0}
+{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":0.6000003814697266,"setPointLow":0.3999999761581421,"symmetric":false,"mode":0,"periode":2.0,"phase":0.0}
 Frontiers/OutLetForest
 {"PrefabPath":"Frontiers/OutLetForest","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":4,"pset":0.0,"imax":1.0000001192092896,"jelly":false,"periodic":false,"periode":2.0}
 Frontiers/Wall
@@ -66,7 +66,7 @@ Components/Empty
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Sensors/Debimeter
-{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":0.44999969005584719,"setPointLow":0.2999999523162842,"mode":0,"periode":2.0,"phase":0.0}
+{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":0.3899996876716614,"setPointLow":0.26999998092651369,"symmetric":false,"mode":0,"periode":2.0,"phase":0.0}
 Frontiers/OutLetForest
 {"PrefabPath":"Frontiers/OutLetForest","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":4,"pset":0.0,"imax":1.0,"jelly":false,"periodic":false,"periode":2.0}
 Frontiers/Corner

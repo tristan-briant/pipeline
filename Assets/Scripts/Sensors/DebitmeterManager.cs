@@ -7,16 +7,36 @@ public class DebitmeterManager : BaseComponent
 {
 
     GameObject water, water0, water2, bubble, cadranMin, cadranMax, arrow, shine, value;
-    //public float x_bulle = 0;
-    //float r_bulle = 0.1f;
+    float successTime = 2.0f; //Time to obtain a success
+
     public float iMax;
     public float setPointHigh;
     public float setPointLow;
-   
-    public float SetPointHigh { get => setPointHigh; set => setPointHigh = value; }
-    public float SetPointLow { get => setPointLow; set => setPointLow = value; }
-    public float IMax { get => iMax; set => iMax = value; }
 
+    public float SetPointHigh
+    {
+        get => setPointHigh;
+        set
+        {
+            if (value <= SetPointLow) { setPointHigh = setPointLow; isSuccess = false; }
+            else { setPointHigh = value; isSuccess = true; }
+            DrawCadran();
+        }
+    }
+    public float SetPointLow
+    {
+        get => setPointLow;
+        set
+        {
+            if (value >= setPointHigh) { setPointLow = setPointHigh; isSuccess = false; }
+            else { setPointLow = value; isSuccess = true; }
+            DrawCadran();
+        }
+    }
+    public float IMax { get => iMax; set { iMax = value; DrawCadran(); } }
+    public bool symmetric = true;
+    public bool Symmetric { get => symmetric; set { symmetric = value; DrawCadran(); } }
+ 
     float SPH, SPL, successSpeed;
     public int mode = 0;
     public float periode = 2, phase = 0;
@@ -29,7 +49,48 @@ public class DebitmeterManager : BaseComponent
 
     public override void Awake()
     {
+        DrawCadran();
         //ChangeParent(transform.parent);
+    }
+
+    void DrawCadran()
+    {
+        float angleH, angleL;
+        if (symmetric)
+        {
+            angleH = Mathf.Clamp((setPointHigh) / iMax, -1, 1);
+            angleL = Mathf.Clamp((setPointLow) / iMax, -1, 1);
+            transform.Find("Convention1").GetComponent<Image>().color = Color.white;
+            transform.Find("Convention2").GetComponent<Image>().color = new Color(0, 0, 0, 0);
+        }
+        else
+        {
+            angleH = Mathf.Clamp(2 * setPointHigh / iMax - 1, -1, 1);
+            angleL = Mathf.Clamp(2 * setPointLow / iMax - 1, -1, 1);
+            transform.Find("Convention1").GetComponent<Image>().color = new Color(0, 0, 0, 0);
+            transform.Find("Convention2").GetComponent<Image>().color = Color.white;
+        }
+
+        cadranMin = transform.Find("Cadran Min").gameObject;
+        cadranMax = transform.Find("Cadran Max").gameObject;
+
+        cadranMax.GetComponent<Image>().fillAmount = 0.5f - angleH * 0.32f;
+        cadranMin.GetComponent<Image>().fillAmount = 0.5f - angleL * 0.32f;
+
+        if (isSuccess)
+        {
+            transform.Find("Value/SetPoint").gameObject.SetActive(true);
+            transform.Find("Value/Dash").gameObject.SetActive(true);
+            float setPoint = Mathf.Round(100 * 0.5f * (setPointHigh + SetPointLow)) / 100;
+            transform.Find("Value/SetPoint").GetComponent<Text>().text = setPoint.ToString();
+            transform.Find("SuccessValue").gameObject.SetActive(true);
+        }
+        else
+        {
+            transform.Find("Value/SetPoint").gameObject.SetActive(false);
+            transform.Find("Value/Dash").gameObject.SetActive(false);
+            transform.Find("SuccessValue").gameObject.SetActive(false);
+        }
     }
 
     protected override void Start()
@@ -41,18 +102,17 @@ public class DebitmeterManager : BaseComponent
         water2 = transform.Find("Water2").gameObject;
 
         bubble = transform.Find("Bubble").gameObject;
-        cadranMin = transform.Find("Cadran Min").gameObject;
-        cadranMax = transform.Find("Cadran Max").gameObject;
+
 
         arrow = transform.Find("Arrow").gameObject;
         shine = transform.Find("Shine").gameObject;
-        value = transform.Find("Value").gameObject;
+        value = transform.Find("Value/Value").gameObject;
 
         f = 0;
         bubble.GetComponent<Animator>().SetFloat("speed", 0);
 
         configPanel = Resources.Load("ConfigPanel/ConfigDebimeter") as GameObject;
-
+        DrawCadran();
     }
 
 
@@ -92,10 +152,9 @@ public class DebitmeterManager : BaseComponent
     public override void Rotate()
     {
         base.Rotate();
-        foreach(Text t in GetComponentsInChildren<Text>())
-        {
-            t.transform.rotation = Quaternion.identity;
-        }
+        transform.Find("Value").rotation = Quaternion.identity;
+        transform.Find("SuccessValue").rotation = Quaternion.identity;
+     
     }
 
     float theta(float x)
@@ -104,61 +163,61 @@ public class DebitmeterManager : BaseComponent
         return x;
     }
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
         p0 = p[0];
         p2 = p[2];
 
-        q += (i[0] + i[2]) * alpha;
-        f += (p[0] - p[2]) / L * alpha;
+        q += (i[0] + i[2]) / C * dt;
+        f += (p[0] - p[2]) / L * dt;
 
-        p[0] = (q / C + (i[0] - f) * R);
-        p[2] = (q / C + (i[2] + f) * R);
+        p[0] = (q + (i[0] - f) * R);
+        p[2] = (q + (i[2] + f) * R);
 
-        i[0] = (f + (p0 - q / C) / R);
-        i[2] = (-f + (p2 - q / C) / R);
+        i[0] = (f + (p0 - q) / R);
+        i[2] = (-f + (p2 - q) / R);
 
         flux = (1 - beta) * flux + beta * f;
-
-        CalculateSetPoint();
-        if (SPL < -flux && -flux < SPH && itemBeingDragged == null)
-            success = Mathf.Clamp(success + successSpeed, 0, 1);
-        else
-            success = Mathf.Clamp(success - 0.05f, 0, 1);
 
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 3);
+        i[1] = i[3] = 0;
     }
 
-   
+    public virtual void UpdateSuccess()
+    {
+        if (setPointLow < -f && -f < setPointHigh && itemBeingDragged == null)
+            success = Mathf.Clamp(success + Time.deltaTime / successTime, 0, 1);
+        else
+            success = Mathf.Clamp(success - 10 * Time.deltaTime / successTime, 0, 1);
+    }
 
 
     private void Update()
     {
 
-        water.GetComponent<Image>().color = PressureColor(q / C);
+        UpdateSuccess();
+
+        water.GetComponent<Image>().color = PressureColor(q);
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
 
         bubble.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
 
         const float ANGLEMAX = 180 / 4.8f;
-        float angle = Mathf.Clamp(flux / iMax * ANGLEMAX, -ANGLEMAX * 1.2f, ANGLEMAX * 1.2f);
-
-        float angleH = Mathf.Clamp((SPH) / iMax, -1, 1);
-        float angleL = Mathf.Clamp((SPL) / iMax, -1, 1);
+        float angle;
+        if (symmetric)
+            angle = Mathf.Clamp(flux / iMax * ANGLEMAX, -ANGLEMAX * 1.2f, ANGLEMAX * 1.2f);
+        else
+            angle = Mathf.Clamp((2 * flux / iMax + 1) * ANGLEMAX, -ANGLEMAX * 1.2f, ANGLEMAX * 1.2f);
 
         arrow.transform.localEulerAngles = new Vector3(0, 0, angle);
-        cadranMax.GetComponent<Image>().fillAmount = 0.5f - angleH * 0.32f;
-        cadranMin.GetComponent<Image>().fillAmount = 0.5f - angleL * 0.32f;
 
         float v;
-        if (Mathf.Abs(f)<1 )
-            v = Mathf.Round(100 * -f)/100;
+        if (Mathf.Abs(f) < 1)
+            v = Mathf.Round(100 * -f) / 100;
         else
             v = Mathf.Round(10 * -f) / 10;
 

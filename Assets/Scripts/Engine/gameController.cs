@@ -424,7 +424,8 @@ public class GameController : MonoBehaviour {
         if (Input.GetKey(KeyCode.Escape))
         {
             // SceneManager.LoadScene(0);
-            Application.Quit();
+            //Application.Quit();
+            BackToMenu();
         }
         if (Input.GetKey(KeyCode.Menu))
         {

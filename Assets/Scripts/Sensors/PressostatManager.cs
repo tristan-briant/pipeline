@@ -64,7 +64,7 @@ public class PressostatManager : BaseComponent {
         DrawCadran();
 
         shine = transform.Find("Gauge/Shine").gameObject;
-        value = transform.Find("Gauge/Arrow/Value").gameObject;
+        value = transform.Find("Gauge/Arrow/Value/Value").gameObject;
 
         //animator = transform.Find("Gauge").GetComponent<Animator>();
         animator = GetComponent<Animator>();
@@ -89,6 +89,26 @@ public class PressostatManager : BaseComponent {
 
         cadranMax.GetComponent<Image>().fillAmount = rateH;
         cadranMin.GetComponent<Image>().fillAmount = rateL;
+
+        if (transform.Find("Gauge/Arrow/Value/SetPoint"))
+        {
+            if (isSuccess)
+            {
+
+                transform.Find("Gauge/Arrow/Value/SetPoint").gameObject.SetActive(true);
+                transform.Find("Gauge/Arrow/Value/Dash").gameObject.SetActive(true);
+                float setPoint = Mathf.Round(100 * 0.5f * (setPointHigh + SetPointLow)) / 100;
+                transform.Find("Gauge/Arrow/Value/SetPoint").GetComponent<Text>().text = setPoint.ToString();
+                //transform.Find("SuccessValue").gameObject.SetActive(true);
+            }
+            else
+            {
+                transform.Find("Gauge/Arrow/Value/SetPoint").gameObject.SetActive(false);
+                transform.Find("Gauge/Arrow/Value/Dash").gameObject.SetActive(false);
+                //transform.Find("SuccessValue").gameObject.SetActive(false);
+            }
+        }
+
     }
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)

@@ -42,7 +42,7 @@ Frontiers/Wall
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Sensors/Debimeter
-{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":true,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":2.0,"setPointLow":0.5,"mode":0,"periode":2.0,"phase":0.0}
+{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":true,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":1.5000004768371583,"setPointLow":0.5,"symmetric":true,"mode":0,"periode":2.0,"phase":0.0}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Components/Empty
@@ -56,7 +56,7 @@ Components/Empty
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Sensors/Debimeter
-{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":true,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":-0.4999992251396179,"setPointLow":-2.499999761581421,"mode":0,"periode":2.0,"phase":0.0}
+{"PrefabPath":"Sensors/Debimeter","dir":0,"destroyable":true,"isSuccess":true,"locked":true,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"iMax":1.0,"setPointHigh":-0.4999992251396179,"setPointLow":-1.5000007152557374,"symmetric":true,"mode":0,"periode":2.0,"phase":0.0}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Frontiers/Wall

@@ -17,6 +17,7 @@ public class InletDebimeterManager : BaseFrontier
         set
         {
             pset = value;
+            UpdateValue();
         }
     }
 
@@ -51,18 +52,28 @@ public class InletDebimeterManager : BaseFrontier
 
     public override void Rotate()
     {
-        Transform text = transform.Find("Value");
-        
+        Transform text = transform.Find("ValueHolder/Value");
+
+        TextAnchor align =0;
+        switch (dir)
+        {
+            case 0: align = TextAnchor.MiddleLeft; break;
+            case 1: if (pset > 0) align = TextAnchor.MiddleLeft; else align = TextAnchor.MiddleRight; break;
+            case 3: if (pset > 0) align = TextAnchor.MiddleRight; else align = TextAnchor.MiddleLeft; break;
+            case 2: align = TextAnchor.MiddleRight; break;
+        }
+        text.GetComponent<Text>().alignment = align;
+
         if (dir == 1)
-            text.localRotation = Quaternion.Euler(0, 0, -90f);
+            text.localRotation = Quaternion.Euler(0, 0, 0);
         else
-            text.localRotation = Quaternion.Euler(0, 0, 90f * dir);
+            text.localRotation = Quaternion.Euler(0, 0, 90f * dir + 90f);
 
-
+        float s = Mathf.Abs(text.localScale.x);
         if (dir == 3)
-            text.localScale = new Vector3(-1, 1, 1);
+            text.localScale = new Vector3(-s, s, s);
         else
-            text.localScale = new Vector3(1, 1, 1);
+            text.localScale = new Vector3(s, s, s);
 
     }
 
@@ -74,8 +85,11 @@ public class InletDebimeterManager : BaseFrontier
         
 
         p0 = p[0];
-
-        f = Mathf.Clamp((ppset - q) / R, -imax, imax); ;
+        if(pset>0)
+            f = Mathf.Clamp((ppset - q) / R, 0, imax); 
+        else
+            f = Mathf.Clamp((ppset - q) / R, -imax, 0);
+        
         q += (i[0] + f) / C * dt;
 
         p[0] = q + i[0] * R;
@@ -91,6 +105,14 @@ public class InletDebimeterManager : BaseFrontier
     {
         GetComponent<Animator>().SetFloat("max", Mathf.Clamp(imax, 0, 0.99f));
         GetComponentInChildren<Text>().text = (Mathf.Round(20 * imax) / 20).ToString();
+
+        Transform cadran = transform.Find("CadranHolder");
+        if (pset > 0)
+            cadran.localScale = Vector3.one;
+        else
+            cadran.localScale = new Vector3(-1,1,1);
+
+        Rotate();
     }
 
     protected override void Start()
@@ -120,7 +142,10 @@ public class InletDebimeterManager : BaseFrontier
 
         bubble.GetComponent<Animator>().SetFloat("speed", SpeedAnim());
 
-        GetComponent<Animator>().SetFloat("rate", Mathf.Clamp(f, 0, 0.999f));
+        if(pset>0)
+            GetComponent<Animator>().SetFloat("rate", Mathf.Clamp(f, 0, 0.999f));
+        else
+            GetComponent<Animator>().SetFloat("rate", Mathf.Clamp(-f, 0, 0.999f));
         
 
 

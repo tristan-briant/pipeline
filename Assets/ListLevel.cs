@@ -32,7 +32,6 @@ public class ListLevel : MonoBehaviour
     }
 
     [ContextMenu("Load List")]
-
     public void Load()
     {
         StreamReader reader= new StreamReader("Assets/Resources/Levels/LevelList.txt");
