@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class DebitmeterManager : BaseComponent
 {
 
-    GameObject water, water0, water2, bubble, cadranMin, cadranMax, arrow, shine, value;
+    GameObject water, water0, water2, bubble, cadranMin, cadranMax, arrow, shine;
     float successTime = 2.0f; //Time to obtain a success
+    ValueManager valueM;
 
     public float iMax;
     public float setPointHigh;
@@ -71,26 +72,29 @@ public class DebitmeterManager : BaseComponent
             transform.Find("Convention2").GetComponent<Image>().color = Color.white;
         }
 
-        cadranMin = transform.Find("Cadran Min").gameObject;
-        cadranMax = transform.Find("Cadran Max").gameObject;
+        cadranMin = transform.Find("Cadran/Cadran Min").gameObject;
+        cadranMax = transform.Find("Cadran/Cadran Max").gameObject;
 
         cadranMax.GetComponent<Image>().fillAmount = 0.5f - angleH * 0.32f;
         cadranMin.GetComponent<Image>().fillAmount = 0.5f - angleL * 0.32f;
 
-        if (isSuccess)
+        valueM = GetComponentInChildren<ValueManager>();
+        valueM.ReDraw(Mathf.Round(100 * 0.5f * (setPointHigh + SetPointLow)) / 100);
+
+        /*if (isSuccess)
         {
             transform.Find("Value/SetPoint").gameObject.SetActive(true);
             transform.Find("Value/Dash").gameObject.SetActive(true);
             float setPoint = Mathf.Round(100 * 0.5f * (setPointHigh + SetPointLow)) / 100;
             transform.Find("Value/SetPoint").GetComponent<Text>().text = setPoint.ToString();
-            transform.Find("SuccessValue").gameObject.SetActive(true);
+            //transform.Find("SuccessValue").gameObject.SetActive(true);
         }
         else
         {
             transform.Find("Value/SetPoint").gameObject.SetActive(false);
             transform.Find("Value/Dash").gameObject.SetActive(false);
-            transform.Find("SuccessValue").gameObject.SetActive(false);
-        }
+            //transform.Find("SuccessValue").gameObject.SetActive(false);
+        }*/
     }
 
     protected override void Start()
@@ -104,9 +108,9 @@ public class DebitmeterManager : BaseComponent
         bubble = transform.Find("Bubble").gameObject;
 
 
-        arrow = transform.Find("Arrow").gameObject;
+        arrow = transform.Find("Cadran/Arrow").gameObject;
         shine = transform.Find("Shine").gameObject;
-        value = transform.Find("Value/Value").gameObject;
+        valueM = GetComponentInChildren<ValueManager>();
 
         f = 0;
         bubble.GetComponent<Animator>().SetFloat("speed", 0);
@@ -153,7 +157,7 @@ public class DebitmeterManager : BaseComponent
     {
         base.Rotate();
         transform.Find("Value").rotation = Quaternion.identity;
-        transform.Find("SuccessValue").rotation = Quaternion.identity;
+        //transform.Find("SuccessValue").rotation = Quaternion.identity;
      
     }
 
@@ -215,13 +219,9 @@ public class DebitmeterManager : BaseComponent
 
         arrow.transform.localEulerAngles = new Vector3(0, 0, angle);
 
-        float v;
-        if (Mathf.Abs(f) < 1)
-            v = Mathf.Round(100 * -f) / 100;
-        else
-            v = Mathf.Round(10 * -f) / 10;
+       
 
-        value.GetComponent<Text>().text = v.ToString();
+        valueM.value=-f;
 
         float alpha;
 

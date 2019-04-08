@@ -7,6 +7,7 @@ public class PressostatManager : BaseComponent {
 
 
     GameObject water, water2, bubble, cadranMin, cadranMax, arrow, shine, tubeH, tubeV, gauge, value;
+    ValueManager valueM;
 
     float successTime = 2.0f; //Time to obtain a success
     float t_shine = 0;
@@ -65,6 +66,7 @@ public class PressostatManager : BaseComponent {
 
         shine = transform.Find("Gauge/Shine").gameObject;
         value = transform.Find("Gauge/Arrow/Value/Value").gameObject;
+        valueM = GetComponentInChildren<ValueManager>();
 
         //animator = transform.Find("Gauge").GetComponent<Animator>();
         animator = GetComponent<Animator>();
@@ -90,25 +92,10 @@ public class PressostatManager : BaseComponent {
         cadranMax.GetComponent<Image>().fillAmount = rateH;
         cadranMin.GetComponent<Image>().fillAmount = rateL;
 
-        if (transform.Find("Gauge/Arrow/Value/SetPoint"))
-        {
-            if (isSuccess)
-            {
+        valueM = GetComponentInChildren<ValueManager>();
+        valueM.ReDraw(Mathf.Round(100 * 0.5f * (setPointHigh + SetPointLow)) / 100);
 
-                transform.Find("Gauge/Arrow/Value/SetPoint").gameObject.SetActive(true);
-                transform.Find("Gauge/Arrow/Value/Dash").gameObject.SetActive(true);
-                float setPoint = Mathf.Round(100 * 0.5f * (setPointHigh + SetPointLow)) / 100;
-                transform.Find("Gauge/Arrow/Value/SetPoint").GetComponent<Text>().text = setPoint.ToString();
-                //transform.Find("SuccessValue").gameObject.SetActive(true);
-            }
-            else
-            {
-                transform.Find("Gauge/Arrow/Value/SetPoint").gameObject.SetActive(false);
-                transform.Find("Gauge/Arrow/Value/Dash").gameObject.SetActive(false);
-                //transform.Find("SuccessValue").gameObject.SetActive(false);
-            }
-        }
-
+        
     }
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
@@ -170,7 +157,14 @@ public class PressostatManager : BaseComponent {
     private void Update()
     {
         UpdateSuccess();
-        animator.SetFloat("success",success);
+
+        if (success == 1)
+            animator.SetTrigger("win");
+        else
+        {
+            animator.ResetTrigger("win");
+            animator.SetFloat("success", success);
+        }
 
         water2.GetComponent<Image>().color = PressureColor(p2);
         water.GetComponent<Image>().color = PressureColor(p2);
@@ -180,8 +174,7 @@ public class PressostatManager : BaseComponent {
 
 
         float v = Mathf.Round(20 * q) / 20;
-        value.GetComponent<Text>().text = v.ToString();
-
+        valueM.value = v;
     }
 
 }
