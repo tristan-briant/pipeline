@@ -92,7 +92,18 @@ public class OuletManager : BaseFrontier
 
     public override void Rotate()
     {
-        
+        if (dir == 3)
+        {
+            transform.localScale = new Vector3(1, -1, 1);
+            transform.localRotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+        {
+            transform.localScale = Vector3.one;
+            transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
+        }
+
+
         Transform holder = transform.Find("ValueHolder");
         if (holder)
         {
@@ -141,7 +152,11 @@ public class OuletManager : BaseFrontier
         }
     }
 
- 
+    public override void Reset_i_p()
+    {
+        base.Reset_i_p();
+        pp = ppset = 0;
+    }
 
     private void Update()
     {

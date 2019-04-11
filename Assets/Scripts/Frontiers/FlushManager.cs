@@ -10,35 +10,29 @@ public class FlushManager : BaseFrontier {
     protected Animation Animation;
     //gameController gc; // le moteur du jeu à invoquer parfois
 
-    //public float timeOut = 4.0f;
-
-
 
     override public void Awake()
     {
         Animation = GetComponent<Animation>();
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
-        //Animation["WatchAnimation"].speed = 4 / timeOut;
     }
 
     public override void OnClick()
     {
 
-        Animation.Play("FlushAnimation");
-        gc.ResetComponant();
+        //Animation.Play("FlushAnimation");
+        GameObject.Find("GameController").GetComponent<GameController>().ResetComponent();
 
         audios[6].Play();
 
     }
 
-    // Use this for initialization
-    protected override void Start () {
-        gc = (GameController)GameObject.Find("gameController").GetComponent(typeof(GameController)); //find the game engine
 
+    public override void Rotate()
+    {
+        if (dir == 3)
+            transform.localScale = new Vector3(-1, 1, 1);
+        else
+            transform.localScale = Vector3.one;
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 }

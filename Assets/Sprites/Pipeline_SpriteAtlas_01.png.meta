@@ -982,9 +982,9 @@ TextureImporter:
       name: Pipeline_SpriteAtlas_01_41
       rect:
         serializedVersion: 2
-        x: 256
+        x: 321
         y: 512
-        width: 256
+        width: 128
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1002,10 +1002,10 @@ TextureImporter:
       name: Pipeline_SpriteAtlas_01_42
       rect:
         serializedVersion: 2
-        x: 512
-        y: 512
-        width: 256
-        height: 256
+        x: 610
+        y: 552
+        width: 64
+        height: 161
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1202,10 +1202,10 @@ TextureImporter:
       name: Pipeline_SpriteAtlas_01_52
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 256
-        width: 256
-        height: 256
+        x: 1116
+        y: 348
+        width: 72
+        height: 72
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1223,9 +1223,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1280
-        y: 256
+        y: 257
         width: 256
-        height: 256
+        height: 255
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1242,7 +1242,7 @@ TextureImporter:
       name: Pipeline_SpriteAtlas_01_54
       rect:
         serializedVersion: 2
-        x: 1536
+        x: 1538
         y: 256
         width: 256
         height: 256

@@ -47,8 +47,6 @@ public class Engine  {
         }
     }
 
-   
-
     public static void RotateCurrant(int dir, float[] pc, float[] ic)
     { // permutation circulaire des courrants  
         float i, p;

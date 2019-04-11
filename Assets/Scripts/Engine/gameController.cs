@@ -192,14 +192,11 @@ public class GameController : MonoBehaviour {
                 if (slot.transform.childCount > 1)
                 {
                     if (slot.transform.childCount != 2) Debug.Log("Populate error" + slot.transform.childCount);
-                    BaseComponent bc = (BaseComponent)slot.transform.GetChild(1).GetComponent(typeof(BaseComponent));
+                    BaseComponent bc = slot.transform.GetChild(1).GetComponent<BaseComponent>();
                     Vector3 v = bc.transform.localPosition;
                     v.z = 0;
                     bc.transform.localPosition = v;
-                    /*if (bc.mirror)
-                        bc.transform.localScale = new Vector3(-1, 1, 1);
-                    else*/
-                        bc.transform.localScale = new Vector3(1, 1, 1);
+                    bc.transform.localScale = new Vector3(1, 1, 1);
                     composants[i][j] = bc;
 
 
@@ -234,7 +231,7 @@ public class GameController : MonoBehaviour {
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
                 if (go.transform.childCount > 1)
-                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
+                    bc = go.transform.GetChild(1).GetComponent<BaseComponent>();
                 else
                 {
                     bc = Instantiate(videFrontier);
@@ -242,7 +239,8 @@ public class GameController : MonoBehaviour {
                     bc.transform.localScale = Vector3.one;
                     bc.transform.localPosition = Vector3.zero;
                 }
-                bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                //bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                bc.Rotate();
                 composants[i][j] = bc;
                 (bc as BaseFrontier).GetValueFromSlot();
             }
@@ -253,15 +251,14 @@ public class GameController : MonoBehaviour {
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
                 if (go.transform.childCount > 1)
-                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
+                    bc = go.transform.GetChild(1).GetComponent<BaseComponent>();
                 else
                 {
-                    bc = Instantiate(videFrontier);
-                    bc.transform.SetParent(go.transform);
+                    bc = Instantiate(videFrontier, go.transform);
                     bc.transform.localScale = Vector3.one;
                     bc.transform.localPosition = Vector3.zero;
                 }
-                bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                bc.Rotate(); //bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
                 (bc as BaseFrontier).GetValueFromSlot();
             }
@@ -272,7 +269,7 @@ public class GameController : MonoBehaviour {
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
                 if (go.transform.childCount > 1)
-                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
+                    bc = go.transform.GetChild(1).GetComponent<BaseComponent>();
                 else
                 {
                     bc = Instantiate(videFrontier);
@@ -280,7 +277,7 @@ public class GameController : MonoBehaviour {
                     bc.transform.localScale = Vector3.one;
                     bc.transform.localPosition = Vector3.zero;
                 }
-                bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                bc.Rotate(); //bc.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 composants[i][j] = bc;
                 (bc as BaseFrontier).GetValueFromSlot();
             }
@@ -291,7 +288,7 @@ public class GameController : MonoBehaviour {
                 GameObject go = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc;
                 if (go.transform.childCount > 1)
-                    bc = (BaseComponent)go.transform.GetChild(1).GetComponent(typeof(BaseComponent));
+                    bc = go.transform.GetChild(1).GetComponent<BaseComponent>();
                 else
                 {
                     bc = Instantiate(videFrontier);
@@ -299,7 +296,7 @@ public class GameController : MonoBehaviour {
                     bc.transform.localScale = Vector3.one;
                     bc.transform.localPosition = Vector3.zero;
                 }
-                bc.transform.localRotation = Quaternion.Euler(0, 0, -0);
+                bc.Rotate(); //bc.transform.localRotation = Quaternion.Euler(0, 0, -0);
                 composants[i][j] = bc;
                 (bc as BaseFrontier).GetValueFromSlot();
             }
@@ -439,7 +436,7 @@ public class GameController : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
-    public void ResetComponant()
+    public void ResetComponent()
     {
         Engine.Reset_p_i(composants);
     }

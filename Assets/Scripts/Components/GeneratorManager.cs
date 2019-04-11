@@ -15,19 +15,19 @@ public class GeneratorManager :  BaseComponent {
     float t_shine = 0;
     //public new float f;
 
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
         //C = 5.0f; L = 10f;
-        float a = p[0], b = p[2];
+        float p0 = p[0], p2 = p[2];
 
-        q += (i[0] + i[2]) * alpha; //q*=0.99;
-        f += (p[0] - p[2]) / L * alpha;
+        q += (i[0] + i[2]) / C * dt; //q*=0.99;
+        f += (p[0] - p[2]) / L * dt;
 
-        p[0] = (q / C + (i[0] - f) * R);
-        p[2] = (q / C + (i[2] + f) * R);
+        p[0] = (q + (i[0] - f) * R);
+        p[2] = (q + (i[2] + f) * R);
 
-        i[0] = (f + (a - q / C) / R);
-        i[2] = (-f + (b - q / C) / R);
+        i[0] = (f + (p0 - q) / R);
+        i[2] = (-f + (p2 - q) / R);
 
         //i[1]=i[3]=0;
         i[1] = p[1] / Rground;
@@ -41,7 +41,7 @@ public class GeneratorManager :  BaseComponent {
         else
             velocity = Mathf.Clamp(velocity - 0.01f*f, 0, 3);
 
-        velocity -= damping * velocity * alpha;
+        velocity -= damping * velocity * dt;
 
         if (setPointLow < velocity && velocity < setPointHigh && itemBeingDragged == null)
             success = Mathf.Clamp(success + 0.002f, 0, 1);//5 seconds to win
@@ -53,20 +53,19 @@ public class GeneratorManager :  BaseComponent {
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        Calcule_i_p_blocked(p, i, dt, 1);
-        Calcule_i_p_blocked(p, i, dt, 3);
+        i[1] = i[3] = 0;
     }
 
 
     protected override void Start()
     {
         base.Start();
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
 
-        bubble = this.transform.Find("Bubble").gameObject;
-        shine = this.transform.Find("Shine").gameObject;
-        helice = this.transform.Find("Helice").gameObject;
+        bubble = transform.Find("Bubble").gameObject;
+        shine = transform.Find("Shine").gameObject;
+        helice = transform.Find("Helice").gameObject;
     }
 
 

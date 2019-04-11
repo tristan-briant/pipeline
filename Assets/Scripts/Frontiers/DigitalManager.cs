@@ -46,16 +46,47 @@ public class DigitalManager : BaseFrontier
     protected float periode = 8;  
     public float Periode { get => periode; set => periode = value; }
 
- 
+    public override void Rotate()
+    {
+        if (dir == 3)
+        {
+            transform.localScale = new Vector3(1, -1, 1);
+            transform.localRotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+        {
+            transform.localScale = Vector3.one;
+            transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
+        }
+
+        Transform holder = transform.Find("Panel");
+        if (dir == 3)
+            holder.localScale = new Vector3(-1, 1, 1);
+        else
+            holder.localScale = new Vector3(1, 1, 1);
+
+        if (dir == 0)
+        {
+            holder.localRotation = Quaternion.Euler(0,0,0);
+        }
+        else
+        {
+            holder.localRotation = Quaternion.Euler(0, 0,-90);
+        }
+
+    }
+
     float ppset;
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
+        const float epsilon = 0.02f;
+
         if (setPoint[Mathf.FloorToInt(4 * (Time.time / periode % 1))])
         {
-            ppset = 0.95f * ppset + 0.05f * (pset + 2 * R * f); // contreréaction pour atteindre pset en sortie
+            ppset = (1- epsilon) * ppset + epsilon * (pset + 2 * R * f); // contreréaction pour atteindre pset en sortie
         }
         else
-            ppset = 0.95f * ppset + 0.05f * ( 2 * R * f); // contreréaction pour atteindre pset en sortie
+            ppset = (1 - epsilon) * ppset + epsilon * ( 2 * R * f); // contreréaction pour atteindre pset en sortie
 
         p0 = p[0];
 
@@ -75,8 +106,8 @@ public class DigitalManager : BaseFrontier
     {
         for (int i = 0; i < 4; i++)
         {
-            transform.Find("Red" + (i + 1)).gameObject.SetActive(!setPoint[i]);
-            transform.Find("Green" + (i + 1)).gameObject.SetActive(setPoint[i]);
+            transform.Find("Panel/Red" + (i + 1)).gameObject.SetActive(!setPoint[i]);
+            transform.Find("Panel/Green" + (i + 1)).gameObject.SetActive(setPoint[i]);
         }
     }
 
@@ -116,8 +147,8 @@ public class DigitalManager : BaseFrontier
 
         for (int i = 0; i < 4; i++)
         {
-            red[i] = transform.Find("Red" + (i + 1)).gameObject;
-            green[i] = transform.Find("Green" + (i + 1)).gameObject;
+            red[i] = transform.Find("Panel/Red" + (i + 1)).gameObject;
+            green[i] = transform.Find("Panel/Green" + (i + 1)).gameObject;
         }
 
         value = transform.Find("Value").gameObject;

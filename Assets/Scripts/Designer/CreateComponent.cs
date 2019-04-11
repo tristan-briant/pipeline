@@ -114,6 +114,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         if (transform.childCount == 2)
         {
             transform.GetChild(1).GetComponent<BaseComponent>().Awake();
+            transform.GetChild(1).localScale = scale * Vector3.one;
         }
     }
 

@@ -27,25 +27,27 @@ public class SlotManager : MonoBehaviour , IDropHandler {
     { //set the Frontier slot
 
         //ChangeSlotImage();
+        Transform bg = transform.GetChild(0);
+
         dir = d;
         
         if (dir == 3)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
-            transform.localRotation = Quaternion.Euler(0, 0, -90f);
+            bg.localScale = new Vector3(-1, 1, 1);
+            bg.localRotation = Quaternion.Euler(0, 0, -90f);
         }
         else if (dir == 5)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
-            transform.localRotation = Quaternion.Euler(0, 0, 180f);
+            bg.localScale = new Vector3(-1, 1, 1);
+            bg.localRotation = Quaternion.Euler(0, 0, 180f);
         }
         else if (dir == 6)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
+            bg.localScale = new Vector3(-1, 1, 1);
+            bg.localRotation = Quaternion.Euler(0, 0, 0);
         }
         else
-            transform.localRotation = Quaternion.Euler(0, 0, 90f * dir); // C'est le slot qui tourne
+            bg.localRotation = Quaternion.Euler(0, 0, 90f * dir); // C'est le slot qui tourne
 
     }
 

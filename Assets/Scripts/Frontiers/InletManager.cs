@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,30 +70,31 @@ public class InletManager : BaseFrontier {
 
     public float Rin = 0; //resistance interne
 
-  
-    public override void Calcule_i_p(float[] p, float[] i, float alpha)
-    {
-       
-        float a = p[0];
 
-         switch (mode) {
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
+    {
+
+        float p0 = p[0];
+
+        switch (mode)
+        {
             case 0:  // Mode normal
                 ppset = pset;
                 break;
             case 1: //mode périodique
-                ppset = pset*Mathf.Sin(2*Mathf.PI*Time.time/periode);
+                ppset = pset * Mathf.Sin(2 * Mathf.PI * Time.time / periode);
                 break;
- 
+
         }
 
 
-        q += (i[0] + ii) * alpha;
-        f += (p[0] - pp) / L * alpha;
+        q += (i[0] + ii) / C * dt;
+        f += (p[0] - pp) / L * dt;
 
-        p[0] = (q / C + (i[0] - f) * R);
+        p[0] = (q + (i[0] - f) * R);
         //p[0] = ppset;
-        i[0] = (f + (a - q / C) / R);
-        ii = (-f + (pp - q / C) / R);
+        i[0] = (f + (p0 - q) / R);
+        ii = (-f + (pp - q) / R);
 
         if (-imax < ii && ii < imax)
         {
@@ -115,19 +115,17 @@ public class InletManager : BaseFrontier {
             pp = p[0];*/
         }
         //Rin = 0;
-        pp = ppset -ii * Rin;
- 
- 
+        pp = ppset - ii * Rin;
 
 
-        if(isSuccess)
+        if (isSuccess)
         {
-            if ( Mathf.Abs(f) > 0.1)
+            if (Mathf.Abs(f) > 0.1)
                 success = Mathf.Clamp(success + 0.005f, 0, 1);
             else
                 success = Mathf.Clamp(success - 0.05f, 0, 1);
         }
-        
+
     }
 
     public override void Calcule_i_p_blocked(float[] p, float[] i, float dt, int index)

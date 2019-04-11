@@ -78,7 +78,7 @@ public class PressostatManager : BaseComponent {
         base.Start();
 
         success = 0;
-        C = 0.05f;
+        C = 0.2f;
 
     }
 

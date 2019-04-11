@@ -353,18 +353,6 @@ public class Designer : MonoBehaviour
         slot.transform.SetParent(PlayGround.transform);
         slot.transform.localPosition = Vector3.zero;
         slot.transform.localScale = Vector3.one;
-        if (dir == 3)
-        {
-            slot.transform.localScale = new Vector3(1, -1, 1);
-            slot.transform.localRotation = Quaternion.Euler(0, 0, -90f);
-        }
-        else if (dir == 5)
-        {
-            slot.transform.localScale = new Vector3(-1, 1, 1);
-            slot.transform.localRotation = Quaternion.Euler(0, 0, 180f);
-        }
-        else
-            slot.transform.localRotation = Quaternion.Euler(0, 0, 90f * dir); // C'est le slot qui tourne
 
         GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
         component.transform.SetParent(slot.transform);
@@ -423,6 +411,7 @@ public class Designer : MonoBehaviour
             { //if corner or frontier
                 component.GetComponent<BaseFrontier>().InitializeSlot();
                 component.GetComponent<BaseComponent>().dir = dir;  //override frontier direction in case it is in the wrong way
+                component.GetComponent<BaseComponent>().Rotate();
             }
 
            

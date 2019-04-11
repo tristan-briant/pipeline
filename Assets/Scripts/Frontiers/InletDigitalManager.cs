@@ -46,7 +46,7 @@ public class InletDigitalManager : BaseFrontier
     public override void Calcule_i_p(float[] p, float[] i, float alpha)
     {
 
-        float a = p[0];
+        float p0 = p[0];
 
         switch (mode)
         {
@@ -64,13 +64,13 @@ public class InletDigitalManager : BaseFrontier
         }
 
         R = 1;
-        q += (i[0] + ii) * alpha;
-        f += (p[0] - pp) / L * alpha*0;
+        q += (i[0] + ii) / C * alpha;
+        f += (p[0] - pp) / L * alpha * 0;
 
         pp = ppset;
-        p[0] = (q / C + (i[0] - f) * R);
-        i[0] = (f + (a - q / C) / R);
-        ii = (-f + (pp - q / C) / R);
+        p[0] = (q + (i[0] - f) * R);
+        i[0] = (f + (p0 - q) / R);
+        ii = (-f + (pp - q) / R);
 
 
         if (isSuccess)

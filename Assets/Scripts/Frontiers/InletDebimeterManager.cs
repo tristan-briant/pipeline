@@ -52,6 +52,18 @@ public class InletDebimeterManager : BaseFrontier
 
     public override void Rotate()
     {
+        if (dir == 3)
+        {
+            transform.localScale = new Vector3(1, -1, 1);
+            transform.localRotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+        {
+            transform.localScale = Vector3.one;
+            transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
+        }
+
+
         Transform text = transform.Find("ValueHolder/Value");
 
         TextAnchor align =0;
@@ -95,6 +107,12 @@ public class InletDebimeterManager : BaseFrontier
         p[0] = q + i[0] * R;
         i[0] = (p0 - q) / R;
 
+    }
+
+    public override void Reset_i_p()
+    {
+        base.Reset_i_p();
+        ppset = 0;
     }
 
     public override void Constraint(float[] p, float[] i, float dt)

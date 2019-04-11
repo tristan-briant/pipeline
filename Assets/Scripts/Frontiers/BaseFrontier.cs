@@ -14,6 +14,8 @@ public class BaseFrontier : BaseComponent {
 
     public override void Rotate()
     {
+        dir = GetComponentInParent<SlotManager>().dir;
+        transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
     }
 
     public void GetValueFromSlot()

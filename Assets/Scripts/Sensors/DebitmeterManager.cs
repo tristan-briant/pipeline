@@ -220,7 +220,7 @@ public class DebitmeterManager : BaseComponent
         arrow.transform.localEulerAngles = new Vector3(0, 0, angle);
 
        
-
+        
         valueM.value=-f;
 
         float alpha;

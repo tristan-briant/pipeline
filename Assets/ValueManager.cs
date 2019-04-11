@@ -63,7 +63,9 @@ public class ValueManager : MonoBehaviour
             animator.SetFloat("value", score);
         }
 
-        val = 0.9f * val + 0.1f * value;
+        if (!float.IsNaN(value))
+            val = 0.9f * val + 0.1f * value;
+
         float v;
         if (Mathf.Abs(val) < 1)
             v = Mathf.Round(100 * val) / 100;
