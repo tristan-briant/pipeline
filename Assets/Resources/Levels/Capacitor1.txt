@@ -32,11 +32,11 @@ Frontiers/Inlet
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Components/Capacitor
-{"PrefabPath":"Components/Capacitor","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"cin":99.99999237060547}
+{"PrefabPath":"Components/Capacitor","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false,"cin":199.99993896484376}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":false,"trigged":false}
 Frontiers/Ground
-{"PrefabPath":"Frontiers/Ground","dir":3,"destroyable":true,"isSuccess":true,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":1,"pset":0.0,"imax":10.0,"jelly":false,"periodic":false,"periode":2.0}
+{"PrefabPath":"Frontiers/Ground","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":1,"pset":0.0,"imax":10.0,"jelly":false,"periodic":false,"periode":2.0}
 Frontiers/Wall
 {"PrefabPath":"Frontiers/Wall","dir":1,"destroyable":true,"isSuccess":false,"locked":true,"dir_locked":false,"mirror":false,"isFrontiers":true,"trigged":false,"type":2}
 Components/Empty

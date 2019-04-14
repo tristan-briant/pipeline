@@ -50,6 +50,7 @@ public class DebitmeterManager : BaseComponent
 
     public override void Awake()
     {
+
         DrawCadran();
         //ChangeParent(transform.parent);
     }

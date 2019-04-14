@@ -23,10 +23,11 @@ public class ValveManager : BaseComponent {
     {
         p0 = p[0];
         p2 = p[2];
-        
+
         //q0 += i[0] * dt;
         //q2 += i[2] * dt;
 
+        q += (i[0] + i[2]) / C * dt;
         q0 += (i[0] - f) / C * dt;
         q2 += (i[2] + f) / C * dt;
         f += (p[0] - p[2]) / L * dt;
@@ -36,11 +37,11 @@ public class ValveManager : BaseComponent {
         else
             f = 0;
 
-        p[0] = (q0 / C + (i[0] - f) * R);
-        p[2] = (q2 / C + (i[2] + f) * R);
+        p[0] = (q0 + q + (i[0] - f) * R);
+        p[2] = (q2 + q + (i[2] + f) * R);
 
-        i[0] = (f + (p0 - q0) / R);
-        i[2] = (-f + (p2 - q2) / R);
+        i[0] = (f + (p0 - q - q0) / R);
+        i[2] = (-f + (p2 - q - q2) / R);
 
     }
 
