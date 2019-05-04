@@ -42,11 +42,11 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     virtual public bool IsSuccess { get => isSuccess; set => isSuccess = value; }
 
-    public bool dir_locked = false;
+    //public bool dir_locked = false;
     public bool mirror = false;
     public bool isFrontiers=false;
 
-    public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
+    //public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
     protected GameController gc; // le moteur du jeu à invoquer parfois
     protected AudioSource[] audios;
@@ -286,7 +286,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public virtual void OnClick()
     {
-        if (!dir_locked && !isFrontiers)
+        if (/*!dir_locked &&*/ !isFrontiers)
         {
             dir = (dir + 1) % 4;
 

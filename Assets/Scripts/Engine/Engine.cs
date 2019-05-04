@@ -12,7 +12,7 @@ public class Engine  {
     public const float dt = 0.05f; // 0.1f pour oneStep1
     public const float alpha = 0.1f; // 0.2f
     public const float repetitionTime = 0.01f;
-    public const int repetitionStep = 4;
+    public const int repetitionStep = 20;
     // number of step per second = repetionStep / repetitionTime
 
     //dt=0.1 alpha = 0.2 attention Resistor = 40 max !

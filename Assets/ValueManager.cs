@@ -8,6 +8,7 @@ public class ValueManager : MonoBehaviour
     public float value;
     float success;
     const float scoreSpeed = 1;
+    public bool drawSetPoint = true;
 
     float score = 0;
     BaseComponent component;
@@ -24,7 +25,7 @@ public class ValueManager : MonoBehaviour
     public void ReDraw(float setpoint = 0)
     {
         component = GetComponentInParent<BaseComponent>();
-        if (component.isSuccess)
+        if (component.isSuccess && drawSetPoint)
         {
             transform.Find("SetPoint").gameObject.SetActive(true);
             transform.Find("Dash").gameObject.SetActive(true);

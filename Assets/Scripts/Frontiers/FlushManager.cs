@@ -21,6 +21,7 @@ public class FlushManager : BaseFrontier {
     {
 
         //Animation.Play("FlushAnimation");
+        GetComponent<Animator>().SetTrigger("flush");
         GameObject.Find("GameController").GetComponent<GameController>().ResetComponent();
 
         audios[6].Play();

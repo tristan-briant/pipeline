@@ -23,30 +23,48 @@ public class PressostatTriggerManager : PressostatManager {
         base.Start();
         configPanel = Resources.Load("ConfigPanel/ConfigPressostatTrigger") as GameObject;
         IsSuccess = true;
+        C = 0.1f;
     }
 
     void CalculateSetPoints(float time)
     {
-        setPointHigh = pMax * (time / raiseTime + tolerance);
-        setPointLow = pMax * (time / raiseTime - tolerance);
+        if (time >= 0)
+        {
+            setPointHigh = pMax * (time / raiseTime + tolerance);
+            setPointLow = pMax * (time / raiseTime - tolerance);
+        }
+        else
+        {
+            setPointHigh = -1;
+            setPointLow = 0;
+        }
         DrawCadran();
     }
 
+    public override void Reset_i_p()
+    {
+        TriggerEnd();
+        Debug.Log("Reset");
+        base.Reset_i_p();
+    }
 
+    IEnumerator coroutine;
     public void TriggerStart()
     {
+        coroutine = CountDown();
         Debug.Log("message reçu");
-        StartCoroutine(countDown());
+        StartCoroutine(coroutine);
         rising = true;
     }
 
     public void TriggerEnd()
     {
-        StopCoroutine(countDown());
+        StopCoroutine(coroutine);
+        CalculateSetPoints(-1);
         rising = false;
     }
 
-    IEnumerator countDown() {
+    IEnumerator CountDown() {
         float time = 0;
 
         while (true)
@@ -57,79 +75,26 @@ public class PressostatTriggerManager : PressostatManager {
         }
         
     }
-
-   
-
+    
     override public void UpdateSuccess()
     {
         if (!rising || itemBeingDragged!=null)
             success = 0;
         else if (setPointLow < q && q < setPointHigh)
             success = Mathf.Clamp01(success + Time.deltaTime / RaiseTime * 1.1f);
-
-
     }
 
-    /*private void Update()
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        if (trigged)
-        {
-            trigged = false;
-            activated = true;
-            StartCoroutine(countDown());
-        }
-
-        if (activated)
-        {
-            time += Time.deltaTime;
-        }
-        else
-        {
-            time = 0;
-        }
-
-
-        water2.GetComponent<Image>().color = PressureColor(pin[2]);
-
-        if (activated)
-            cadran2.GetComponent<Image>().color = new Color(0,255,0);
-        else
-            cadran2.GetComponent<Image>().color = new Color(255, 255, 255);
-
-
-        float rate = Mathf.Clamp((q - PMin) / (PMax - PMin), 0, 1);
-
        
-        Vector3 pos = new Vector3(0, rate * 100f, 0);
-        arrow.transform.localPosition = arrowStartPosition + pos;
+        p2 = p[2];
 
-        pos = new Vector3(0, risingCurve(time) * 100f, 0);
+        q += i[2] / C * dt;
+        //q *= 0.995f;
 
-        cadran.transform.localPosition = cadranStartPosition+ pos;
-        cadran2.transform.localPosition = cadranStartPosition+  pos;
+        p[2] = q + i[2] * R;
+        i[2] = (p2 - q) / R;
+    }
 
-        water.GetComponent<Image>().fillAmount = (1 - 0.9f * rate);
-
-        float alpha;
-
-        if (success < 1)
-        {
-            alpha = success;
-            t_shine = 0;
-        }
-        else
-        {
-            t_shine += Time.deltaTime;
-            alpha = 0.8f + 0.2f * Mathf.Cos(t_shine * 5.0f);
-
-        }
-
-        shine.GetComponent<Image>().color = new Color(1, 1, 1, alpha);
-        
-    }*/
-
-    /*float risingCurve(float t) {
-        return setPoint*(1 - Mathf.Exp ( -t / Tau) );
-    }*/
-
+ 
 }

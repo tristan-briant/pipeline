@@ -17,23 +17,25 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
     {
         if (transform.childCount == 2)
         {
-            transform.GetChild(1).GetComponent<BaseComponent>().Awake();
+            //transform.GetChild(1).GetComponent<BaseComponent>().Awake();
             transform.GetChild(1).GetComponent<BaseComponent>().enabled = false;
             transform.GetChild(1).GetComponent<BaseComponent>().ChangeParent(transform,false);
-            transform.GetChild(1).localPosition = Vector3.zero;
-            transform.GetChild(1).localScale = scale * Vector3.one;
+            if (transform.parent.name == "Deck")
+            {
+                transform.GetChild(1).localPosition = Vector3.zero;
+                transform.GetChild(1).localScale = scale * Vector3.one;
+            }
         }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (transform.childCount == 1)
+        if (transform.childCount == 1)  // Slot empty
         {
             eventData.pointerDrag = null;
             return;
         }
-
-
+        
 
         if (designermode)
         { // To allow reodering or removing
@@ -50,7 +52,6 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
 
         NewComponent.transform.localPosition = Vector3.zero;
         NewComponent.transform.localScale = Vector3.one * 1.2f;
-        //NewComponent.GetComponent<BaseComponent>().dir = 0;
         NewComponent.GetComponent<BaseComponent>().destroyable = true;
         NewComponent.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
@@ -114,7 +115,7 @@ public class CreateComponent : MonoBehaviour, IBeginDragHandler , IDragHandler ,
         if (transform.childCount == 2)
         {
             transform.GetChild(1).GetComponent<BaseComponent>().Awake();
-            transform.GetChild(1).localScale = scale * Vector3.one;
+            //transform.GetChild(1).localScale = scale * Vector3.one;
         }
     }
 

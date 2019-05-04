@@ -13,7 +13,7 @@ public class capacitorManager : BaseComponent {
     private float rin = 0.025f;
 
     float q0, q2;
-    float xp;
+    //float xp;
 
     public float Cin { get => cin / Engine.TimeFactor(); set { cin = value * Engine.TimeFactor(); UpdateValue(); } }
     public float Rin { get => rin; set => rin = value; }
@@ -23,6 +23,7 @@ public class capacitorManager : BaseComponent {
         configPanel = Resources.Load("ConfigPanel/ConfigCapacity") as GameObject;
         GetComponent<Animator>().SetFloat("position", 0.5f);
         UpdateValue();
+        //Debug.Log("factor = " +  Engine.TimeFactor());
     }
 
 
@@ -33,17 +34,18 @@ public class capacitorManager : BaseComponent {
         waterIn2 = transform.Find("Tank/Water-in2").gameObject;
         water0 = transform.Find("Water0").gameObject;
         water2 = transform.Find("Water2").gameObject;
-        spring1 = transform.Find("Tank/Spring1").gameObject;
+        /*spring1 = transform.Find("Tank/Spring1").gameObject;
         spring2 = transform.Find("Tank/Spring2").gameObject;
         spring3 = transform.Find("Tank/Spring3").gameObject;
         spring4 = transform.Find("Tank/Spring4").gameObject;
-        piston = transform.Find("Tank/Piston").gameObject;
+        piston = transform.Find("Tank/Piston").gameObject;*/
         bubble0 = transform.Find("Tank/Mirror/Bubble0").gameObject;
         bubble2 = transform.Find("Tank/Bubble2").gameObject;
         bubble0.GetComponent<Animator>().SetFloat("speed", 0);
         bubble2.GetComponent<Animator>().SetFloat("speed", 0);
 
         UpdateValue();
+        C = 0.5f;
     }
 
 
@@ -83,8 +85,6 @@ public class capacitorManager : BaseComponent {
         i[1] = i[3] = 0;
     }
 
-   
-
     float Sature(float x) {
         if (x > 0)
             return x / (1 + x);
@@ -96,17 +96,15 @@ public class capacitorManager : BaseComponent {
     {
         base.Rotate();
         transform.Find("Value").rotation = Quaternion.identity;
-        //transform.Find("Value").localRotation = Quaternion.Euler(0, 0, -90 * dir);
-
     }
 
 
     public void UpdateValue() {
 
-        float size = Sature(0.5f * Cin);
-        GetComponent<Animator>().SetFloat("size",size);
+        float size = Sature(0.25f * Cin);
+        GetComponent<Animator>().SetFloat("size", size);
 
-        GetComponentInChildren<Text>().text = (Mathf.Round(10 * Cin) / 10 ).ToString();
+        GetComponentInChildren<Text>().text =  (Mathf.Round(10 * Cin) / 10 ).ToString();
         
     }
 
@@ -116,16 +114,6 @@ public class capacitorManager : BaseComponent {
         waterIn2.GetComponent<Image>().color = PressureColor(q2 + q);
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
-
-        //float xMax = 32f;
-        //xp = xMax * Mathf.Atan((q2 - q0) * xMax * 0.1f) / 1.5f;
-        /*piston.transform.localPosition = new Vector3(xp, 0, 0);
-
-        waterIn2.GetComponent<Image>().fillAmount = 0.6f + 0.4f * xp / xMax;
-        spring1.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
-        spring2.transform.localScale = new Vector3(1 + xp / xMax, 1 - xp / xMax * 0.4f, 1);
-        spring3.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);
-        spring4.transform.localScale = new Vector3(1 - xp / xMax, 1 + xp / xMax * 0.4f, 1);*/
 
         GetComponent<Animator>().SetFloat("position", 0.5f*(1 + Sature((q2-q0)*2)));
 

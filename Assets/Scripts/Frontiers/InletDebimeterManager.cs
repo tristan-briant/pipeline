@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class InletDebimeterManager : BaseFrontier
 {
 
-    public float pset = 1;
+    public float pset = 10;
     public float Pset
     {
         get
@@ -31,7 +31,23 @@ public class InletDebimeterManager : BaseFrontier
 
         set
         {
-            imax = value;
+            imax = Mathf.Clamp(value,0,imaxcadran);
+            UpdateValue();
+        }
+    }
+
+    public float imaxcadran = 1f;
+    public float Imaxcadran
+    {
+        get
+        {
+            return imaxcadran;
+        }
+
+        set
+        {
+            imaxcadran = value;
+            if (imax > imaxcadran) imax = imaxcadran;
             UpdateValue();
         }
     }
@@ -40,7 +56,7 @@ public class InletDebimeterManager : BaseFrontier
     GameObject water =null, water0=null, arrow=null, bubble=null, value, timer;
     GameObject[] red = new GameObject[4];
     GameObject[] green = new GameObject[4];
-
+    protected bool open=true;
 
 
     public override void Awake()
@@ -92,9 +108,14 @@ public class InletDebimeterManager : BaseFrontier
     float ppset;
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
+        R = 0.5f;
+        C = 0.1f;
+        const float delta = 0.01f;
 
-        ppset = 0.95f * ppset + 0.05f * (pset + 2 * R * f);
-        
+        if (open)
+            ppset = (1 - delta) * ppset + delta * (pset + 2 * R * f);
+        else
+            ppset = (1 - delta) * ppset;
 
         p0 = p[0];
         if(pset>0)
@@ -121,7 +142,7 @@ public class InletDebimeterManager : BaseFrontier
 
     public void UpdateValue()
     {
-        GetComponent<Animator>().SetFloat("max", Mathf.Clamp(imax, 0, 0.99f));
+        GetComponent<Animator>().SetFloat("max", Mathf.Clamp(imax/imaxcadran, 0, 0.99f));
         GetComponentInChildren<Text>().text = (Mathf.Round(20 * imax) / 20).ToString();
 
         Transform cadran = transform.Find("CadranHolder");
@@ -130,7 +151,7 @@ public class InletDebimeterManager : BaseFrontier
         else
             cadran.localScale = new Vector3(-1,1,1);
 
-        Rotate();
+        //Rotate();
     }
 
     protected override void Start()
@@ -161,9 +182,9 @@ public class InletDebimeterManager : BaseFrontier
         bubble.GetComponent<Animator>().SetFloat("speed", SpeedAnim());
 
         if(pset>0)
-            GetComponent<Animator>().SetFloat("rate", Mathf.Clamp(f, 0, 0.999f));
+            GetComponent<Animator>().SetFloat("rate", Mathf.Clamp(f / imaxcadran, 0, 0.999f));
         else
-            GetComponent<Animator>().SetFloat("rate", Mathf.Clamp(-f, 0, 0.999f));
+            GetComponent<Animator>().SetFloat("rate", Mathf.Clamp(-f / imaxcadran, 0, 0.999f));
         
 
 

@@ -34,7 +34,6 @@ public class OuletManager : BaseFrontier
         }
     }
 
- 
 
     GameObject water=null, water0=null, arrow=null, bubble=null, moulin;
     public bool jelly = false;

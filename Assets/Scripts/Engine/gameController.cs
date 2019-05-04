@@ -193,6 +193,7 @@ public class GameController : MonoBehaviour {
                 {
                     if (slot.transform.childCount != 2) Debug.Log("Populate error" + slot.transform.childCount);
                     BaseComponent bc = slot.transform.GetChild(1).GetComponent<BaseComponent>();
+                    bc.enabled=true; //sometime usefull if exchange from the deck
                     Vector3 v = bc.transform.localPosition;
                     v.z = 0;
                     bc.transform.localPosition = v;

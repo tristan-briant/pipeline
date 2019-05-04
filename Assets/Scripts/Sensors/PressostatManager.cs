@@ -94,8 +94,7 @@ public class PressostatManager : BaseComponent {
 
         valueM = GetComponentInChildren<ValueManager>();
         valueM.ReDraw(Mathf.Round(100 * 0.5f * (setPointHigh + SetPointLow)) / 100);
-
-        
+ 
     }
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
@@ -103,7 +102,7 @@ public class PressostatManager : BaseComponent {
         p2 = p[2];
         
         q += i[2] / C * dt;
-        q *= 0.99f;
+        q *= 0.995f;
 
         p[2] = q + i[2] * R;
         i[2] = (p2 - q) / R;
@@ -173,7 +172,7 @@ public class PressostatManager : BaseComponent {
         animator.SetFloat("rate", rate);
 
 
-        float v = Mathf.Round(20 * q) / 20;
+        float v = Mathf.Round(100 * q) / 100;
         valueM.value = v;
     }
 

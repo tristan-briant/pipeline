@@ -265,14 +265,14 @@ public class TransistorManager : BaseComponent
 
         /* C = 0.3f;
          R = 0.1f;*/
-        if (mirror) {
+        /*if (mirror) {
             float e = p[0];
             p[0] = p[2];
             p[2] = e;
             e = i[0];
             i[0] = i[2];
             i[2] = e;
-        }
+        }*/
 
        
 
@@ -394,6 +394,7 @@ public class TransistorManager : BaseComponent
                 child.localScale = new Vector3(-1, 1, 1);
 
     }
+
     public override void OnClick()
     {
        
