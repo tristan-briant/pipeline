@@ -40,6 +40,7 @@ public class WatchManager : BaseComponent {
      
         GetComponent<Animator>().SetTrigger("Start");
         GetComponent<Animator>().ResetTrigger("Reset");
+        GetComponent<Animator>().ResetTrigger("Stop");
 
         GetComponent<Animator>().SetFloat("speed", 1 / timeOut);
 
@@ -65,7 +66,7 @@ public class WatchManager : BaseComponent {
     {
         GameObject.Find("Playground").BroadcastMessage("TriggerEnd", SendMessageOptions.DontRequireReceiver);
         GameObject.Find("CanvasDragged").BroadcastMessage("TriggerEnd", SendMessageOptions.DontRequireReceiver);
-        //GetComponent<Animator>().SetTrigger("Reset");
+        GetComponent<Animator>().SetTrigger("Stop");
         CancelInvoke("DecreaseTime");
         running = false;
     }

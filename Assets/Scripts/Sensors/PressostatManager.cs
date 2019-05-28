@@ -172,7 +172,7 @@ public class PressostatManager : BaseComponent {
         animator.SetFloat("rate", rate);
 
 
-        float v = Mathf.Round(100 * q) / 100;
+        float v = Mathf.Round(20 * q) / 20;
         valueM.value = v;
     }
 

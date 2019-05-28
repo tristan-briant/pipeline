@@ -7,9 +7,9 @@ public class GeneratorManager :  BaseComponent {
 
     GameObject water0, water2, shine, helice;
     float velocity = 0;
-    public float setPointLow=0.1f;
-    public float timeSuccess = 5f;
-    public float TimeSuccess { get => timeSuccess; set => timeSuccess = Mathf.Clamp(value, 0.5f, 30f); }
+    float setPointLow=0.001f;
+    public float chargeSuccess = 5f;
+    public float ChargeSuccess { get => chargeSuccess; set => chargeSuccess = Mathf.Clamp(value, 0.5f, 30f); }
 
     float t_shine = 0;
 
@@ -39,17 +39,19 @@ public class GeneratorManager :  BaseComponent {
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        float p0 = p[0], p2 = p[2];
+        const float Res = 0.5f;
 
-        q += (i[0] + i[2]) / C * dt; 
-        f += (p[0] - p[2]) / L * dt;
+        p0 = p[0];
+        p2 = p[2];
 
-        p[0] = (q + (i[0] - f) * R);
-        p[2] = (q + (i[2] + f) * R);
+        q += (i[0] + i[2]) / C * dt;
+        f = (i[0] - i[2]) / 2;
 
-        i[0] = (f + (p0 - q) / R);
-        i[2] = (-f + (p2 - q) / R);
+        p[0] = (q + i[0] * Res * 0.5f);
+        p[2] = (q + i[2] * Res * 0.5f);
 
+        i[0] = (p0 - q) / Res * 2;
+        i[2] = (p2 - q) / Res * 2;
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
@@ -68,7 +70,7 @@ public class GeneratorManager :  BaseComponent {
         water0.GetComponent<Image>().color = PressureColor(pin[0]);
         water2.GetComponent<Image>().color = PressureColor(pin[2]);
 
-        angle += 3.14f * velocity*3;
+        angle += 3.14f * velocity * 3;
         helice.transform.localEulerAngles = new Vector3(0, 0, angle);
 
 
@@ -76,9 +78,11 @@ public class GeneratorManager :  BaseComponent {
         velocity = (1 - delta) * velocity + delta * (f < 0 ? -f : 0);
 
         if (setPointLow < velocity && itemBeingDragged == null)
-            success = Mathf.Clamp01(success + Time.deltaTime/timeSuccess);
+            success = Mathf.Clamp01(success - f * Time.deltaTime / chargeSuccess);
         else
-            success = Mathf.Clamp(success - 2 * Time.deltaTime / timeSuccess, 0, 1);
+            success = Mathf.Clamp01(success + (-1 + f) * Time.deltaTime);
+            
+        //success -= f * Time.deltaTime / chargeSuccess;
 
         bubbleAnimator.GetComponent<Animator>().SetFloat("speed", -SpeedAnim());
 
@@ -92,7 +96,7 @@ public class GeneratorManager :  BaseComponent {
         }
         else
         {
-            t_shine += Time.deltaTime/timeSuccess;
+            t_shine += Time.deltaTime/chargeSuccess;
             alpha = 0.8f + 0.2f * Mathf.Cos(t_shine * 5.0f);
 
         }

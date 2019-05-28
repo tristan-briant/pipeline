@@ -9,8 +9,8 @@ public class Engine  {
     static float[][] Dintensite; //ordonnée paire = courants verticaux
     static float[][] Dpression;
 
-    public const float dt = 0.05f; // 0.1f pour oneStep1
-    public const float alpha = 0.1f; // 0.2f
+    public const float dt = 0.025f; // 0.1f pour oneStep1
+    public const float alpha = 0.1f; //0.1// 0.2f
     public const float repetitionTime = 0.01f;
     public const int repetitionStep = 20;
     // number of step per second = repetionStep / repetitionTime

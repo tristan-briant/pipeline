@@ -47,8 +47,6 @@ public class ResistorManager : BaseComponent {
         i[0] = (p0 - q) / Res * 2;
         i[2] = (p2 - q) / Res * 2;
 
-        //x_bulle -= 0.05f * f;
-
     }
 
     override public void Awake()
@@ -69,9 +67,6 @@ public class ResistorManager : BaseComponent {
     protected void UpdateValue()
     {
         GetComponentInChildren<Text>().text = res.ToString();
-
-        //Sprite[] sprites = Resources.LoadAll<Sprite>("Field/BorderAtlas");
-
 
         if (res > 3.0f)
         {
