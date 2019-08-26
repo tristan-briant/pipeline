@@ -42,13 +42,10 @@ public class LevelManager : MonoBehaviour {
         {
             DontDestroyOnLoad(gameObject);
             instance = this;
-            //LoadPlaygroundList();
-            //levelMax = playgroundName.Count;
-        }
+         }
         else
         {
             DestroyImmediate(gameObject);
-            //Destroy(gameObject);
         }
     }
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class capacitorManager : BaseComponent {
 
     GameObject waterIn0, waterIn2, water0, water2, bubble0, bubble2;
-    GameObject spring1, spring2, spring3, spring4, piston;
+    //GameObject spring1, spring2, spring3, spring4, piston;
 
     float f0, f2;
     public float cin;
@@ -34,11 +34,6 @@ public class capacitorManager : BaseComponent {
         waterIn2 = transform.Find("Tank/Water-in2").gameObject;
         water0 = transform.Find("Water0").gameObject;
         water2 = transform.Find("Water2").gameObject;
-        /*spring1 = transform.Find("Tank/Spring1").gameObject;
-        spring2 = transform.Find("Tank/Spring2").gameObject;
-        spring3 = transform.Find("Tank/Spring3").gameObject;
-        spring4 = transform.Find("Tank/Spring4").gameObject;
-        piston = transform.Find("Tank/Piston").gameObject;*/
         bubble0 = transform.Find("Tank/Mirror/Bubble0").gameObject;
         bubble2 = transform.Find("Tank/Bubble2").gameObject;
         bubble0.GetComponent<Animator>().SetFloat("speed", 0);
@@ -115,7 +110,8 @@ public class capacitorManager : BaseComponent {
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
 
-        GetComponent<Animator>().SetFloat("position", 0.5f*(1 + Sature((q2-q0)*2)));
+        const float Coeff= 0.6f;
+        GetComponent<Animator>().SetFloat("position", 0.5f * (1 + Sature((q2-q0) * Coeff)));
 
 
         bubble0.GetComponent<Animator>().SetFloat("speed", SpeedAnim(f0));

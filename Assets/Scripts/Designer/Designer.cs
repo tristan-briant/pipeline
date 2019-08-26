@@ -117,8 +117,13 @@ public class Designer : MonoBehaviour
 
     static public void LoadFromPrefs()
     {
-        if (PlayerPrefs.HasKey("SandBox")){
+        if (PlayerPrefs.HasKey("SandBox"))
+        {
             PGdata = PlayerPrefs.GetString("SandBox");
+            LoadFromString();
+        }
+        else {
+            PGdata = Resources.Load<TextAsset>("Levels/Default-Designer").ToString();
             LoadFromString();
         }
     }
