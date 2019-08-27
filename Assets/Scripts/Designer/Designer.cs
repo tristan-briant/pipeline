@@ -277,7 +277,7 @@ public class Designer : MonoBehaviour
                 GameObject component = Instantiate(Resources.Load(prefab)) as GameObject; //Instantiate(Resources.Load(prefab, typeof(GameObject))) as GameObject;
                 //component.transform.SetParent(slotDeck.transform);
                 component.GetComponent<BaseComponent>().ChangeParent(slotDeck.transform);
- 
+
                 JsonUtility.FromJsonOverwrite(tokens[k++], slotDeck.transform.GetComponentInChildren<BaseComponent>());
                 slotDeck.GetComponent<CreateComponent>().Start();
 
@@ -782,8 +782,7 @@ public class Designer : MonoBehaviour
         GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Transform deck = gc.Deck.transform;
 
-        deck.GetComponent<DeckManager>().DrawDeck();
-
+ 
         if (playMode)
         { //Go in playMode
             SaveToString();
@@ -803,10 +802,13 @@ public class Designer : MonoBehaviour
             //deck.parent.gameObject.SetActive(false);
         }
 
+        deck.GetComponent<DeckManager>().DrawDeck();
+
+
     }
 
 
 
 
-   
+
 }

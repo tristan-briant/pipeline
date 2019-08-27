@@ -41,7 +41,7 @@ public class optionManager : MonoBehaviour {
     bool firstTime = true;
 
     public void SetVolume() {
-        Debug.Log("bip");
+        //Debug.Log("bip");
         float vol = GameObject.Find("SliderVolume").GetComponent<Slider>().normalizedValue;
         PlayerPrefs.SetFloat("Volume", vol);
         LVM.Volume = vol;

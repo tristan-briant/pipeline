@@ -133,6 +133,8 @@ public class DigitalManager : BaseFrontier
     protected override void Start()
     {
         base.Start();
+        tubeEnd[0] = true;
+
         if (transform.Find("Water"))
             water = transform.Find("Water").gameObject;
         if (transform.Find("Water0"))

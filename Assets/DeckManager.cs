@@ -22,6 +22,13 @@ public class DeckManager : MonoBehaviour
             {
                 slot.gameObject.SetActive(true);
                 slot.GetComponent<CreateComponent>().designermode = true;
+
+                if (slot.childCount > 1)
+                {
+                    slot.GetChild(1).GetComponent<BaseComponent>().enabled = false;
+                    slot.GetComponentInChildren<BaseComponent>().StartCoroutine("Awake");
+                }
+
             }
 
             transform.parent.parent.parent.GetComponent<Animator>().SetTrigger("HideImmediate");
@@ -39,6 +46,8 @@ public class DeckManager : MonoBehaviour
                 else
                 {
                     slot.gameObject.SetActive(true);
+                    slot.GetChild(1).GetComponent<BaseComponent>().enabled = false;
+                    slot.GetComponentInChildren<BaseComponent>().StartCoroutine("Awake");
                     slot.GetComponent<CreateComponent>().designermode = false;
                     count++;
                 }

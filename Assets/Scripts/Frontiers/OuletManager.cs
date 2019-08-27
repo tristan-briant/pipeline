@@ -44,12 +44,18 @@ public class OuletManager : BaseFrontier
     public float Periode { get => periode; set => periode = value; }
     public bool Periodic { get => periodic; set => periodic = value; }
 
+    public override void Awake()
+    {
+        tubeEnd[3] = true;
+    }
 
     override public bool IsSuccess { get => isSuccess; set { isSuccess = value; InitializeSuccess(); } }
 
     protected override void Start()
     {
         base.Start();
+       
+
         if (transform.Find("Water"))
             water = transform.Find("Water").gameObject;
         if (transform.Find("Water0"))

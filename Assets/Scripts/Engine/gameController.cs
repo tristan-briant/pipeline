@@ -149,9 +149,8 @@ public class GameController : MonoBehaviour {
                 BaseComponent bc = slot.GetComponentInChildren<BaseComponent>();
                 if (!bc.name.Contains("Wall"))
                 {
-                    Debug.Log(bc.name);
                     trivialEdge = false;
-                    //break;
+                    break;
                 }
             }
 
@@ -212,7 +211,6 @@ public class GameController : MonoBehaviour {
                     if (firstPopulate)
                     {
                         slot.GetComponentInChildren<Image>().sprite = sprites[((i + j) % 2) * 2 + (int)Random.Range(0, 1.999f)];
-                        //float c = 1.0f - Random.Range(0.0f, 0.3f);
                         slot.GetComponentInChildren<Image>().color = Color.white;
                     }
                     GameObject bc = Instantiate(Resources.Load("Components/Empty", typeof(GameObject))) as GameObject;
@@ -255,7 +253,8 @@ public class GameController : MonoBehaviour {
                     bc = go.transform.GetChild(1).GetComponent<BaseComponent>();
                 else
                 {
-                    bc = Instantiate(videFrontier, go.transform);
+                    bc = Instantiate(videFrontier);
+                    bc.transform.SetParent(go.transform);
                     bc.transform.localScale = Vector3.one;
                     bc.transform.localPosition = Vector3.zero;
                 }
@@ -305,7 +304,26 @@ public class GameController : MonoBehaviour {
         }
 
 
+        PutAllStopper();
+
         firstPopulate = false;
+    }
+
+
+    public void PutAllStopper()
+    { for (int j = 0; j < M; j++)
+            {
+        for (int i = 0; i < N; i++)
+        {
+           
+                composants[i][j].RemoveAllStoppers();
+                if (i > 0 && composants[i][j].HasTubeEnd(2) && !composants[i - 1][j].HasTubeEnd(0)) composants[i][j].PutStopper(2);
+                if (i < N - 1 && composants[i][j].HasTubeEnd(0) && !composants[i + 1][j].HasTubeEnd(2)) composants[i][j].PutStopper(0);
+                if (j > 0 && composants[i][j].HasTubeEnd(1) && !composants[i][j - 1].HasTubeEnd(3)) composants[i][j].PutStopper(1);
+                if (j < M - 1 && composants[i][j].HasTubeEnd(3) && !composants[i][j + 1].HasTubeEnd(1)) composants[i][j].PutStopper(3);
+                Debug.Log("toto" + composants[i][j].dir + composants[i][j].HasTubeEnd(1));
+            }
+        }
     }
 
     void Evolution()

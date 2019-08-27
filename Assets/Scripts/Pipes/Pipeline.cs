@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Pipeline : BaseComponent { 
 
     GameObject water0,water2,bubble;
+   
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
@@ -33,6 +34,7 @@ public class Pipeline : BaseComponent {
     protected override void Start()
     {
         base.Start();
+        tubeEnd[0] = tubeEnd[2] = true;
         water0 = transform.Find("Water0").gameObject;
         water2 = transform.Find("Water2").gameObject;
 

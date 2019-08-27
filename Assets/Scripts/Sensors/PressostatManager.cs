@@ -78,7 +78,7 @@ public class PressostatManager : BaseComponent {
         base.Start();
 
         success = 0;
-        C = 0.2f;
+        C = 0.1f;
 
     }
 
@@ -102,7 +102,7 @@ public class PressostatManager : BaseComponent {
         p2 = p[2];
         
         q += i[2] / C * dt;
-        q *= 0.995f;
+        q *= 0.999f;
 
         p[2] = q + i[2] * R;
         i[2] = (p2 - q) / R;

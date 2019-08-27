@@ -32,6 +32,7 @@ public class ElbowManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
+        tubeEnd[3] = tubeEnd[2] = true;
         water2 = transform.Find("Water2").gameObject;
         water3 = transform.Find("Water3").gameObject;
         bubble = transform.Find("Bubble").gameObject;

@@ -94,7 +94,8 @@ public class capacitorManager : BaseComponent {
     }
 
 
-    public void UpdateValue() {
+    public void UpdateValue()
+    {
 
         float size = Sature(0.25f * Cin);
         GetComponent<Animator>().SetFloat("size", size);

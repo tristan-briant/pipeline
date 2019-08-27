@@ -136,6 +136,7 @@ public class InletManager : BaseFrontier {
     protected override void Start()
     {
         base.Start();
+        tubeEnd[3] = true;
         water = this.transform.Find("Water").gameObject;
         water0 = this.transform.Find("Water0").gameObject;
 

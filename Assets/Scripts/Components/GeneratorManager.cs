@@ -10,6 +10,8 @@ public class GeneratorManager :  BaseComponent {
     float setPointLow=0.001f;
     public float chargeSuccess = 5f;
     public float ChargeSuccess { get => chargeSuccess; set { chargeSuccess = Mathf.Clamp(value, 0.5f, 30f); UpdateValue(); } }
+    public float tolerance = 5f; // Percent
+    public float Tolerance { get => tolerance; set { tolerance = Mathf.Clamp(value, 0.0f, 50f); } }
 
     float t_shine = 0;
 
@@ -93,7 +95,7 @@ public class GeneratorManager :  BaseComponent {
         velocity = (1 - delta) * velocity + delta * (f < 0 ? -f : 0);
 
         if (setPointLow < velocity && itemBeingDragged == null)
-            success = Mathf.Clamp01(success - f * Time.deltaTime / chargeSuccess);
+            success = Mathf.Clamp01(success - f * Time.deltaTime / chargeSuccess * (1 + tolerance / 100f));
         else
             success = Mathf.Clamp01(success + (-1 + f) * Time.deltaTime);
             

@@ -20,6 +20,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected float fluxMinSound =0.01f;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
+    protected bool[] tubeEnd = { false, false, false, false }; // Has tube ends in directions 0,1,2,3
     [NonSerialized] public float success = 1;
     protected float fail = 0;
     protected const float fMinBubble = 0.05f;
@@ -75,7 +76,25 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         SetLocked();
     }
 
- 
+    public bool HasTubeEnd (int direction) { // Tell if the component has an end in that direction
+        int a = (direction - dir) % 4;
+        while (a < 0) a+=4; 
+        return tubeEnd[a];
+    }
+
+    public void RemoveAllStoppers() {
+        foreach (Transform child in transform)
+            if (child.name.Contains("Stopper")) Destroy(child.gameObject);
+    }
+
+    public void PutStopper(int direction) // Put a stopper
+    {
+        
+        GameObject stopper = Instantiate(Resources.Load("Components/Stopper"),transform) as GameObject;
+        stopper.transform.localPosition = Vector3.zero;
+        stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 * (direction-dir)));
+       
+    }
 
     protected Color PressureColor(float p)
     { // donne la convention de pression
@@ -238,6 +257,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public virtual void Rotate() 
     {
         transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
+        gc.PutAllStopper();
     }
 
     //float clickStart;

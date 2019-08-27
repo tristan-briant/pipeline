@@ -62,7 +62,7 @@ Frontiers/Wall
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Sensors/Generator
-{"PrefabPath":"Sensors/Generator","dir":0,"destroyable":true,"isSuccess":true,"locked":true,"mirror":false,"isFrontiers":false,"chargeSuccess":4.0}
+{"PrefabPath":"Sensors/Generator","dir":0,"destroyable":true,"isSuccess":true,"locked":true,"mirror":false,"isFrontiers":false,"chargeSuccess":5.0,"tolerance":5.0}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Frontiers/Wall
