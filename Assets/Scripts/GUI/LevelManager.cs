@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour {
     public int levelMax;
     public float scrollViewHight = 0;
     public bool FirstLaunch=true;
+    public bool WithStopper=true;
     public bool hacked = false;
     static public bool designerMode = false;
     public bool designerScene = false;

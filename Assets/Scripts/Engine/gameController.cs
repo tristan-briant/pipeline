@@ -303,27 +303,37 @@ public class GameController : MonoBehaviour {
 
         }
 
-
-        PutAllStopper();
-
+        if (LVM.WithStopper)
+            PutAllStopper();
+           
+            
         firstPopulate = false;
     }
 
 
     public void PutAllStopper()
-    { for (int j = 0; j < M; j++)
-            {
-        for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
         {
-           
+            for (int i = 0; i < N; i++)
+            {
+
                 composants[i][j].RemoveAllStoppers();
                 if (i > 0 && composants[i][j].HasTubeEnd(2) && !composants[i - 1][j].HasTubeEnd(0)) composants[i][j].PutStopper(2);
                 if (i < N - 1 && composants[i][j].HasTubeEnd(0) && !composants[i + 1][j].HasTubeEnd(2)) composants[i][j].PutStopper(0);
                 if (j > 0 && composants[i][j].HasTubeEnd(1) && !composants[i][j - 1].HasTubeEnd(3)) composants[i][j].PutStopper(1);
                 if (j < M - 1 && composants[i][j].HasTubeEnd(3) && !composants[i][j + 1].HasTubeEnd(1)) composants[i][j].PutStopper(3);
-                Debug.Log("toto" + composants[i][j].dir + composants[i][j].HasTubeEnd(1));
             }
         }
+
+        if (BaseComponent.itemBeingDragged != null)
+        {
+            BaseComponent dg = BaseComponent.itemBeingDragged.GetComponent<BaseComponent>();
+            dg.RemoveAllStoppers();
+            for (int i = 0; i < 4; i++)
+                if (dg.HasTubeEnd(i)) dg.PutStopper(i);
+        }
+
     }
 
     void Evolution()
