@@ -16,6 +16,7 @@ public class WatchManager : BaseComponent {
     public override void Awake()
     {
         ChangeValue(timeOut);
+
     }
 
     protected override void Start()

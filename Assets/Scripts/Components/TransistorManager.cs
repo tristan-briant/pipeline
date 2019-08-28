@@ -28,6 +28,8 @@ public class TransistorManager : BaseComponent
     override public void Awake()
     {
         configPanel = Resources.Load("ConfigPanel/ConfigTransistor") as GameObject;
+        tubeEnd[1] = tubeEnd[2] = tubeEnd[3] = true;
+
     }
 
     public  void Calcule_i_p_new(float[] p, float[] i, float dt)

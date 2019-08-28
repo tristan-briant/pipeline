@@ -29,6 +29,13 @@ public class ElbowManager : BaseComponent {
         i[0] = i[1] = 0;
     }
 
+    public override void Awake()
+    {
+        base.Awake();
+        tubeEnd[3] = tubeEnd[2] = true;
+    }
+
+
     protected override void Start()
     {
         base.Start();

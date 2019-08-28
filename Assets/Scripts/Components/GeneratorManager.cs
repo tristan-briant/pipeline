@@ -22,6 +22,7 @@ public class GeneratorManager :  BaseComponent {
         Color col = transform.Find("Shine").GetComponent<Image>().color;
         col.a = 0;
         transform.Find("Shine").GetComponent<Image>().color = col;
+        tubeEnd[0] = tubeEnd[2] = true;
     }
 
     protected override void Start()

@@ -31,10 +31,15 @@ public class Pipeline : BaseComponent {
         i[3] = 0;
     }
 
+    public override void Awake()
+    {
+        base.Awake();
+        tubeEnd[0] = tubeEnd[2] = true;
+    }
+
     protected override void Start()
     {
         base.Start();
-        tubeEnd[0] = tubeEnd[2] = true;
         water0 = transform.Find("Water0").gameObject;
         water2 = transform.Find("Water2").gameObject;
 

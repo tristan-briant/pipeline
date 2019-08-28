@@ -58,6 +58,12 @@ public class TeManager : BaseComponent
         i[1] = 0;
     }
 
+    public override void Awake()
+    {
+        base.Awake();
+        tubeEnd[0] = tubeEnd[2] = tubeEnd[3] = true;
+    }
+
     protected override void Start()
     {
         base.Start();

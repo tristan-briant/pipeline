@@ -42,6 +42,12 @@ public class ElbowDoubleManager : BaseComponent {
     {
     }
 
+    public override void Awake()
+    {
+        base.Awake();
+        tubeEnd[0] = tubeEnd[1] = tubeEnd[2] = tubeEnd[3] = true;
+    }
+
     protected override void Start()
     {
         base.Start();

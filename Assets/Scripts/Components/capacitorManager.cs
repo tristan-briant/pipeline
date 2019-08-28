@@ -20,6 +20,7 @@ public class capacitorManager : BaseComponent {
 
     public override void Awake()
     {
+        tubeEnd[0] = tubeEnd[2] = true;
         configPanel = Resources.Load("ConfigPanel/ConfigCapacity") as GameObject;
         GetComponent<Animator>().SetFloat("position", 0.5f);
         UpdateValue();

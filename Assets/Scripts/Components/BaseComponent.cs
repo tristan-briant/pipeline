@@ -257,8 +257,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public virtual void Rotate() 
     {
         transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
-        //gc.PutAllStopper();
-        gc.PopulateComposant();
+        gc.PutAllStopper();
+        //gc.PopulateComposant();
     }
 
     //float clickStart;

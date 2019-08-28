@@ -16,6 +16,7 @@ public class PressostatTriggerManager : PressostatManager {
     public override void Awake()
     {
         symmetric = false;
+        tubeEnd[2] = true;
     }
 
     protected override void Start()

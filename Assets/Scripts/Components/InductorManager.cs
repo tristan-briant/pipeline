@@ -22,8 +22,9 @@ public class InductorManager : BaseComponent
     public override void Awake()
     {
         configPanel = Resources.Load("ConfigPanel/ConfigInductor") as GameObject;
+        tubeEnd[0] = tubeEnd[2] = true;
     }
-    
+
 
     protected override void Start()
     {

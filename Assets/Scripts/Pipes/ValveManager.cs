@@ -48,6 +48,12 @@ public class ValveManager : BaseComponent {
         i[1] = i[3] = 0;
     }
 
+    public override void Awake()
+    {
+        base.Awake();
+        tubeEnd[0] = tubeEnd[2] = true;
+    }
+
     protected override void Start()
     {
         base.Start();

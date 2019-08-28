@@ -48,6 +48,10 @@ public class PressostatManager : BaseComponent {
     }
     public float PMin { get => symmetric ? -pMax : 0; }
 
+    override public void Awake()
+    {
+        tubeEnd[2] = true;
+    }
 
     protected override void Start()
     {

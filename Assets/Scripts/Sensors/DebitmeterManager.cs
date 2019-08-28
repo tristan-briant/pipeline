@@ -52,7 +52,7 @@ public class DebitmeterManager : BaseComponent
     {
 
         DrawCadran();
-        //ChangeParent(transform.parent);
+        tubeEnd[0] = tubeEnd[2] = true;
     }
 
     void DrawCadran()

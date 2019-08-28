@@ -22,6 +22,7 @@ public class PressostatDigitalManager : BaseComponent
     override public void Awake()
     {
         InitializePanel();
+        tubeEnd[2] = true;
     }
 
     protected override void Start()

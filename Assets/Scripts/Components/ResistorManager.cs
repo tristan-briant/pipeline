@@ -51,6 +51,7 @@ public class ResistorManager : BaseComponent {
 
     override public void Awake()
     {
+        tubeEnd[0] = tubeEnd[2] = true;
         Variant = Resources.LoadAll<Sprite>("Components/Resistor-Variants");
         configPanel = Resources.Load("ConfigPanel/ConfigResistor") as GameObject;
         UpdateValue();
