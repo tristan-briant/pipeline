@@ -25,6 +25,14 @@ public class PressostatDigitalManager : BaseComponent
         tubeEnd[2] = true;
     }
 
+    override public void PutStopper(int direction) // Put a stopper
+    {
+        /*GameObject stopper = Instantiate(Resources.Load("Components/Stopper"), transform) as GameObject;
+        stopper.transform.localPosition = Vector3.zero;
+        stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 * (direction)));*/
+
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -46,6 +54,7 @@ public class PressostatDigitalManager : BaseComponent
     public override void Rotate()
     {
         dir = 0;
+        gc.StopperChanged = true;
     }
 
     public void InitializePanel()

@@ -45,8 +45,8 @@ public class WatchManager : BaseComponent {
 
         GetComponent<Animator>().SetFloat("speed", 1 / timeOut);
 
-        GameObject.Find("Playground").BroadcastMessage("TriggerStart", SendMessageOptions.DontRequireReceiver);
-        GameObject.Find("CanvasDragged").BroadcastMessage("TriggerStart", SendMessageOptions.DontRequireReceiver);
+        GameObject.Find("Playground").BroadcastMessage("TriggerStart", timeOut, SendMessageOptions.DontRequireReceiver);
+        GameObject.Find("CanvasDragged").BroadcastMessage("TriggerStart", timeOut , SendMessageOptions.DontRequireReceiver);
 
         Invoke("EndTrig", timeOut);
         timeValue = (int) timeOut;
@@ -66,6 +66,7 @@ public class WatchManager : BaseComponent {
     void EndTrig()
     {
         GameObject.Find("Playground").BroadcastMessage("TriggerEnd", SendMessageOptions.DontRequireReceiver);
+        GameObject.Find("Playground").BroadcastMessage("HighLightFlush", SendMessageOptions.DontRequireReceiver);
         GameObject.Find("CanvasDragged").BroadcastMessage("TriggerEnd", SendMessageOptions.DontRequireReceiver);
         GetComponent<Animator>().SetTrigger("Stop");
         CancelInvoke("DecreaseTime");

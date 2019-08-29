@@ -28,6 +28,9 @@ public class FlushManager : BaseFrontier {
 
     }
 
+    public void HighLightFlush() {
+        GetComponent<Animator>().SetTrigger("showHand");
+    }
 
     public override void Rotate()
     {

@@ -73,6 +73,14 @@ public class PressostatCircleManager : BaseComponent {
     public override void Awake()
     {
         success = 0;
+        tubeEnd[2] = true;
+    }
+
+    override public void PutStopper(int direction) // Put a stopper
+    {
+        /*GameObject stopper = Instantiate(Resources.Load("Components/Stopper"), transform) as GameObject;
+        stopper.transform.localPosition = Vector3.zero;
+        stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 * (direction)));*/
     }
 
     protected override void Start()
@@ -116,7 +124,9 @@ public class PressostatCircleManager : BaseComponent {
                 connector.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 break;
         }
-       
+
+        gc.StopperChanged = true;
+
     }
 
     public float angle;

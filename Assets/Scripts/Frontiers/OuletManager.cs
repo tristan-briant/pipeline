@@ -36,9 +36,9 @@ public class OuletManager : BaseFrontier
 
 
     GameObject water=null, water0=null, arrow=null, bubble=null, moulin;
-    public bool jelly = false;
+    /*public bool jelly = false;
     Color jellyColor = new Color(0xFF / 255.0f, 0x42 / 255.0f, 0x6A / 255.0f);
-    Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);
+    Color jellyColorBg = new Color(0x42 / 255.0f, 0x42 / 255.0f, 0x42 / 255.0f);*/
     public bool periodic = false;
     public float periode = 2;
     public float Periode { get => periode; set => periode = value; }

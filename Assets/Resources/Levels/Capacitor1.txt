@@ -1,4 +1,4 @@
-{"N":5,"M":7,"R":1.0,"L":1.0,"C":0.5,"Rground":50.0}
+{"N":5,"M":7,"R":1.0}
 Components/Pipeline
 {"PrefabPath":"Components/Pipeline","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Components/Elbow
@@ -28,15 +28,15 @@ Frontiers/Wall
 Frontiers/Corner
 {"PrefabPath":"Frontiers/Corner","dir":0,"destroyable":true,"isSuccess":false,"locked":true,"mirror":false,"isFrontiers":true,"type":0}
 Frontiers/Inlet
-{"PrefabPath":"Frontiers/Inlet","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":true,"type":1,"pset":1.0,"imax":1.0,"jelly":false,"periodic":false,"periode":2.0}
+{"PrefabPath":"Frontiers/Inlet","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":true,"type":1,"pset":1.0,"imax":1.0,"periodic":false,"periode":2.0}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Components/Capacitor
-{"PrefabPath":"Components/Capacitor","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":249.99990844726563}
+{"PrefabPath":"Components/Capacitor","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":499.9996337890625}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Frontiers/Ground
-{"PrefabPath":"Frontiers/Ground","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":true,"type":1,"pset":0.0,"imax":10.0,"jelly":false,"periodic":false,"periode":2.0}
+{"PrefabPath":"Frontiers/Ground","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":true,"type":1,"pset":0.0,"imax":10.0,"periodic":false,"periode":2.0}
 Frontiers/Wall
 {"PrefabPath":"Frontiers/Wall","dir":1,"destroyable":true,"isSuccess":false,"locked":true,"mirror":false,"isFrontiers":true,"type":2}
 Components/Empty

@@ -105,8 +105,16 @@ public class capacitorManager : BaseComponent {
         
     }
 
+    bool FirstCharge = true;
+
     private void Update()
     {
+        /*if(FirstCharge && Mathf.Abs(q0) > 0.1f)
+        {
+            GameObject.Find("Playground").BroadcastMessage("HighLightFlush", SendMessageOptions.DontRequireReceiver);
+            FirstCharge = false;
+        }*/
+
         waterIn0.GetComponent<Image>().color = PressureColor(q0 + q);
         waterIn2.GetComponent<Image>().color = PressureColor(q2 + q);
         water0.GetComponent<Image>().color = PressureColor(p0);

@@ -8,6 +8,8 @@ public class Dilatation : MonoBehaviour
     BaseComponent bc;
     Material material;
     public int index = 0; // 
+    const float alpha = 0.2f;
+    protected float pressure = 0;
 
     protected void Start()
     {
@@ -20,6 +22,7 @@ public class Dilatation : MonoBehaviour
 
     private void Update()
     {
-       material.SetFloat("_DilationCoefficent", bc.GetPressure(index));
+        pressure = alpha * bc.GetPressure(index) + (1 - alpha) * pressure;
+        material.SetFloat("_DilationCoefficent", pressure);
     }
 }

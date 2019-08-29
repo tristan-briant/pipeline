@@ -8,7 +8,6 @@ public class TeManager : BaseComponent
 {
 
     GameObject water0, water2, water3, bubble20, bubble23, bubble03;
-    //float x_bulle0 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
     float f0,  f2, f3;
     float i0 = 0,  i2 = 0, i3 = 0;
 
@@ -19,36 +18,28 @@ public class TeManager : BaseComponent
         i0 = i2 = i3 = f0 = f2 = f3 = 0;
     }
 
-    public override void Calcule_i_p(float[] p, float[] i,float dt)
+    public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
         p0 = p[0];
         p2 = p[2];
         p3 = p[3];
 
-
-        //i0 = i[0]; //x_bulle0 -= 0.05f * i0; //// pour le dessin
-        //i1 = i[1]; x_bulle1 += 0.05f * i1; 
-        //i2 = i[2]; //x_bulle2 += 0.05f * i2;
-        //i3 = i[3]; //x_bulle3 -= 0.05f * i3;
-
-        q += (i[0] + i[2] + i[3]) * dt; //q*=0.99;
+        q += (i[0] + i[2] + i[3]) / C * dt;
 
         f0 += (p[0] - q) / L * dt;
-        //f1 += (p[1] - q) / L * alpha;
+        //f1 += (p[1] - q) / L * dt;
         f2 += (p[2] - q) / L * dt;
         f3 += (p[3] - q) / L * dt;
 
-        p[0] = (q / C + (i[0] - f0) * R);
-        //p[1] = (q / C + (i[1] - f1) * R);
-        p[2] = (q / C + (i[2] - f2) * R);
-        p[3] = (q / C + (i[3] - f3) * R);
+        p[0] = (q + (i[0] - f0) * R);
+        //p[1] = (q + (i[1] - f1) * R);
+        p[2] = (q + (i[2] - f2) * R);
+        p[3] = (q + (i[3] - f3) * R);
 
-        i[0] = (f0 + (p0 - q / C) / R);
-        //i[1] = (f1 + (p1 - q / C) / R);
-        i[2] = (f2 + (p2 - q / C) / R);
-        i[3] = (f3 + (p3 - q / C) / R);
-
-  
+        i[0] = (f0 + (p0 - q) / R);
+        //i[1] = (f1 + (p1 - q) / R);
+        i[2] = (f2 + (p2 - q) / R);
+        i[3] = (f3 + (p3 - q) / R);
 
     }
 
@@ -77,19 +68,10 @@ public class TeManager : BaseComponent
 
     }
 
-    /*float Flux(float f1, float f2) {
-        if ((f1 > 0 && f2 > 0) || (f1 < 0 && f2 < 0))
-            return 0;
-
-        if (Mathf.Abs(f1) < Mathf.Abs(f2))
-            return f1;
-        else
-            return -f2;
-    }*/
 
     private void Update()
     {
-        SetPressure(Mathf.Clamp(0.5f * q, -1f, 1f));
+        SetPressure(Mathf.Clamp(0.5f * (p0 + p2 + p3) / 3f, -1f, 1f));
 
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);

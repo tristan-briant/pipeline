@@ -267,6 +267,7 @@ public class Designer : MonoBehaviour
 
         int k = 0;
         JsonUtility.FromJsonOverwrite(tokens[k++], PG.GetComponent<PlaygroundParameters>()); //k=0 puis 1  
+        //k++; // Ignore Playground Parameters
 
         foreach (Transform slotDeck in deck)
         {

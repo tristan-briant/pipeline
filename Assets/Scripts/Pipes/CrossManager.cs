@@ -8,17 +8,10 @@ public class CrossManager : BaseComponent
 {
 
     GameObject water, water0, water1, water2, water3, bubble20, bubble23, bubble03, bubble13, bubble21, bubble01;
-    //float x_bulle0 = 0.5f, x_bulle1 = 0.5f, x_bulle2 = 0.5f, x_bulle3 = 0.5f;
     float f0, f1, f2, f3;
     float i0 = 0, i1 = 0, i2 = 0, i3 = 0;
 
-    /*new public float R = 2;
-    new public float L = 2;
-    new public float C = 2;*/
-
-    //float r_bulle = 0.1f;
- 
-
+  
     public override void Reset_i_p()
     {
         base.Reset_i_p();
@@ -27,7 +20,6 @@ public class CrossManager : BaseComponent
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-
         p0 = p[0];
         p1 = p[1];
         p2 = p[2];

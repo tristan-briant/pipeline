@@ -16,7 +16,7 @@ public class PressostatManager : BaseComponent {
     public float setPointHigh;
     public float setPointLow;
     public float pMax=1;
-    //float pMin=0;
+    protected float qq = 0;
 
     public bool symmetric = true;
     public bool Symmetric { get => symmetric; set { symmetric = value; DrawCadran(); } }
@@ -52,6 +52,16 @@ public class PressostatManager : BaseComponent {
     {
         tubeEnd[2] = true;
     }
+
+    override public void PutStopper(int direction) // Put a stopper
+    {
+        /*GameObject stopper = Instantiate(Resources.Load("Components/Stopper"), transform) as GameObject;
+        stopper.transform.localPosition = Vector3.zero;
+        stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 * (direction)));*/
+
+    }
+
+
 
     protected override void Start()
     {
@@ -146,6 +156,8 @@ public class PressostatManager : BaseComponent {
                 tubeH.SetActive(false);
                 break;
         }
+
+        gc.StopperChanged = true;
        
     }
 
@@ -161,6 +173,9 @@ public class PressostatManager : BaseComponent {
     {
         UpdateSuccess();
 
+        const float alpha = 0.05f;
+        qq = alpha * q + (1 - alpha) * qq;
+
         if (success == 1)
             animator.SetTrigger("win");
         else
@@ -172,11 +187,11 @@ public class PressostatManager : BaseComponent {
         water2.GetComponent<Image>().color = PressureColor(p2);
         water.GetComponent<Image>().color = PressureColor(p2);
 
-        float rate = Mathf.Clamp((q - PMin) / (PMax - PMin), 0, 0.99f);
+        float rate = Mathf.Clamp((qq - PMin) / (PMax - PMin), 0, 0.99f);
         animator.SetFloat("rate", rate);
 
 
-        float v = Mathf.Round(20 * q) / 20;
+        float v = Mathf.Round(20 * qq) / 20;
         valueM.value = v;
     }
 

@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour {
     public Button nextButton;
     public Button prevButton;
 
+    public bool StopperChanged;
 
     public bool composantChanged;
     protected bool paused = false;
@@ -303,8 +304,9 @@ public class GameController : MonoBehaviour {
 
         }
 
-        if (LVM.WithStopper)
-            PutAllStopper();
+        StopperChanged = true;
+
+        
            
             
         firstPopulate = false;
@@ -442,6 +444,11 @@ public class GameController : MonoBehaviour {
 
         Engine.update_composant_p_i(composants);
 
+        if (LVM.WithStopper && StopperChanged)
+        {
+            PutAllStopper();
+            StopperChanged = false;
+        }
 
         if (Input.GetKey(KeyCode.Home))
         {

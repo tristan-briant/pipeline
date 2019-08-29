@@ -10,13 +10,21 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 {
     public string PrefabPath="";
     protected float q = 0, f = 0;
-    protected float[] qq = { 0, 0, 0, 0 };
-    protected float[] ff = { 0, 0, 0, 0 };
     protected GameObject configPanel;
     protected float p0, p1, p2, p3;
 
     public int dir=0;
-    protected float R = 1f, L = 1f, C =1f, Rground = 50;
+    public bool destroyable=true;
+    public bool isSuccess = false;
+    virtual public bool IsSuccess { get => isSuccess; set => isSuccess = value; }
+
+    public bool locked = false;
+    public bool Locked { get => locked; set { locked = value; SetLocked(); } }
+
+    public bool mirror = false;
+    public bool isFrontiers=false;
+
+    protected float R = 1f, L = 1f, C =0.1f, Rground = 50;
     protected float fluxMinSound =0.01f;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
@@ -36,16 +44,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     }
     public float GetPressure(int index = 0) { return pressure[index]; }
 
-    public bool destroyable=true;
-    public bool isSuccess = false;
-    public bool locked = false;
-    public bool Locked { get => locked; set { locked = value; SetLocked(); } }
-
-    virtual public bool IsSuccess { get => isSuccess; set => isSuccess = value; }
-
-    //public bool dir_locked = false;
-    public bool mirror = false;
-    public bool isFrontiers=false;
+ 
 
     //public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
@@ -70,7 +69,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             R = parameters.R;
             C = parameters.C;
             L = parameters.L;
-            Rground = parameters.Rground;
+            //Rground = parameters.Rground;
         }
         Rotate();
         SetLocked();
@@ -87,9 +86,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             if (child.name.Contains("Stopper")) Destroy(child.gameObject);
     }
 
-    public void PutStopper(int direction) // Put a stopper
+    virtual public void PutStopper(int direction) // Put a stopper
     {
-        
         GameObject stopper = Instantiate(Resources.Load("Components/Stopper"),transform) as GameObject;
         stopper.transform.localPosition = Vector3.zero;
         stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 * (direction-dir)));
@@ -257,8 +255,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public virtual void Rotate() 
     {
         transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
-        gc.PutAllStopper();
-        //gc.PopulateComposant();
+        gc.StopperChanged = true;
     }
 
     //float clickStart;

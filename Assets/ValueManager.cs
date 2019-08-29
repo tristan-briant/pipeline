@@ -9,6 +9,7 @@ public class ValueManager : MonoBehaviour
     float success;
     const float scoreSpeed = 1;
     public bool drawSetPoint = true;
+    public bool lowResolution = false; // Only 1 digit even when value <1
 
     float score = 0;
     BaseComponent component;
@@ -68,7 +69,7 @@ public class ValueManager : MonoBehaviour
             val = 0.9f * val + 0.1f * value;
 
         float v;
-        if (Mathf.Abs(val) < 1)
+        if (Mathf.Abs(val) < 1 && !lowResolution)
             v = Mathf.Round(100 * val) / 100;
         else
             v = Mathf.Round(10 * val) / 10;
