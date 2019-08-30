@@ -46,6 +46,19 @@ public class DigitalManager : BaseFrontier
     protected float periode = 8;  
     public float Periode { get => periode; set => periode = value; }
 
+    override public void PutStopper(int direction) // Put a stopper
+    {
+        GameObject stopper = Instantiate(Resources.Load("Components/Stopper"), transform) as GameObject;
+        stopper.transform.localPosition = Vector3.zero;
+        stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -90));
+    }
+
+    public override void Awake()
+    {
+        base.Awake();
+        tubeEnd[3] = true;
+    }
+
     public override void Rotate()
     {
         if (dir == 3)
@@ -74,6 +87,7 @@ public class DigitalManager : BaseFrontier
             holder.localRotation = Quaternion.Euler(0, 0,-90);
         }
 
+        //gc.StopperChanged = true;
     }
 
     float ppset;
@@ -133,7 +147,6 @@ public class DigitalManager : BaseFrontier
     protected override void Start()
     {
         base.Start();
-        tubeEnd[0] = true;
 
         if (transform.Find("Water"))
             water = transform.Find("Water").gameObject;

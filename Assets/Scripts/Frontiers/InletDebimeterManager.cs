@@ -64,6 +64,7 @@ public class InletDebimeterManager : BaseFrontier
         configPanel = Resources.Load("ConfigPanel/ConfigInlet") as GameObject;
         GetComponent<Animator>().SetFloat("rate", 0.0f);
         UpdateValue();
+        tubeEnd[3] = true;
     }
 
     public override void Rotate()
@@ -157,7 +158,6 @@ public class InletDebimeterManager : BaseFrontier
     protected override void Start()
     {
         base.Start();
-        tubeEnd[3] = true;
 
         if (transform.Find("Water"))
             water = transform.Find("Water").gameObject;

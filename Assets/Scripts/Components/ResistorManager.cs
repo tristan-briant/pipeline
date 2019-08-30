@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ResistorManager : BaseComponent {
 
-    GameObject water,water0, water2, bubble;
+    GameObject water,water0, water2,waterIn, bubble;
     public float x_bulle = 0;
     //float r_bulle = 0.1f;
     public float res=10;
@@ -19,11 +19,12 @@ public class ResistorManager : BaseComponent {
     protected override void Start()
     {
         base.Start();
-        water = this.transform.Find("Water").gameObject;
-        water0 = this.transform.Find("Water0").gameObject;
-        water2 = this.transform.Find("Water2").gameObject;
+        water = transform.Find("Water").gameObject;
+        waterIn = transform.Find("WaterIn").gameObject;
+        water0 = transform.Find("Water0").gameObject;
+        water2 = transform.Find("Water2").gameObject;
 
-        bubble = this.transform.Find("Bubble").gameObject;
+        bubble = transform.Find("Bubble").gameObject;
         f = 0;
         bubble.gameObject.SetActive(true); //May be deactivated if from designer
         bubble.GetComponent<Animator>().SetFloat("speed", -f / fMinBubble);
@@ -65,11 +66,22 @@ public class ResistorManager : BaseComponent {
 
     }
 
+    float Sature(float x)
+    {
+        if (x > 0)
+            return x*x / (1 + x*x);
+        else
+            return x*x / (1 - x*x);
+    }
+
     protected void UpdateValue()
     {
+        float size = Sature(2f / Res);
+        GetComponent<Animator>().SetFloat("size", size);
+
         GetComponentInChildren<Text>().text = res.ToString();
 
-        if (res > 3.0f)
+        /*if (res > 3.0f)
         {
             transform.Find("Tube").GetComponent<Image>().sprite = Variant[0];
             transform.Find("Water").GetComponent<Image>().sprite = Variant[3];
@@ -83,7 +95,7 @@ public class ResistorManager : BaseComponent {
         {
             transform.Find("Tube").GetComponent<Image>().sprite = Variant[2];
             transform.Find("Water").GetComponent<Image>().sprite = Variant[5];
-        }
+        }*/
             
     }
 
@@ -96,6 +108,7 @@ public class ResistorManager : BaseComponent {
     private void Update()
     {
         water.GetComponent<Image>().color = PressureColor(q);
+        waterIn.GetComponent<Image>().color = PressureColor(q);
         water0.GetComponent<Image>().color = PressureColor(p0);
         water2.GetComponent<Image>().color = PressureColor(p2);
 
