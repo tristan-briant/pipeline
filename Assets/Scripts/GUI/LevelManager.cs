@@ -11,7 +11,7 @@ public class LevelManager : MonoBehaviour {
 
     public int currentLevel;
     public int completedLevel;
-    public int levelMax;
+    //public int levelMax;
     public float scrollViewHight = 0;
     public bool FirstLaunch=true;
     public bool WithStopper=true;
@@ -71,7 +71,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void ResetGame() {
-        for (int i = 1; i <= levelMax; i++) {
+        for (int i = 1; i <= LevelMax(); i++) {
             PlayerPrefs.SetString("Level-" + GetPlaygroundName(i), "");
         }
     }

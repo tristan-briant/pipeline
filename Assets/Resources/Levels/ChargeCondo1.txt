@@ -59,7 +59,7 @@ Components/Empty
 Components/Te
 {"PrefabPath":"Components/Te","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Sensors/PressostatTrigger
-{"PrefabPath":"Sensors/PressostatTrigger","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"mirror":false,"isFrontiers":false,"setPointHigh":-1.0,"setPointLow":0.0,"pMax":1.9999990463256837,"symmetric":false,"raiseTime":5.0,"pLim":1.0}
+{"PrefabPath":"Sensors/PressostatTrigger","dir":0,"destroyable":true,"isSuccess":true,"locked":false,"mirror":false,"isFrontiers":false,"setPointHigh":-1.0,"setPointLow":0.0,"pMax":1.3499988317489625,"symmetric":false,"raiseTime":5.0,"pLim":1.0}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Frontiers/Wall

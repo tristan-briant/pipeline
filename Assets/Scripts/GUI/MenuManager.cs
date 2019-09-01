@@ -7,17 +7,18 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour{
 
     public int levelCompleted;
-    public int levelMax;
+    //public int levelMax;
     public GameObject levelList;
     public Sprite Locked;
     public LevelManager LVM;
+    public GameObject LoadScreen;
 
-  
+    Animator animator;
 
     private void Start()
     {
-       
-         LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+ 
+        LVM = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
         // Load options
         string lang=PlayerPrefs.GetString("Language");
@@ -33,7 +34,7 @@ public class MenuManager : MonoBehaviour{
         if (!LVM.FirstLaunch)
             GameObject.Find("MainCanvas").GetComponent<Animator>().Play("Level");
         
-        levelMax = LVM.levelMax;
+        //levelMax = LVM.levelMax;
         LVM.completedLevel = levelCompleted = PlayerPrefs.GetInt("Level Completed");
 
         GenerateMenu();
@@ -82,20 +83,36 @@ public class MenuManager : MonoBehaviour{
         LVM.currentLevel = levelNumber;
         LVM.scrollViewHight = levelList.transform.localPosition.y;
         LVM.designerScene = false;
+
+        LoadScreen.SetActive(true);
+
         SceneManager.LoadScene("LevelScene");
     }
-  
+
+    public void ResetTrigger() {
+        animator.ResetTrigger("goback");
+        animator.ResetTrigger("level");
+        animator.ResetTrigger("title");
+        animator.ResetTrigger("option");
+    }
 
     void LateUpdate()
     {
-        
+
+        if (animator == null) animator = GameObject.Find("MainCanvas").GetComponent<Animator>();
+        ResetTrigger();
+
+
         if (Input.GetKey(KeyCode.Home))
         {
             Application.Quit();
         }
         if (Input.GetKey(KeyCode.Escape))
         {
-            Application.Quit();
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Title"))
+                Application.Quit();
+            else
+                animator.SetTrigger("goback");
         }
         if (Input.GetKey(KeyCode.Menu))
         {

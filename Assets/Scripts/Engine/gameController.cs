@@ -375,7 +375,7 @@ public class GameController : MonoBehaviour {
 
         winText.SetActive(true);                            //lance l'animation de victoire
         yield return new WaitForSeconds(2f);
-        if (currentLevel < LVM.levelMax)
+        if (currentLevel < LVM.LevelMax())
         {
 
             levelText.gameObject.SetActive(false);
