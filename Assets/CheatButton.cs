@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CheatButton : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
     float timeDown;
-    const float cheatTime = 3.0f;
+    const float cheatTime = 2.0f;
 
     public void OnPointerDown(PointerEventData eventData)
     {

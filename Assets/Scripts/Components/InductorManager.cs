@@ -11,7 +11,7 @@ public class InductorManager : BaseComponent
     GameObject water, water0, water2;
     public float x_bulle = 0;
     public float lin = 10;
-    public float rin = 1;
+    public float rin = 10f;
     //float r_bulle = 0.1f;
     //float angle;
     Animation anim;
@@ -34,7 +34,7 @@ public class InductorManager : BaseComponent
         water = transform.Find("Water").gameObject;
 
         GetComponent<Animator>().SetFloat("speed", 0);
-        rin = 1;
+        rin = 20f;
     }
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)

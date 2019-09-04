@@ -8,7 +8,7 @@ Components/Te
 Components/Cross
 {"PrefabPath":"Components/Cross","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Components/Capacitor
-{"PrefabPath":"Components/Capacitor","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":999.9989624023438}
+{"PrefabPath":"Components/Capacitor","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":10.000000953674317}
 empty
 empty
 empty

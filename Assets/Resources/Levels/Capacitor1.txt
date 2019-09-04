@@ -32,7 +32,7 @@ Frontiers/Inlet
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Components/Capacitor
-{"PrefabPath":"Components/Capacitor","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":499.9996337890625}
+{"PrefabPath":"Components/Capacitor","dir":1,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":5.0}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Frontiers/Ground

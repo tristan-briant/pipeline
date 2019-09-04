@@ -419,6 +419,7 @@ public class GameController : MonoBehaviour {
 
     public void LoadLevel()
     {
+        StopAllCoroutines();
         string filename = LVM.GetPlaygroundName(currentLevel);
         GetComponent<Designer>().LoadFromRessources(filename);
 

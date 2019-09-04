@@ -24,7 +24,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public bool mirror = false;
     public bool isFrontiers=false;
 
-    protected float R = 1f, L = 1f, C =0.1f, Rground = 50;
+    protected float R = 1f, L = 1f, C =0.0f, Rground = 50;
     protected float fluxMinSound =0.01f;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
@@ -61,7 +61,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         success = 0;
         gc = (GameController)GameObject.Find("GameController").GetComponent(typeof(GameController)); //find the game engine
 
-        parameters = transform.GetComponentInParent<PlaygroundParameters>();
+        GameObject PG = GameObject.Find("Playground");
+        parameters = PG.transform.GetComponent<PlaygroundParameters>();
         audios = GameObject.Find("PlaygroundHolder").GetComponents<AudioSource>();
 
         if (parameters != null)
@@ -71,6 +72,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             L = parameters.L;
             //Rground = parameters.Rground;
         }
+        else {
+            Debug.Log("Parameters not found");
+        }
+
         Rotate();
         SetLocked();
     }

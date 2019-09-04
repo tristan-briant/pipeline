@@ -60,9 +60,9 @@ Frontiers/Wall
 Frontiers/Wall
 {"PrefabPath":"Frontiers/Wall","dir":1,"destroyable":true,"isSuccess":false,"locked":true,"mirror":false,"isFrontiers":true,"type":4}
 Components/Capacitor
-{"PrefabPath":"Components/Capacitor","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":100.0000228881836}
+{"PrefabPath":"Components/Capacitor","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":1.0000001192092896}
 Components/Capacitor
-{"PrefabPath":"Components/Capacitor","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":100.00001525878906}
+{"PrefabPath":"Components/Capacitor","dir":3,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false,"cin":0.9999957084655762}
 Components/Empty
 {"PrefabPath":"Components/Empty","dir":0,"destroyable":true,"isSuccess":false,"locked":false,"mirror":false,"isFrontiers":false}
 Frontiers/Wall

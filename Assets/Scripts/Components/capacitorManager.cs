@@ -15,8 +15,11 @@ public class capacitorManager : BaseComponent {
     float q0, q2;
     //float xp;
 
-    public float Cin { get => cin / Engine.TimeFactor(); set { cin = value * Engine.TimeFactor(); UpdateValue(); } }
+    public float Cin { get => cin ; set { cin = value; Capacity = cin * Engine.TimeFactor(); UpdateValue(); } }
     public float Rin { get => rin; set => rin = value; }
+
+    protected float Capacity;
+
 
     public override void Awake()
     {
@@ -40,8 +43,9 @@ public class capacitorManager : BaseComponent {
         bubble0.GetComponent<Animator>().SetFloat("speed", 0);
         bubble2.GetComponent<Animator>().SetFloat("speed", 0);
 
+        Capacity= cin * Engine.TimeFactor(); UpdateValue();
         UpdateValue();
-        C = 0.5f;
+        //C = 0.5f;
     }
 
 
@@ -62,8 +66,8 @@ public class capacitorManager : BaseComponent {
         p2 = p[2];
 
         q += (i[0] + i[2]) / C * dt;
-        q0 += i[0] / cin  / 2 * dt;
-        q2 += i[2] / cin /  2 * dt;
+        q0 += i[0] / Capacity  / 2 * dt;
+        q2 += i[2] / Capacity /  2 * dt;
 
 
         p[0] = (q + q0) + i[0] * rin;
