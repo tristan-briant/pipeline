@@ -465,6 +465,12 @@ public class GameController : MonoBehaviour {
         {
             Application.Quit();
         }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            Debug.Log("Send mail");
+            Application.OpenURL("mailto: ?subject=Email&body=from Unity");
+        }
     }
 
     public void BackToMenu()
@@ -477,6 +483,8 @@ public class GameController : MonoBehaviour {
     {
         Engine.Reset_p_i(composants);
     }
+
+   
 
 }
 

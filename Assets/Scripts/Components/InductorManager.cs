@@ -11,13 +11,14 @@ public class InductorManager : BaseComponent
     GameObject water, water0, water2;
     public float x_bulle = 0;
     public float lin = 10;
-    public float rin = 10f;
+    float rin = 20f;
+    float inductance = 10;
     //float r_bulle = 0.1f;
     //float angle;
     Animation anim;
 
-    public float Lin { get => lin; set => lin = value; }
-    public float Rin { get => rin; set => rin = value; }
+    public float Lin { get => lin; set { lin = value; inductance = lin * Engine.TimeFactor(); UpdateValue(); } }
+    //public float Rin { get => rin; set => rin = value; }
 
     public override void Awake()
     {
@@ -34,17 +35,20 @@ public class InductorManager : BaseComponent
         water = transform.Find("Water").gameObject;
 
         GetComponent<Animator>().SetFloat("speed", 0);
-        rin = 20f;
+
+        inductance = lin * Engine.TimeFactor();
+        UpdateValue();
+
+        //rin = 20f;
     }
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        //R = 16f;//C = 2;
         p0 = p[0];
         p2 = p[2];
 
         q += (i[0] + i[2]) / C * dt;
-        f += (p[0] - p[2]) / lin * dt;
+        f += (p[0] - p[2]) / inductance * dt;
 
         p[0] = (q + (i[0] - f) * rin);
         p[2] = (q + (i[2] + f) * rin);
@@ -59,6 +63,27 @@ public class InductorManager : BaseComponent
         i[1] = 0;
         i[3] = 0;
     }
+
+
+    float Sature(float x)
+    {
+        if (x > 0)
+            return x / (1 + x);
+        else
+            return x / (1 - x);
+    }
+
+    public void UpdateValue()
+    {
+
+        float size = Sature(0.25f * Lin);
+        GetComponent<Animator>().SetFloat("size", size);
+
+        GetComponentInChildren<Text>().text = (Mathf.Round(10 * Lin) / 10).ToString();
+
+    }
+
+
 
     private void Update()
     {

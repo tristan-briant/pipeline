@@ -43,7 +43,7 @@ public class capacitorManager : BaseComponent {
         bubble0.GetComponent<Animator>().SetFloat("speed", 0);
         bubble2.GetComponent<Animator>().SetFloat("speed", 0);
 
-        Capacity= cin * Engine.TimeFactor(); UpdateValue();
+        Capacity= cin * Engine.TimeFactor();
         UpdateValue();
         //C = 0.5f;
     }
