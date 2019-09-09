@@ -93,6 +93,8 @@ public class DigitalManager : BaseFrontier
     float ppset;
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
+        R = 0.5f;
+        C = 0.1f;
         const float epsilon = 0.02f;
 
         if (setPoint[Mathf.FloorToInt(4 * (Time.time / periode % 1))])
@@ -172,7 +174,7 @@ public class DigitalManager : BaseFrontier
 
         InitializePanel();
         UpdatePanel();
-        R = 0.5f;
+        R = 10f;
     }
 
 

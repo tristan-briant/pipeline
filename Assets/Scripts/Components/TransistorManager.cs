@@ -8,11 +8,9 @@ public class TransistorManager : BaseComponent
 
     GameObject water, water1, water2, water3, bubble1, bubble2;
 
-    //public float x_bulle2=0,x_bulle1 = 0;
-    //float r_bulle = 0.1f;
     float q1, q2, q3, q11, q22;
     float i11, i22;
-    public float xp;
+
     public float gain = 10;
     public float Gain { get => gain; set => gain = value; }
     float g, f1, f2 = 0, f3, f13 = 0;

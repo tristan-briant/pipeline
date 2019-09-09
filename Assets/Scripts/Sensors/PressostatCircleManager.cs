@@ -129,7 +129,7 @@ public class PressostatCircleManager : BaseComponent {
 
     }
 
-    public float angle;
+    float angle;
 
     private void Update()
     {

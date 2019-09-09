@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class ResistorManager : BaseComponent {
 
     GameObject water,water0, water2,waterIn, bubble;
-    public float x_bulle = 0;
+    //public float x_bulle = 0;
     //float r_bulle = 0.1f;
     public float res=10;
 
-    public Sprite[] TubeVariant;
-    public Sprite[] WaterVariant;
-    Sprite[] Variant;
+    //public Sprite[] TubeVariant;
+    //public Sprite[] WaterVariant;
+    //Sprite[] Variant;
 
     public float Res { get => res; set{ res = Mathf.Round( value*100)/100; UpdateValue(); } }
 
@@ -53,7 +53,7 @@ public class ResistorManager : BaseComponent {
     override public void Awake()
     {
         tubeEnd[0] = tubeEnd[2] = true;
-        Variant = Resources.LoadAll<Sprite>("Components/Resistor-Variants");
+        //Variant = Resources.LoadAll<Sprite>("Components/Resistor-Variants");
         configPanel = Resources.Load("ConfigPanel/ConfigResistor") as GameObject;
         UpdateValue();
     }

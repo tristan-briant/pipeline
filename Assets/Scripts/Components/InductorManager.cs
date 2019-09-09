@@ -9,7 +9,7 @@ public class InductorManager : BaseComponent
 {
 
     GameObject water, water0, water2;
-    public float x_bulle = 0;
+    //public float x_bulle = 0;
     public float lin = 10;
     float rin = 20f;
     float inductance = 10;

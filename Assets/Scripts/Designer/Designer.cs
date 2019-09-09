@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using System.IO;
+using System.Net.Http;
+using System.Web;
 
 public class Designer : MonoBehaviour
 {
@@ -809,7 +811,110 @@ public class Designer : MonoBehaviour
     }
 
 
+    public void SendMail() {
 
 
+
+        SaveToString();
+        string cpstr = CompressData(PGdata);
+
+        Debug.Log(CompressData(PGdata));
+        Debug.Log(CompressData(cpstr,false));
+        Debug.Log(PGdata.Equals(CompressData(CompressData(PGdata), false)));
+        Debug.Log(" " + PGdata.Length + "   " + cpstr.Length);
+
+
+        cpstr = "Copy all and paste in Waterline Sand Box:%0A#" + cpstr + "#";
+
+        string url="";
+
+#if UNITY_ANDROID
+        url = "mailto: ?subject=Waterline circuit&body=" + cpstr;
+#endif
+
+#if UNITY_STANDALONE
+
+        url =  Application.persistentDataPath;
+#endif
+
+        Application.OpenURL(url);
+
+      
+      
+    }
+
+
+    string[] strCorrespondance = {
+        //"\"PrefabPath\"" , "PFP",
+        "empty\n", "*",
+        "Components/Pipeline\n{\"PrefabPath\":\"Components/Pipeline\"" , "?PL",
+        "Components/Elbow\n{\"PrefabPath\":\"Components/Elbow\"" , "?EL",
+        "Components/Te\n{\"PrefabPath\":\"Components/Te\"" , "?T",
+        "Components/Cross\n{\"PrefabPath\":\"Components/Cross\"" , "?CR",
+        "Components/Capacitor\n{\"PrefabPath\":\"Components/Capacitor\"","?CA",
+        "Components/Empty\n{\"PrefabPath\":\"Components/Empty\"", "?e",
+        "Components/PipelineDouble\n{\"PrefabPath\":\"Components/PipelineDouble\"","?PP",
+        "Components/ElbowDouble\n{\"PrefabPath\":\"Components/ElbowDouble\"","?EE",
+        "Components/Resistor\n{\"PrefabPath\":\"Components/Resistor\"","?R",
+        "Components/Inductor\n{\"PrefabPath\":\"Components/Inductor\"","?I",
+        "Components/Diode\n{\"PrefabPath\":\"Components/Diode\"","?D",
+        "Components/transistor-NPN\n{\"PrefabPath\":\"Components/transistor-NPN\"","?NPN",
+        "Components/Valve\n{\"PrefabPath\":\"Components/Valve\"","?V",
+        "Sensors/Generator\n{\"PrefabPath\":\"Sensors/Generator\"","$G",
+        "Sensors/PressostatTrigger\n{\"PrefabPath\":\"Sensors/PressostatTrigger\"", "$PT",
+        "Sensors/PressostatCircle\n{\"PrefabPath\":\"Sensors/PressostatCircle\"","$PC",
+        "Sensors/Pressostat\n{\"PrefabPath\":\"Sensors/Pressostat\"","$PS",
+        "Sensors/PressostatDigital\n{\"PrefabPath\":\"Sensors/PressostatDigital\"","$PD",
+        "Sensors/Debimeter\n{\"PrefabPath\":\"Sensors/Debimeter\"","$DM",
+        "Sensors/Flush\n{\"PrefabPath\":\"Sensors/Flush\"","$F",
+        "Sensors/WatchClock\n{\"PrefabPath\":\"Sensors/WatchClock\"","$W",
+        "Frontiers/Corner\n{\"PrefabPath\":\"Frontiers/Corner\"" , "!CN",
+        "Frontiers/Wall\n{\"PrefabPath\":\"Frontiers/Wall\"" , "!W",
+        "Frontiers/OutLetForest\n{\"PrefabPath\":\"Frontiers/OutLetForest\"" , "!OF",
+        "Frontiers/Ground\n{\"PrefabPath\":\"Frontiers/Ground\"", "!G",
+        "Frontiers/DigitalInlet\n{\"PrefabPath\":\"Frontiers/DigitalInlet\"","!D",
+        "Frontiers/InletDebimetreTrigger\n{\"PrefabPath\":\"Frontiers/InletDebimetreTrigger\"", "!IDT",
+        "Frontiers/Inlet\n{\"PrefabPath\":\"Frontiers/Inlet\"","!IN",
+        ",\"dir\":0", "D0", ",\"dir\":1", "D1",",\"dir\":2", "D2", ",\"dir\":3", "D3", ",\"dir\":4", "D4", ",\"dir\":5", "D5", ",\"dir\":6", "D6",
+        "\"type\":0", "T0", "\"type\":1", "T1","\"type\":2", "T2", "\"type\":3", "T3", "\"type\":4", "T4", "\"type\":5", "T5", "\"type\":6", "T6",
+        ",\"destroyable\":true" , "dT",",\"destroyable\":false" , "dF",
+        ",\"isSuccess\":false", "iF",",\"isSuccess\":true", "iT",
+        ",\"locked\":false", "lF",",\"locked\":true", "lT",
+        ",\"mirror\":false", "mF",",\"mirror\":true", "mT",
+        "\"periodic\":false","PRF","\"periodic\":true","PRT","\"periode\":","PE",
+        "\"setPoint\":","SP",
+        ",\"isFrontiers\":false" , "fF",",\"isFrontiers\":true" , "fT",
+        "\"imaxcadran\":","IMXC","\"imax\":","IMX","\"pset\":","PS",
+        "\"iMax\":","iMX","\"pMax\":","pMX",
+        "\"chargeSuccess\":","CS",
+        "\"symmetric\":true","ST","\"symmetric\":false","SF","\"setPointLow\":","SpL","\"setPointHigh\":","SpH",
+        "\"openTime\":","YY","\"raiseTime\":","XX","\"timeOut\":","ZZ",
+        "}\n", " ",
+        "\"","."
+        //"\n", "%0A",
+    };
+
+    string CompressData(string data , bool compress = true)
+    {
+        string buf=data;
+
+        if (compress)
+        {
+            for (int i = 0; i < strCorrespondance.Length / 2; i++)
+            {
+                buf = buf.Replace(strCorrespondance[2 * i], strCorrespondance[2 * i + 1]);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < strCorrespondance.Length / 2; i++)
+            {
+                buf = buf.Replace(strCorrespondance[2 * i+1], strCorrespondance[2 * i ]);
+            }
+        }
+
+
+        return buf;
+    }
 
 }

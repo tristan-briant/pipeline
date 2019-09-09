@@ -591,6 +591,11 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
 
         Destroy(gameObject);
-
     }
+
+    public float Troncate(float x)
+    {
+        return Mathf.Round(x * 1000) / 1000;
+    }
+
 }

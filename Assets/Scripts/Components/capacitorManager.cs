@@ -15,7 +15,7 @@ public class capacitorManager : BaseComponent {
     float q0, q2;
     //float xp;
 
-    public float Cin { get => cin ; set { cin = value; Capacity = cin * Engine.TimeFactor(); UpdateValue(); } }
+    public float Cin { get => cin ; set { cin = Troncate(value); Capacity = cin * Engine.TimeFactor(); UpdateValue(); } }
     public float Rin { get => rin; set => rin = value; }
 
     protected float Capacity;

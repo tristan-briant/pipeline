@@ -10,7 +10,7 @@ public class diodeManager : BaseComponent {
     //public float x_bulle = 0;
     //float r_bulle = 0.1f;
     float q0, q2;
-    public float xp;
+    float xp;
 
     public override void Reset_i_p()
     {
