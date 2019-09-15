@@ -898,8 +898,10 @@ public class Designer : MonoBehaviour
     {
         string buf=data;
 
+
         if (compress)
         {
+            buf = "toto#" + data + "#fin";
             for (int i = 0; i < strCorrespondance.Length / 2; i++)
             {
                 buf = buf.Replace(strCorrespondance[2 * i], strCorrespondance[2 * i + 1]);
@@ -907,6 +909,17 @@ public class Designer : MonoBehaviour
         }
         else
         {
+            // first remove header and tail
+
+            int indexStart = buf.IndexOf("##");
+            int indexEnd = buf.IndexOf("##",indexStart+10);
+            Debug.Log(indexStart);
+            Debug.Log(indexEnd);
+            if (indexStart >= 0 && indexEnd>=0)
+                buf = buf.Substring(indexStart, indexEnd-indexStart);
+           
+
+
             for (int i = 0; i < strCorrespondance.Length / 2; i++)
             {
                 buf = buf.Replace(strCorrespondance[2 * i+1], strCorrespondance[2 * i ]);
