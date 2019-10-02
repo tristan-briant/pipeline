@@ -10,7 +10,7 @@ public class capacitorManager : BaseComponent {
 
     float f0, f2;
     public float cin;
-    private float rin = 0.025f;
+    private float rin = 0.2f;
 
     float q0, q2;
     //float xp;

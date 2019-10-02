@@ -811,17 +811,27 @@ public class Designer : MonoBehaviour
     }
 
 
+    public void Paste()
+    {
+        string clipBoard = GUIUtility.systemCopyBuffer;
+        Debug.Log(clipBoard);
+        Debug.Log(CompressData(clipBoard, false));
+        PGdata = CompressData(clipBoard, false);
+
+        LoadFromString();
+    }
+
     public void SendMail() {
 
-
+    
 
         SaveToString();
         string cpstr = CompressData(PGdata);
-
+        /*Debug.Log(PGdata);
         Debug.Log(CompressData(PGdata));
         Debug.Log(CompressData(cpstr,false));
         Debug.Log(PGdata.Equals(CompressData(CompressData(PGdata), false)));
-        Debug.Log(" " + PGdata.Length + "   " + cpstr.Length);
+        Debug.Log(" " + PGdata.Length + "   " + cpstr.Length);*/
 
 
         cpstr = "Copy all and paste in Waterline Sand Box:%0A#" + cpstr + "#";
@@ -841,6 +851,17 @@ public class Designer : MonoBehaviour
 
       
       
+    }
+
+
+    int DiffersAtIndex(string s1, string s2)
+    {
+        int index = 0;
+        int min = Mathf.Min(s1.Length, s2.Length);
+        while (index < min && s1[index] == s2[index])
+            index++;
+
+        return (index == min && s1.Length == s2.Length) ? -1 : index;
     }
 
 
@@ -890,7 +911,7 @@ public class Designer : MonoBehaviour
         "\"symmetric\":true","ST","\"symmetric\":false","SF","\"setPointLow\":","SpL","\"setPointHigh\":","SpH",
         "\"openTime\":","YY","\"raiseTime\":","XX","\"timeOut\":","ZZ",
         "}\n", " ",
-        "\"","."
+        "\"","~"
         //"\n", "%0A",
     };
 
@@ -901,7 +922,7 @@ public class Designer : MonoBehaviour
 
         if (compress)
         {
-            buf = "toto#" + data + "#fin";
+            buf = "" + data + "";
             for (int i = 0; i < strCorrespondance.Length / 2; i++)
             {
                 buf = buf.Replace(strCorrespondance[2 * i], strCorrespondance[2 * i + 1]);
@@ -911,12 +932,14 @@ public class Designer : MonoBehaviour
         {
             // first remove header and tail
 
-            int indexStart = buf.IndexOf("##");
-            int indexEnd = buf.IndexOf("##",indexStart+10);
-            Debug.Log(indexStart);
-            Debug.Log(indexEnd);
-            if (indexStart >= 0 && indexEnd>=0)
-                buf = buf.Substring(indexStart, indexEnd-indexStart);
+            int indexStart = buf.IndexOf("#")+1;
+            int indexEnd = buf.IndexOf("#",indexStart+1);
+
+            if (indexStart >= 0 && indexEnd >= 0)
+            {
+                buf = buf.Substring(indexStart, indexEnd - indexStart);
+                //Debug.Log(buf);
+            }
            
 
 

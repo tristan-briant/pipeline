@@ -10,9 +10,9 @@ public class InductorManager : BaseComponent
 
     GameObject water, water0, water2;
     //public float x_bulle = 0;
-    public float lin = 10;
-    float rin = 20f;
-    float inductance = 10;
+    public float lin = 2;
+    private float rin = 15f;
+    float inductance = 2;
     //float r_bulle = 0.1f;
     //float angle;
     Animation anim;
@@ -44,6 +44,8 @@ public class InductorManager : BaseComponent
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
+        C = 0.1f;
+
         p0 = p[0];
         p2 = p[2];
 
