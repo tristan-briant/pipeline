@@ -844,7 +844,8 @@ public class Designer : MonoBehaviour
 
 #if UNITY_STANDALONE
 
-        url =  Application.persistentDataPath;
+        //url =  Application.persistentDataPath;
+        url = "mailto: ?subject=Waterline circuit&body=" + cpstr;
 #endif
 
         Application.OpenURL(url);

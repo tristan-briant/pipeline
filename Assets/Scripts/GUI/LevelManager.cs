@@ -48,6 +48,9 @@ public class LevelManager : MonoBehaviour {
         {
             DestroyImmediate(gameObject);
         }
+
+
+        Application.targetFrameRate = 30;
     }
 
     public int LevelMax()
