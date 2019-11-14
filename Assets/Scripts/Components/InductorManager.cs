@@ -11,7 +11,7 @@ public class InductorManager : BaseComponent
     GameObject water, water0, water2;
     //public float x_bulle = 0;
     public float lin = 2;
-    private float rin = 15f;
+    private float rin = 10f;
     float inductance = 2;
     //float r_bulle = 0.1f;
     //float angle;

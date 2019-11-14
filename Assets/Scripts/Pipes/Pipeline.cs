@@ -17,11 +17,11 @@ public class Pipeline : BaseComponent {
         q += (i[0] + i[2]) / C * dt;
         f += (p0 - p2) / L * dt;
 
-        p[0] = (q + (i[0] - f) * R);
-        p[2] = (q + (i[2] + f) * R);
+        p[0] = q + (i[0] - f) * R;
+        p[2] = q + (i[2] + f) * R;
 
-        i[0] = (f + (p0 - q) / R);
-        i[2] = (-f + (p2 - q) / R);
+        i[0] = f + (p0 - q) / R;
+        i[2] = -f + (p2 - q) / R;
         
     }
 
