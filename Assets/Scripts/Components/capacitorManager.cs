@@ -70,8 +70,8 @@ public class capacitorManager : BaseComponent {
         q0 += i[0] / Capacity / 2 * dt;
         q2 += i[2] / Capacity / 2 * dt;
 
-        f0 += (p0 - q0-q) / L * dt;
-        f2 += (p2 - q2-q) / L * dt;
+        f0 += (p0 - q0 - q) / L * dt;
+        f2 += (p2 - q2 - q) / L * dt;
 
         p[0] = (q + q0) + (i[0] - f0) * rin;
         p[2] = (q + q2) + (i[2] - f2) * rin;
@@ -141,7 +141,7 @@ public class capacitorManager : BaseComponent {
         water2.GetComponent<Image>().color = PressureColor(p2);
 
         const float Coeff= 0.6f;
-        GetComponent<Animator>().SetFloat("position", 0.5f * (1 + Sature((q2-q0) * Coeff)));
+        GetComponent<Animator>().SetFloat("position", 0.5f * (1 + Sature((q2 - q0) * Coeff)));
 
 
         bubble0.GetComponent<Animator>().SetFloat("speed", SpeedAnim(ff0));

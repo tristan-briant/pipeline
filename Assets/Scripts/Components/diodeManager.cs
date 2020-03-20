@@ -7,8 +7,6 @@ public class diodeManager : BaseComponent {
 
     GameObject water0, water2, bubble;
     GameObject piston;
-    //public float x_bulle = 0;
-    //float r_bulle = 0.1f;
     float q0, q2;
     float xp;
 
@@ -28,9 +26,7 @@ public class diodeManager : BaseComponent {
 
         f += (p[0] - p[2]) / L * dt;
 
-        if (f <= 0)
-            q0 = q2 = (q0 + q2) / 2;
-        else
+        if (f >= 0)                   //Diode de 2 vers 0
             f = 0;
 
         p[0] = (q0 + (i[0] - f) * R);

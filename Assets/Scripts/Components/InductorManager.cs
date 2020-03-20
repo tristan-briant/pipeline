@@ -9,12 +9,9 @@ public class InductorManager : BaseComponent
 {
 
     GameObject water, water0, water2;
-    //public float x_bulle = 0;
     public float lin = 2;
     private float rin = 10f;
     float inductance = 2;
-    //float r_bulle = 0.1f;
-    //float angle;
     Animation anim;
 
     public float Lin { get => lin; set { lin = value; inductance = lin * Engine.TimeFactor(); UpdateValue(); } }
@@ -24,6 +21,7 @@ public class InductorManager : BaseComponent
     {
         configPanel = Resources.Load("ConfigPanel/ConfigInductor") as GameObject;
         tubeEnd[0] = tubeEnd[2] = true;
+        UpdateValue();
     }
 
 
@@ -85,7 +83,11 @@ public class InductorManager : BaseComponent
 
     }
 
-
+    public override void Rotate()
+    {
+        base.Rotate();
+        transform.Find("Value").rotation = Quaternion.identity;
+    }
 
     private void Update()
     {

@@ -8,20 +8,14 @@ public class TransistorManager : BaseComponent
 
     GameObject water, water1, water2, water3, bubble1, bubble2;
 
-    float q1, q2, q3, q11, q22;
+    float q1, q2, q3, q11, q22,q23;
     float i11, i22;
 
     public float gain = 10;
     public float Gain { get => gain; set => gain = value; }
     float g, f1, f2 = 0, f3, f13 = 0;
     float threshold = 0.02f;
-    //float fthreshold = 0.05f;
     public bool NPN = true;
-
-
-    //float Rin=100;
-    //float q12 = 0;//, q13 = 0;
-    //public bool mirror=false;
 
     override public void Awake()
     {
@@ -190,208 +184,232 @@ public class TransistorManager : BaseComponent
 
     public override void Calcule_i_p(float[] p, float[] i, float dt)
     {
-        /*if (mirror)
-        {
-            float e = p[0];
-            p[0] = p[2];
-            p[2] = e;
-            e = i[0];
-            i[0] = i[2];
-            i[2] = e;
-        }*/
-
         p1 = p[1];
         p2 = p[2];
         p3 = p[3];
 
-        q1 += (i[1] - f1)  * dt;
-        q2 += i[2]  * dt;
-        //q11 -= i11 * dt;
-        q22 -= i22  * dt;
+        q1 += (i[1] - f1) / C * dt;
+        q2 += (i[2] - f2) / C * dt;
+        q3 += (i[3] + f1 + f2) / C * dt;
 
-        q += (i[3] + i22 + f1) * dt;
+        f1 += (p[1] - p[3]) / L * dt;
+        f2 += (p[2] - p[3]) / L * dt;
 
-        /*if (q1 > q11)
-        {
-            q1 = q11 = (q1 + q11) / 2;
-            f1 += (p[1] - q) / L * dt;
-        }
-        else
-        {
-            f1 = 0;
-        }*/
-
- 
-        if (q2 - q22> 0)
-        {
-            q2 = q22 = (q2 + q22) / 2;
-            f2 += (p[2] - q) / L * dt;
-        }
-        else
-        {
+        if (f2 <= 0)                     //Diode de 2 vers 3
+            /*;//q2 = q3 = (q2 + q3) / 2;
+        else*/
             f2 = 0;
-        }
 
-        f1 += (p[1] - q) / L * dt;
-        f1 = Mathf.Clamp(f1, 0, gain * f2);
+        //f1 = Mathf.Clamp(f1,0,gain*f2);
+        f1 = Mathf.Min(f1, gain * f2);   // Courant retour autoris�
 
-        f3 += (p[3] - q) / L * dt;
+        p[1] = (q1 + (i[1] - f1) * R);
+        p[2] = (q2 + (i[2] - f2) * R);
+        p[3] = (q3 + (i[3] + f1 + f2) * R);
 
+        i[1] = (f1 + (p1 - q1) / R);
+        i[2] = (f2 + (p2 - q2) / R);
+        i[3] = (-f1 - f2 + (p3 - q3) / R);
 
-        p[1] = (q1 / C + (i[1] - f1) * R);
-        p[2] = (q2 / C + (i[2] - f2) * R);
-        p[3] = (q / C + (i[3] - f3) * R);
-
-        //i[1] = (f1 + (p1 - q1 / C) / R);
-        i[1] = f1;
-        i[2] = (f2 + (p2 - q2 / C) / R);
-        i[3] = (f3 + (p3 - q / C) / R);
-
-        //i11= (f1 + (q11 - q / C) / R);
-        i22= (f2 + (q22 - q / C) / R);
-
-        /*if (mirror)
+        if (false)
         {
-            float e = p[0];
-            p[0] = p[2];
-            p[2] = e;
-            e = i[0];
-            i[0] = i[2];
-            i[2] = e;
-        }*/
 
-        return;
+            p1 = p[1];
+            p2 = p[2];
+            p3 = p[3];
 
+            q1 += (i[1] - f1) * dt;
+            q2 += i[2] * dt;
+            //q11 -= i11 * dt;
+            q22 -= i22 * dt;
 
-        /* C = 0.3f;
-         R = 0.1f;*/
-        /*if (mirror) {
-            float e = p[0];
-            p[0] = p[2];
-            p[2] = e;
-            e = i[0];
-            i[0] = i[2];
-            i[2] = e;
-        }*/
+            q += (i[3] + i22 + f1) * dt;
 
-       
-
-        q1 += (i[1]) * dt;
-        q3 += (i[3]) * dt;
-        q2 += (i[2]) * dt;
-
-        if (NPN)
-        {
-            g = q2 - q3;
-
-            if (g > 0)
+            /*if (q1 > q11)
             {
-                q = (q2 + q3) / 2;
-                q2 = q;
-                q3 = q;
-                f2 += (p[2] - p[3]) / L * dt;
+                q1 = q11 = (q1 + q11) / 2;
+                f1 += (p[1] - q) / L * dt;
+            }
+            else
+            {
+                f1 = 0;
+            }*/
+
+
+            if (q2 - q22 > 0)
+            {
+                q2 = q22 = (q2 + q22) / 2;
+                f2 += (p[2] - q) / L * dt;
             }
             else
             {
                 f2 = 0;
             }
 
-            if (g > threshold)
-            {
-                q = q1;
-                q1 = 0.5f * q1 + 0.5f * q3;
-                q3 = 0.5f * q3 + 0.5f * q;
+            f1 += (p[1] - q) / L * dt;
+            f1 = Mathf.Clamp(f1, 0, gain * f2);
 
-                f13 += (p[1] - p[3]) / L * dt;
-            }
-            else
-            {
-                f13 = 0;
-            }
+            f3 += (p[3] - q) / L * dt;
 
-            f13 = Mathf.Clamp(f13, 0, gain * f2);
 
-            p[1] = (q1 / C + (i[1] - f13) * R);
-            p[2] = (q2 / C + (i[2] - f2 ) * R);
-            p[3] = (q3 / C + (i[3] + f13 + f2) * R);
+            p[1] = (q1 / C + (i[1] - f1) * R);
+            p[2] = (q2 / C + (i[2] - f2) * R);
+            p[3] = (q / C + (i[3] - f3) * R);
 
-            i[1] = (f13 + (p1 - q1 / C) / R);
+            //i[1] = (f1 + (p1 - q1 / C) / R);
+            i[1] = f1;
             i[2] = (f2 + (p2 - q2 / C) / R);
-            i[3] = (-f2 - f13 + (p3 - q3 / C) / R);
-        }
-        else
-        {
-            g = q1 - q2;
+            i[3] = (f3 + (p3 - q / C) / R);
 
-            if (g > 0) 
+            //i11= (f1 + (q11 - q / C) / R);
+            i22 = (f2 + (q22 - q / C) / R);
+
+            /*if (mirror)
             {
-                q = (q1 + q2) / 2;
-                q1 = q;
-                q2 = q;
-                f2 += (p[1] - p[2] ) / L * dt;
+                float e = p[0];
+                p[0] = p[2];
+                p[2] = e;
+                e = i[0];
+                i[0] = i[2];
+                i[2] = e;
+            }*/
+
+            return;
+
+
+            /* C = 0.3f;
+             R = 0.1f;*/
+            /*if (mirror) {
+                float e = p[0];
+                p[0] = p[2];
+                p[2] = e;
+                e = i[0];
+                i[0] = i[2];
+                i[2] = e;
+            }*/
+
+
+
+            q1 += (i[1]) * dt;
+            q3 += (i[3]) * dt;
+            q2 += (i[2]) * dt;
+
+            if (NPN)
+            {
+                g = q2 - q3;
+
+                if (g > 0)
+                {
+                    q = (q2 + q3) / 2;
+                    q2 = q;
+                    q3 = q;
+                    f2 += (p[2] - p[3]) / L * dt;
+                }
+                else
+                {
+                    f2 = 0;
+                }
+
+                if (g > threshold)
+                {
+                    q = q1;
+                    q1 = 0.5f * q1 + 0.5f * q3;
+                    q3 = 0.5f * q3 + 0.5f * q;
+
+                    f13 += (p[1] - p[3]) / L * dt;
+                }
+                else
+                {
+                    f13 = 0;
+                }
+
+                f13 = Mathf.Clamp(f13, 0, gain * f2);
+
+                p[1] = (q1 / C + (i[1] - f13) * R);
+                p[2] = (q2 / C + (i[2] - f2) * R);
+                p[3] = (q3 / C + (i[3] + f13 + f2) * R);
+
+                i[1] = (f13 + (p1 - q1 / C) / R);
+                i[2] = (f2 + (p2 - q2 / C) / R);
+                i[3] = (-f2 - f13 + (p3 - q3 / C) / R);
             }
             else
             {
-                f2 = 0;
+                g = q1 - q2;
+
+                if (g > 0)
+                {
+                    q = (q1 + q2) / 2;
+                    q1 = q;
+                    q2 = q;
+                    f2 += (p[1] - p[2]) / L * dt;
+                }
+                else
+                {
+                    f2 = 0;
+                }
+
+                if (g > threshold)
+                {
+                    q = q1;
+                    q1 = 0.9f * q1 + 0.1f * q3;
+                    q3 = 0.9f * q3 + 0.1f * q;
+
+                    f13 += (p[1] - p[3]) / L * dt;
+                }
+                else
+                {
+                    f13 = 0;
+                }
+
+                f13 = Mathf.Clamp(f13, 0, gain * f2);
+
+                p[1] = (q1 / C + (i[1] - f2 - f13) * R);
+                p[2] = (q2 / C + (i[2] + f2) * R);
+                p[3] = (q3 / C + (i[3] + f13) * R);
+
+                i[1] = (f13 + f2 + (p1 - q1 / C) / R);
+                i[2] = (-f2 + (p2 - q2 / C) / R);
+                i[3] = (-f13 + (p3 - q3 / C) / R);
+
             }
 
-            if (g>threshold) {
-                q = q1;
-                q1 = 0.9f * q1 + 0.1f * q3;
-                q3 = 0.9f * q3 + 0.1f * q;
 
-                f13 += (p[1] - p[3] ) / L * dt;
-            } 
-            else
+            /*
+            if (mirror)
             {
-                f13 = 0;
-            }
-
-            f13 = Mathf.Clamp(f13, 0 , gain * f2);
-
-            p[1] = (q1 / C + (i[1] - f2 - f13) * R);
-            p[2] = (q2 / C + (i[2] + f2 ) * R);
-            p[3] = (q3 / C + (i[3] + f13 ) * R);
-
-            i[1] = ( f13 + f2 + (p1 - q1 / C) / R);
-            i[2] = ( - f2 + (p2 - q2 / C) / R);
-            i[3] = (-f13  + (p3 - q3 / C) / R);
-
+                float e = p[0];
+                p[0] = p[2];
+                p[2] = e;
+                e = i[0];
+                i[0] = i[2];
+                i[2] = e;
+            }*/
         }
-           
-        
-        /*
-        if (mirror)
-        {
-            float e = p[0];
-            p[0] = p[2];
-            p[2] = e;
-            e = i[0];
-            i[0] = i[2];
-            i[2] = e;
-        }*/
-
 
     }
 
     public override void Constraint(float[] p, float[] i, float dt)
     {
-        if (mirror)
+
+        i[0] = 0;
+        /*if (mirror)
             i[2] = 0;
         else
-            i[0] = 0;
+            i[0] = 0;*/
     }
 
     public override void Rotate()
     {
         transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
 
-        if(!mirror)
+        /*if(!mirror)
             foreach (Transform child in transform)
                 child.localScale = Vector3.one;
         else
             foreach (Transform child in transform)
                 child.localScale = new Vector3(-1, 1, 1);
+                */
 
     }
 
@@ -400,10 +418,10 @@ public class TransistorManager : BaseComponent
        
             dir = (dir + 1) % 4;
 
-        if (dir == 2 || dir == 3)
+        /*if (dir == 2 || dir == 3)
             mirror = true;
         else
-            mirror = false;
+            mirror = false;*/
 
 
             Rotate();
@@ -428,7 +446,7 @@ public class TransistorManager : BaseComponent
         water1.GetComponent<Image>().color = PressureColor(p1);
         water2.GetComponent<Image>().color = PressureColor(p2);
         water3.GetComponent<Image>().color = PressureColor(p3);
-        water.GetComponent<Image>().color = PressureColor(q);
+        water.GetComponent<Image>().color = PressureColor((p1 + p2 + p3) / 3);
 
         GetComponent<Animator>().SetFloat("open",Mathf.Clamp(f2,0,0.99f));
 
