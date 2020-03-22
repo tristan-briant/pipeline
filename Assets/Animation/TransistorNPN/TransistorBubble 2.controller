@@ -6,7 +6,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TransistorBubble 1
+  m_Name: TransistorBubble 2
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: speed
@@ -163,7 +163,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 821ff62cd2ae7fe46a20546c69ec3073, type: 2}
+  m_Motion: {fileID: 7400000, guid: cc08c5bd55df9ee40bc1b52815c0e893, type: 2}
   m_Tag: 
   m_SpeedParameter: speed
   m_MirrorParameter: 
@@ -270,4 +270,4 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 48, y: 204, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 1102710950871512300}
+  m_DefaultState: {fileID: 1102683149710443022}

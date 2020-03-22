@@ -53,7 +53,7 @@ public class InletDebimeterManager : BaseFrontier
     }
 
 
-    GameObject water =null, water0=null, arrow=null, bubble=null, value, timer;
+    GameObject water =null, water0=null, bubble=null, value, timer;
     GameObject[] red = new GameObject[4];
     GameObject[] green = new GameObject[4];
     protected bool open=true;

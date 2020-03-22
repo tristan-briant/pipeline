@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
 
     public static int N, M; // size of the playground
 
@@ -12,10 +13,8 @@ public class GameController : MonoBehaviour {
     float[][] deltap;
 
     public static BaseComponent[][] composants;
-    //public BaseComponent vide;
     public BaseComponent videFrontier;
     public BaseFrontier[] borders;
-    // public Sprite concrete; // image for locked component
     public int currentLevel;
     public Text levelText;
     public Text nextLevelText;
@@ -51,7 +50,7 @@ public class GameController : MonoBehaviour {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
                 go.SetActive(false);
             LevelManager.designerMode = false;
- 
+
             LoadLevel();
         }
         else //level designer
@@ -127,10 +126,10 @@ public class GameController : MonoBehaviour {
         //Debug.Log(" W :" + width + " H  " + height);
         //Debug.Log(" N :" + N + " M  " + M);
 
-        float wx= width / (100f * N);
+        float wx = width / (100f * N);
 
         bool trivialEdge = true;
-        if (! LevelManager.designerMode)
+        if (!LevelManager.designerMode)
         {
             for (int j = 1; j < M - 1; j++)
             {
@@ -145,7 +144,7 @@ public class GameController : MonoBehaviour {
             }
             for (int j = 1; j < M - 1; j++)
             {
-                int i = N-1;
+                int i = N - 1;
                 GameObject slot = Pg.transform.GetChild((i) + (j) * (N)).gameObject; //the slot
                 BaseComponent bc = slot.GetComponentInChildren<BaseComponent>();
                 if (!bc.name.Contains("Wall"))
@@ -155,8 +154,8 @@ public class GameController : MonoBehaviour {
                 }
             }
 
-            if(trivialEdge)
-                wx = width / (100f * (N-1.5f));
+            if (trivialEdge)
+                wx = width / (100f * (N - 1.5f));
         }
 
         float wy = height / (100f * M);
@@ -193,7 +192,7 @@ public class GameController : MonoBehaviour {
                 {
                     if (slot.transform.childCount != 2) Debug.Log("Populate error" + slot.transform.childCount);
                     BaseComponent bc = slot.transform.GetChild(1).GetComponent<BaseComponent>();
-                    bc.enabled=true; //sometime usefull if exchange from the deck
+                    bc.enabled = true; //sometime usefull if exchange from the deck
                     Vector3 v = bc.transform.localPosition;
                     v.z = 0;
                     bc.transform.localPosition = v;
@@ -301,14 +300,10 @@ public class GameController : MonoBehaviour {
                 composants[i][j] = bc;
                 (bc as BaseFrontier).GetValueFromSlot();
             }
-
         }
 
         StopperChanged = true;
 
-        
-           
-            
         firstPopulate = false;
     }
 
@@ -316,26 +311,14 @@ public class GameController : MonoBehaviour {
     public void PutAllStopper()
     {
         for (int j = 0; j < M; j++)
-        {
             for (int i = 0; i < N; i++)
-            {
-
-                composants[i][j].RemoveAllStoppers();
-                if (i > 0 && composants[i][j].HasTubeEnd(2) && !composants[i - 1][j].HasTubeEnd(0)) composants[i][j].PutStopper(2);
-                if (i < N - 1 && composants[i][j].HasTubeEnd(0) && !composants[i + 1][j].HasTubeEnd(2)) composants[i][j].PutStopper(0);
-                if (j > 0 && composants[i][j].HasTubeEnd(1) && !composants[i][j - 1].HasTubeEnd(3)) composants[i][j].PutStopper(1);
-                if (j < M - 1 && composants[i][j].HasTubeEnd(3) && !composants[i][j + 1].HasTubeEnd(1)) composants[i][j].PutStopper(3);
-            }
-        }
+                composants[i][j].PutStoppers();
 
         if (BaseComponent.itemBeingDragged != null)
         {
             BaseComponent dg = BaseComponent.itemBeingDragged.GetComponent<BaseComponent>();
-            dg.RemoveAllStoppers();
-            for (int i = 0; i < 4; i++)
-                if (dg.HasTubeEnd(i)) dg.PutStopper(i);
+            dg.PutStoppers();
         }
-
     }
 
     void Evolution()
@@ -394,8 +377,6 @@ public class GameController : MonoBehaviour {
             levelText.text = "Retry";
         levelText.GetComponent<Button>().enabled = true;
         levelText.GetComponent<Animator>().enabled = true;
-
-
     }
 
     public void LoadNextOrRetryLevel()
@@ -441,7 +422,8 @@ public class GameController : MonoBehaviour {
     }
 
 
-    void LateUpdate () {
+    void LateUpdate()
+    {
 
         Engine.update_composant_p_i(composants);
 
@@ -453,7 +435,7 @@ public class GameController : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Home))
         {
-            
+
         }
         if (Input.GetKey(KeyCode.Escape))
         {
@@ -474,7 +456,7 @@ public class GameController : MonoBehaviour {
     }
 
     public void BackToMenu()
-    {    
+    {
         Designer.SaveToPrefs();
         SceneManager.LoadScene(0);
     }
@@ -484,7 +466,7 @@ public class GameController : MonoBehaviour {
         Engine.Reset_p_i(composants);
     }
 
-   
+
 
 }
 

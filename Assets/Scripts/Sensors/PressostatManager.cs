@@ -10,7 +10,6 @@ public class PressostatManager : BaseComponent {
     ValueManager valueM;
 
     float successTime = 2.0f; //Time to obtain a success
-    float t_shine = 0;
     Animator animator;
 
     public float setPointHigh;

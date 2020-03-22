@@ -6,16 +6,14 @@ using UnityEngine.UI;
 public class capacitorManager : BaseComponent {
 
     GameObject waterIn0, waterIn2, water0, water2, bubble0, bubble2;
-    //GameObject spring1, spring2, spring3, spring4, piston;
-
+    
     float f0, f2;
     float ff0, ff2;
     public float cin;
     private float rin = 0.3f;
 
     float q0, q2;
-    //float xp;
-
+    
     public float Cin { get => cin ; set { cin = Troncate(value); Capacity = cin * Engine.TimeFactor(); UpdateValue(); } }
     public float Rin { get => rin; set => rin = value; }
 
@@ -28,7 +26,6 @@ public class capacitorManager : BaseComponent {
         configPanel = Resources.Load("ConfigPanel/ConfigCapacity") as GameObject;
         GetComponent<Animator>().SetFloat("position", 0.5f);
         UpdateValue();
-        //Debug.Log("factor = " +  Engine.TimeFactor());
     }
 
 
@@ -117,24 +114,13 @@ public class capacitorManager : BaseComponent {
 
     public void UpdateValue()
     {
-
         float size = Sature(0.25f * Cin);
         GetComponent<Animator>().SetFloat("size", size);
-
         GetComponentInChildren<Text>().text =  (Mathf.Round(10 * Cin) / 10 ).ToString();
-        
     }
-
-    bool FirstCharge = true;
 
     private void Update()
     {
-        /*if(FirstCharge && Mathf.Abs(q0) > 0.1f)
-        {
-            GameObject.Find("Playground").BroadcastMessage("HighLightFlush", SendMessageOptions.DontRequireReceiver);
-            FirstCharge = false;
-        }*/
-
         waterIn0.GetComponent<Image>().color = PressureColor(q0 + q);
         waterIn2.GetComponent<Image>().color = PressureColor(q2 + q);
         water0.GetComponent<Image>().color = PressureColor(p0);
@@ -143,9 +129,7 @@ public class capacitorManager : BaseComponent {
         const float Coeff= 0.6f;
         GetComponent<Animator>().SetFloat("position", 0.5f * (1 + Sature((q2 - q0) * Coeff)));
 
-
         bubble0.GetComponent<Animator>().SetFloat("speed", SpeedAnim(ff0));
         bubble2.GetComponent<Animator>().SetFloat("speed", SpeedAnim(ff2));
-
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Web;
@@ -28,7 +29,6 @@ public class Designer : MonoBehaviour
         N = Pg.GetComponent<PlaygroundParameters>().N;
         M = Pg.GetComponent<PlaygroundParameters>().M;
     }
-
 
     public void MakeThumb(string filename)
     {
@@ -91,19 +91,19 @@ public class Designer : MonoBehaviour
         string filename = "PlayGround" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
             + System.DateTime.Now.ToLongTimeString().Replace(":", "-");
 
-        string file = Path.Combine(Application.persistentDataPath,filename + ".txt");
+        string file = Path.Combine(Application.persistentDataPath, filename + ".txt");
 
         SaveToString();
-       
+
         File.WriteAllText(file, PGdata);
 
-        MakeThumb(Path.Combine(Application.persistentDataPath,  filename + ".png"));
+        MakeThumb(Path.Combine(Application.persistentDataPath, filename + ".png"));
     }
 
 
     static public void SaveToPrefs()
     {
-        
+
         LevelManager lvm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 
         if (lvm.currentLevel == 0 || lvm.designerScene)
@@ -124,7 +124,8 @@ public class Designer : MonoBehaviour
             PGdata = PlayerPrefs.GetString("SandBox");
             LoadFromString();
         }
-        else {
+        else
+        {
             PGdata = Resources.Load<TextAsset>("Levels/Default-Designer").ToString();
             LoadFromString();
         }
@@ -144,7 +145,7 @@ public class Designer : MonoBehaviour
         MakeThumb("Assets/Resources/Levels/" + path + ".png");
     }
 
-    static public void SaveToString(bool reset=false)
+    static public void SaveToString(bool reset = false)
     {
         GameObject PG = GameObject.Find("Playground");
 
@@ -187,7 +188,7 @@ public class Designer : MonoBehaviour
             }
 
         }
-        
+
     }
 
     void ClearPlayground()
@@ -218,7 +219,7 @@ public class Designer : MonoBehaviour
 
     }
 
-    [ContextMenu("LoadFromString")]
+    //[ContextMenu("LoadFromString")]
     static public void LoadFromString()
     {
         if (PGdata == null) return;
@@ -274,7 +275,7 @@ public class Designer : MonoBehaviour
         foreach (Transform slotDeck in deck)
         {
             string prefab = tokens[k++];
-            
+
             if (prefab != "empty")
             {
                 GameObject component = Instantiate(Resources.Load(prefab)) as GameObject; //Instantiate(Resources.Load(prefab, typeof(GameObject))) as GameObject;
@@ -294,7 +295,7 @@ public class Designer : MonoBehaviour
         PG.GetComponent<GridLayoutGroup>().constraintCount = N;
 
         GameObject slot = CreateSlot(PG, "Field/SlotCorner", tokens[k++], 1, tokens[k++]);
-        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type+1, true);      //type + 1
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type + 1, true);      //type + 1
 
         for (int i = 1; i < N - 1; i++)
         {
@@ -302,7 +303,7 @@ public class Designer : MonoBehaviour
         }
 
         slot = CreateSlot(PG, "Field/SlotCorner", tokens[k++], 0, tokens[k++]);
-        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type+1, false);      //type + 1
+        CreateSlotEdge(slot.GetComponentInChildren<BaseFrontier>().type + 1, false);      //type + 1
 
         for (int j = 1; j < M - 1; j++)
         {
@@ -353,7 +354,6 @@ public class Designer : MonoBehaviour
             LoadFromString();
         }
     }
-    
 
     static GameObject CreateSlotFrontier(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, int type)
     {
@@ -393,7 +393,6 @@ public class Designer : MonoBehaviour
 
         return slot;
     }
-    
 
     static GameObject CreateSlot(GameObject PlayGround, string PrefabSlotPath, string PrefabComponentPath, int dir, string data)
     {
@@ -422,14 +421,14 @@ public class Designer : MonoBehaviour
                 component.GetComponent<BaseComponent>().Rotate();
             }
 
-           
+
             component.GetComponent<BaseComponent>().destroyable = LevelManager.designerMode;
         }
         return slot;
 
     }
 
-    static void CreateSlotEdge(int type,bool onTheLeft)
+    static void CreateSlotEdge(int type, bool onTheLeft)
     {
         Transform edge;
         GameObject slot = Instantiate(Resources.Load("Field/SlotEdge", typeof(GameObject))) as GameObject;
@@ -453,11 +452,11 @@ public class Designer : MonoBehaviour
 
         switch (type)
         {
-            case 0: 
-            case 1: im.color=new Color(0,0,0,0); break;
-            case 2: im.color = Color.white; im.sprite = sprites[(int)Random.Range(0, 1.999f)]; break;
-            case 3: 
-            case 4: 
+            case 0:
+            case 1: im.color = new Color(0, 0, 0, 0); break;
+            case 2: im.color = Color.white; im.sprite = sprites[(int)UnityEngine.Random.Range(0, 1.999f)]; break;
+            case 3:
+            case 4:
             case 5: im.color = Color.white; im.sprite = sprites[2]; break;
         }
     }
@@ -476,13 +475,13 @@ public class Designer : MonoBehaviour
         else
             CreateSlotEdge(0, true);
 
-        if (Pg.transform.GetChild(N-1).GetComponentInChildren<BaseFrontier>().type == 1)
+        if (Pg.transform.GetChild(N - 1).GetComponentInChildren<BaseFrontier>().type == 1)
             CreateSlotEdge(2, false);
         else
             CreateSlotEdge(0, false);
 
 
-        for (int j = 1; j < M; j++) 
+        for (int j = 1; j < M; j++)
         {
             int type = Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type;
             CreateSlotEdge(type, true);
@@ -506,7 +505,7 @@ public class Designer : MonoBehaviour
         Pg.GetComponent<GridLayoutGroup>().constraintCount = N;
 
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 6, 0);
-        CreateSlotEdge(0,true);
+        CreateSlotEdge(0, true);
 
         for (int i = 1; i < N - 1; i++) CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 0, 1);
         CreateSlotFrontier(Pg, "Field/SlotCorner", "Frontiers/Corner", 0, 0);
@@ -514,7 +513,7 @@ public class Designer : MonoBehaviour
 
         for (int j = 1; j < M - 1; j++)
         {
-            int type = Mathf.Min(j+1, 4);
+            int type = Mathf.Min(j + 1, 4);
             CreateSlotFrontier(Pg, "Field/SlotWall", "Frontiers/Wall", 1, type);
             CreateSlotEdge(type, true);
             for (int i = 1; i < N - 1; i++) CreateSlotComponent(Pg, "Field/SlotComponent", "", 0); //empty component
@@ -608,26 +607,26 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().M = M - 1;
             M = M - 1;
 
- 
+
             int type = Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type;
 
             if (type <= 2) //Beach
             {
                 Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 2;
-               // Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 4;
+                // Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 4;
             }
             //else
-                Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 5;
+            Pg.transform.GetChild(j * N).GetComponentInChildren<BaseFrontier>().type = 5;
 
             type = Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type;
 
             if (type <= 2) //Beach
             {
                 Pg.transform.GetChild(N - 1 + (j - 1) * N).GetComponentInChildren<BaseFrontier>().type = 2;
-               // Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 4;
+                // Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 4;
             }
             //else
-                Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 5;
+            Pg.transform.GetChild(N - 1 + j * N).GetComponentInChildren<BaseFrontier>().type = 5;
 
 
             Pg.transform.GetChild((j - 1) * N).GetComponentInChildren<BaseFrontier>().InitializeSlot();
@@ -666,7 +665,7 @@ public class Designer : MonoBehaviour
             Pg.GetComponent<PlaygroundParameters>().M = M + 1;
             M = M + 1;
 
- 
+
             j = M - 1;
             int type = Pg.transform.GetChild((j - 2) * N).GetComponentInChildren<BaseFrontier>().type;
 
@@ -772,8 +771,6 @@ public class Designer : MonoBehaviour
 
     }
 
-
-
     static bool playMode = false;
     GameObject[] designerElements;
     public void TogglePlayMode()
@@ -785,7 +782,7 @@ public class Designer : MonoBehaviour
         GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         Transform deck = gc.Deck.transform;
 
- 
+
         if (playMode)
         { //Go in playMode
             SaveToString();
@@ -793,7 +790,7 @@ public class Designer : MonoBehaviour
             GameObject.Find("MainCanvas").transform.Find("Selectors/CategorySelector").gameObject.SetActive(false);
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("DesignerUI"))
                 go.SetActive(false);
-           
+
             //deck.parent.gameObject.SetActive(true);
             LoadFromString();
         }
@@ -821,10 +818,8 @@ public class Designer : MonoBehaviour
         LoadFromString();
     }
 
-    public void SendMail() {
-
-    
-
+    public void SendMail()
+    {
         SaveToString();
         string cpstr = CompressData(PGdata);
         /*Debug.Log(PGdata);
@@ -836,7 +831,7 @@ public class Designer : MonoBehaviour
 
         cpstr = "Copy all and paste in Waterline Sand Box:%0A#" + cpstr + "#";
 
-        string url="";
+        string url = "";
 
 #if UNITY_ANDROID
         url = "mailto: ?subject=Waterline circuit&body=" + cpstr;
@@ -848,12 +843,11 @@ public class Designer : MonoBehaviour
         url = "mailto: ?subject=Waterline circuit&body=" + cpstr;
 #endif
 
-        Application.OpenURL(url);
+        //Application.OpenURL(url);
+        //printString();
+ Application.OpenURL("file://");
 
-      
-      
     }
-
 
     int DiffersAtIndex(string s1, string s2)
     {
@@ -916,9 +910,9 @@ public class Designer : MonoBehaviour
         //"\n", "%0A",
     };
 
-    string CompressData(string data , bool compress = true)
+    string CompressData(string data, bool compress = true)
     {
-        string buf=data;
+        string buf = data;
 
 
         if (compress)
@@ -933,20 +927,20 @@ public class Designer : MonoBehaviour
         {
             // first remove header and tail
 
-            int indexStart = buf.IndexOf("#")+1;
-            int indexEnd = buf.IndexOf("#",indexStart+1);
+            int indexStart = buf.IndexOf("#") + 1;
+            int indexEnd = buf.IndexOf("#", indexStart + 1);
 
             if (indexStart >= 0 && indexEnd >= 0)
             {
                 buf = buf.Substring(indexStart, indexEnd - indexStart);
                 //Debug.Log(buf);
             }
-           
+
 
 
             for (int i = 0; i < strCorrespondance.Length / 2; i++)
             {
-                buf = buf.Replace(strCorrespondance[2 * i+1], strCorrespondance[2 * i ]);
+                buf = buf.Replace(strCorrespondance[2 * i + 1], strCorrespondance[2 * i]);
             }
         }
 
@@ -954,4 +948,19 @@ public class Designer : MonoBehaviour
         return buf;
     }
 
+    [ContextMenu("Playground To String")]
+    public void printString()
+    {
+        GameObject PG = GameObject.Find("Playground");
+
+        String str = "";
+        foreach (Transform slot in PG.transform)
+        {
+            BaseComponent component = slot.GetComponentInChildren<BaseComponent>();
+            str += component.ToString();
+        }
+        Debug.Log(str);
+
+    }
+ // Environment.GetCommandLineArgs Method to open 
 }

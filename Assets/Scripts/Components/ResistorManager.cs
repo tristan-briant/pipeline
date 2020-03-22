@@ -28,7 +28,6 @@ public class ResistorManager : BaseComponent {
         f = 0;
         bubble.gameObject.SetActive(true); //May be deactivated if from designer
         bubble.GetComponent<Animator>().SetFloat("speed", -f / fMinBubble);
-
         
     }
 

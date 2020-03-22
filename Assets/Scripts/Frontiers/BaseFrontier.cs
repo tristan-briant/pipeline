@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,6 +45,11 @@ public class BaseFrontier : BaseComponent {
     public override void Constraint(float[] p, float[] i, float dt)
     {
         i[0] = 0;
+    }
+
+    override public String ToString()
+    {
+        return "W"; //empty Wall
     }
 
 }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Engine  {
+public class Engine
+{
 
     static float[][] intensite; //ordonnée paire = courants verticaux
     static float[][] pression;
@@ -27,7 +28,7 @@ public class Engine  {
     }
 
 
-    public static void initialize_p_i(int N,int M)
+    public static void initialize_p_i(int N, int M)
     {
         intensite = new float[N - 1][];
         pression = new float[N - 1][];
@@ -161,7 +162,7 @@ public class Engine  {
 
         int N = composants.Length;
         int M = composants[0].Length;
-        
+
         //float success = 1;
         //float fail = 0;
 
@@ -171,7 +172,7 @@ public class Engine  {
 
             pp[0] = pression[k - 1][0];
             ii[0] = -intensite[k - 1][0];
-            composants[k][0].Calcule_i_p(pp, ii,dt);
+            composants[k][0].Calcule_i_p(pp, ii, dt);
             pression[k - 1][0] = (1 - alpha) * pression[k - 1][0] + alpha * pp[0];
             intensite[k - 1][0] = (1 - alpha) * intensite[k - 1][0] + alpha * (-ii[0]);
             //if(composants[k][0].isSuccess)
@@ -253,9 +254,9 @@ public class Engine  {
         }
 
         Constraint(composants);
-        
-       // return success;
-        
+
+        // return success;
+
 
     }
 
@@ -302,8 +303,8 @@ public class Engine  {
             pp[0] = pression[k - 1][0];
             ii[0] = -intensite[k - 1][0];
             composants[k][0].Calcule_i_p(pp, ii, dt);
-            Dpression[k - 1][0] +=  pp[0];
-            Dintensite[k - 1][0] +=  -ii[0];
+            Dpression[k - 1][0] += pp[0];
+            Dintensite[k - 1][0] += -ii[0];
             success = success * composants[k][0].success;
             //fail += composants[k][0].fail;
         }
@@ -337,7 +338,7 @@ public class Engine  {
             pp[0] = pression[0][2 * (k - 1) + 1];
             ii[0] = -intensite[0][2 * (k - 1) + 1];
             composants[0][k].Calcule_i_p(pp, ii, dt);
-            Dpression[0][2 * (k - 1) + 1] +=  pp[0];
+            Dpression[0][2 * (k - 1) + 1] += pp[0];
             Dintensite[0][2 * (k - 1) + 1] += -ii[0];
             success = success * composants[0][k].success;
             //fail += composants[0][k].fail;
@@ -369,7 +370,7 @@ public class Engine  {
         //Clamp_p_i(composants);
         Constraint(composants);
 
-                if (fail > 0) return -1;
+        if (fail > 0) return -1;
 
         return success;
 
@@ -431,7 +432,7 @@ public class Engine  {
                 currant_update3(k - 1, l - 1, pression, intensite, pp, ii, alpha);
             }
         }
-        
+
     }
 
 
@@ -440,7 +441,7 @@ public class Engine  {
         int N = composants.Length;
         int M = composants[0].Length;
 
-        for (int k = 0; k < N ; k++)
+        for (int k = 0; k < N; k++)
         {
             for (int l = 0; l < M; l++)
             {
@@ -492,8 +493,8 @@ public class Engine  {
         }
     }
 
-    const float MaxIValue=2;
-    const float MaxPValue=2;
+    const float MaxIValue = 2;
+    const float MaxPValue = 2;
 
     public static void Clamp_p_i(BaseComponent[][] composants)
     {

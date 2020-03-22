@@ -4,12 +4,12 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConfigFile : MonoBehaviour
+public class ConfigFile : ConfigPanel
 {
     string[] fileNames;
     public GameObject fileButton;
 
-    void Start()
+    override public void Start()
     {
         /*Canvas canvas = gameObject.AddComponent<Canvas>();
         canvas.overrideSorting = true;

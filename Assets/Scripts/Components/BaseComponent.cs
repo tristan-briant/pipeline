@@ -4,17 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
 public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     IEndDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-    public string PrefabPath="";
+    public string PrefabPath = "";
     protected float q = 0, f = 0;
     protected GameObject configPanel;
     protected float p0, p1, p2, p3;
 
-    public int dir=0;
-    public bool destroyable=true;
+    public int dir = 0;
+    public bool destroyable = true;
     public bool isSuccess = false;
     virtual public bool IsSuccess { get => isSuccess; set => isSuccess = value; }
 
@@ -22,10 +21,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public bool Locked { get => locked; set { locked = value; SetLocked(); } }
 
     public bool mirror = false;
-    public bool isFrontiers=false;
+    public bool isFrontiers = false;
 
-    protected float R = 1f, L = 1f, C =0.0f, Rground = 50;
-    protected float fluxMinSound =0.01f;
+    protected float R = 1f, L = 1f, C = 0.0f, Rground = 50;
+    protected float fluxMinSound = 0.01f;
     protected float[] pin = new float[4];
     protected float[] iin = new float[4];
     protected bool[] tubeEnd = { false, false, false, false }; // Has tube ends in directions 0,1,2,3
@@ -33,20 +32,16 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     protected float fail = 0;
     protected const float fMinBubble = 0.05f;
 
-    private float[] pressure= new float[4];
-    public void SetPressure(float value, int index=0)
+    private float[] pressure = new float[4];
+    public void SetPressure(float value, int index = 0)
     {
-            if (float.IsNaN(value))
-            {
-                pressure[index] = 0;
-            }
-            else pressure[index] = value;
+        if (float.IsNaN(value))
+        {
+            pressure[index] = 0;
+        }
+        else pressure[index] = value;
     }
     public float GetPressure(int index = 0) { return pressure[index]; }
-
- 
-
-    //public bool trigged=false;   // for composant that can be trigged. use with tag Triggerable
 
     protected GameController gc; // le moteur du jeu à invoquer parfois
     protected AudioSource[] audios;
@@ -70,9 +65,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             R = parameters.R;
             C = parameters.C;
             L = parameters.L;
-            //Rground = parameters.Rground;
         }
-        else {
+        else
+        {
             Debug.Log("Parameters not found");
         }
 
@@ -80,23 +75,32 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         SetLocked();
     }
 
-    public bool HasTubeEnd (int direction) { // Tell if the component has an end in that direction
+    public bool HasTubeEnd(int direction)
+    { // Tell if the component has an end in that direction
         int a = (direction - dir) % 4;
-        while (a < 0) a+=4; 
+        while (a < 0) a += 4;
         return tubeEnd[a];
     }
 
-    public void RemoveAllStoppers() {
+    public void RemoveAllStoppers()
+    {
         foreach (Transform child in transform)
             if (child.name.Contains("Stopper")) Destroy(child.gameObject);
     }
 
     virtual public void PutStopper(int direction) // Put a stopper
     {
-        GameObject stopper = Instantiate(Resources.Load("Components/Stopper"),transform) as GameObject;
+        GameObject stopper = Instantiate(Resources.Load("Components/Stopper"), transform) as GameObject;
         stopper.transform.localPosition = Vector3.zero;
-        stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 * (direction-dir)));
-       
+        stopper.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 90 * (direction - dir)));
+
+    }
+
+    virtual public void PutStoppers()
+    {
+        RemoveAllStoppers();
+        for (int i = 0; i < 4; i++)
+            if (HasTubeEnd(i)) PutStopper(i);
     }
 
     protected Color PressureColor(float p)
@@ -104,9 +108,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         float PMAX = 1.0f;
 
         Color max = new Color(0.3f, .80f, 0.80f);  // p=2
-        //Color zero = new Color(0, 0.0f / 255, 00.0f / 255); //
-        Color zero = new Color(0, 100.0f/255, 140.0f/255);  // p=0
-        Color min = new Color(150.0f/255, 75.0f/255, 120.0f/255);  // p=-2
+        Color zero = new Color(0, 100.0f / 255, 140.0f / 255);  // p=0
+        Color min = new Color(150.0f / 255, 75.0f / 255, 120.0f / 255);  // p=-2
 
         p = Mathf.Clamp(p, -PMAX, PMAX);
 
@@ -117,7 +120,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     }
 
-    public void Set_i_p(float[] p, float[] i) {
+    public void Set_i_p(float[] p, float[] i)
+    {
 
         if (mirror)
         {
@@ -129,7 +133,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             i[2] = e;
         }
 
-        for (int k = 0; k < 4; k++) {
+        for (int k = 0; k < 4; k++)
+        {
             pin[k] = p[k];
             iin[k] = i[k];
         }
@@ -145,8 +150,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     }
 
     public virtual void Constraint(float[] p, float[] i, float dt)
-    {
-        // Put constraint here as i blocked or p imposed
+    {  // Put constraint here as i blocked or p imposed
         i[0] = i[1] = i[2] = i[3] = 0;
     }
 
@@ -160,7 +164,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         q = f = 0;
     }
 
-    public virtual void Calcule_i_p(float[] p, float[] i,float dt)
+    public virtual void Calcule_i_p(float[] p, float[] i, float dt)
     {
     }
 
@@ -190,7 +194,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         if (name.Contains("Empty")) return false;
 
-        bool designerMode =  LevelManager.designerMode;
+        bool designerMode = LevelManager.designerMode;
         if (locked && !designerMode) return false;
 
         return true;
@@ -234,7 +238,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (locked) return false;
 
         if (name.Contains("Empty")) return true;
-       
+
         return destroyable;
     }
 
@@ -257,13 +261,12 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     }
 
-    public virtual void Rotate() 
+    public virtual void Rotate()
     {
         transform.localRotation = Quaternion.Euler(0, 0, dir * 90);
         gc.StopperChanged = true;
     }
 
-    //float clickStart;
     float longPressDuration = 0.3f;
     bool pressing = false;
     float startPressTime;
@@ -278,7 +281,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (pressing && (Time.time > startPressTime + longPressDuration)) //continuous press
         {
-            if(IsLongClickable())
+            if (IsLongClickable())
                 OnLongClick();
 
             pressing = false;
@@ -299,7 +302,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         else*/
         if ((Time.time < startPressTime + longPressDuration))
         {
-            if(IsClickable())
+            if (IsClickable())
                 OnClick();
             else
                 audios[1].Play();
@@ -316,7 +319,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             Rotate();
 
             foreach (BaseComponent bc in FindObjectsOfType<BaseComponent>())
-                if(bc.enabled)
+                if (bc.enabled)
                     bc.ResetSuccess();
 
 
@@ -332,7 +335,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (!IsLongClickable()) return;
 
- 
+
         //Launch Config Panel
         foreach (ConfigPanel cp in FindObjectsOfType<ConfigPanel>())
             cp.Close();
@@ -350,8 +353,9 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         rect.anchoredPosition = new Vector2(0, 0);
 
     }
-    
-    virtual public void ResetSuccess() {
+
+    virtual public void ResetSuccess()
+    {
         success = 0;
     }
 
@@ -409,34 +413,34 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         if (endParent == null)
         {
-            if(IsDestroyable() || startParent==null)
+            if (IsDestroyable() || startParent == null)
                 StartCoroutine(DestroyComponent());
             else
                 StartCoroutine(FlightToFinalPosition(startParent));
-            
+
         }
 
         if (endParent && startParent)
         { // on échange
             if (endParent == startParent)
             {
-                StartCoroutine(FlightToFinalPosition(endParent,0.05f));
+                StartCoroutine(FlightToFinalPosition(endParent, 0.05f));
             }
             else
             {
-                Transform c=null;
+                Transform c = null;
                 if (endParent.childCount > 1)
                     c = endParent.GetChild(1);
-                
+
                 if (!c || c.GetComponent<BaseComponent>().IsEmpty())
                 {
-                    StartCoroutine(FlightToFinalPosition(endParent,0.05f));
+                    StartCoroutine(FlightToFinalPosition(endParent, 0.05f));
                 }
                 else
                 {
                     if (c.GetComponent<BaseComponent>().IsMovable())
                     {
-                      
+
                         c.GetComponent<BaseComponent>().ChangeParent(GameObject.Find("CanvasDragged").transform);
                         gc.PopulateComposant();
 
@@ -473,10 +477,10 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
                 }
             }
         }
-        
+
         dragged = false;
         startParent = endParent = null;
-        
+
     }
 
     protected float SpeedAnim()
@@ -516,7 +520,7 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
             return 0;
     }
 
-    public void ChangeParent(Transform newParent,bool overrideSorting=true) // set new parent and change sorting layer
+    public void ChangeParent(Transform newParent, bool overrideSorting = true) // set new parent and change sorting layer
     {
         transform.SetParent(newParent);
         Canvas canvasParent = newParent.GetComponentInParent<Canvas>();
@@ -530,14 +534,14 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
-    public IEnumerator FlightToFinalPosition(Transform newParent,float flightTime=0.2f, bool cleanNewParent=true)
+    public IEnumerator FlightToFinalPosition(Transform newParent, float flightTime = 0.2f, bool cleanNewParent = true)
     {
         Vector3 initialPosition = transform.position;
         Vector3 finalPosition = newParent.position;
 
         float t = 0;
 
-        while (t<flightTime)
+        while (t < flightTime)
         {
             transform.position = (initialPosition * (flightTime - t) + finalPosition * t) / flightTime;
             t += Time.deltaTime;
@@ -584,8 +588,8 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         while (t < flightTime)
         {
-            transform.localScale = (initialScale * (flightTime - t) ) / flightTime;
-            transform.rotation = Quaternion.Euler(0,0,initialRotation + 360*  t / flightTime) ;
+            transform.localScale = (initialScale * (flightTime - t)) / flightTime;
+            transform.rotation = Quaternion.Euler(0, 0, initialRotation + 360 * t / flightTime);
             t += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -596,6 +600,19 @@ public class BaseComponent : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public float Troncate(float x)
     {
         return Mathf.Round(x * 1000) / 1000;
+    }
+
+    virtual public String ToString(char name = 'e')
+    {
+        if(name=='e')
+            return "e"; //empty component
+            
+        // sinon '[N]ame' + '[L]ocked' + [D]ir/Mirror
+        String str = "";
+        str += name;
+        if (locked) str += "L";
+        str += (dir + (mirror ? 4 : 0)).ToString();
+        return str;
     }
 
 }
